@@ -1,5 +1,7 @@
 import json
 
+from pydantic import UUID4
+
 from pydglabws.enums import StrengthOperationType, Channel, MessageDataHead, FeedbackButton
 from pydglabws.exceptions import InvalidStrengthData, InvalidFeedbackData
 from pydglabws.models import StrengthData
@@ -92,3 +94,17 @@ def dump_add_pulses(
         f"{MessageDataHead.PULSE}-{channel}": [dump_pulse_operation(pulse) for pulse in pulses]
     }
     return json.dumps(dict_data)
+
+
+def dg_lab_client_qrcode(host: str, port: int, client_id: UUID4):
+    """
+    生成终端二维码，二维码图像需要自行生成
+
+    :param host: WebSocket 服务端主机
+    :param port: WebSocket 服务端端口
+    :param client_id: 终端 ID
+    :return:
+    """
+    return (f"https://www.dungeon-lab.com/app-download.php"
+            f"#DGLAB-SOCKET"
+            f"#wss://{host}:{port}/{client_id}")

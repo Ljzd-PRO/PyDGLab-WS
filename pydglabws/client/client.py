@@ -9,7 +9,7 @@ from pydglabws.enums import MessageDataHead, RetCode, StrengthOperationType, Cha
 from pydglabws.models import StrengthData
 from pydglabws.types import PulseOperation
 from pydglabws.utils import parse_strength_data, dump_strength_operation, dump_clear_pulses, dump_add_pulses, \
-    parse_feedback_data
+    parse_feedback_data, dg_lab_client_qrcode
 
 
 class DGLabClient(ABC):
@@ -44,6 +44,12 @@ class DGLabClient(ABC):
     def not_bind(self) -> bool:
         """终端是否未完成与 App 的绑定"""
         return self._client_id is None or self.target_id is None
+
+    @property
+    @abstractmethod
+    def qrcode(self) -> Optional[str]:
+        """终端二维码，二维码图像需要自行生成"""
+        ...
 
     @abstractmethod
     async def ensure_bind(self):
@@ -133,6 +139,13 @@ class DGLabWSClient(DGLabClient):
     def __init__(self, websocket: WebSocketClientProtocol):
         super().__init__()
         self._websocket = websocket
+
+    @property
+    def qrcode(self) -> Optional[str]:
+        if self._websocket.remote_address is None:
+            return None
+        host, port = self._websocket.remote_address
+        return dg_lab_client_qrcode(host, port, self._client_id)
 
     async def ensure_bind(self):
         while True:
