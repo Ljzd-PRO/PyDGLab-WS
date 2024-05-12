@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "pydglabws"
+version = "0.1.0"
+description = "一个通过 WebSocket 控制郊狼 DG-Lab 的 Python 库"
+authors = ["Ljzd-PRO <ljzd@office.ljzd-pro.asia>"]
+readme = "README.md"
+homepage = "https://github.com/Ljzd-PRO/PyDGLabWS"
+repository = "https://github.com/Ljzd-PRO/PyDGLabWS"
+documentation = "https://github.com/Ljzd-PRO/PyDGLabWS"
+
+keywords = ["dg-lab", "dg-lab-v3", "websocket", "library", "os-independent"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Development Status :: 5 - Production/Stable",
+    "Topic :: SOFTWARE DEVELOPMENT :: LIBRARIES :: PYTHON MODULES",
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pydantic = "^2.7.1"
+websockets = "^12.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
