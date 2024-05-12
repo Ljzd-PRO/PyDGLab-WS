@@ -182,7 +182,7 @@ class DGLabWSClient(DGLabClient):
             value: int
     ):
         await super().set_strength(channel, operation_type, value)
-        await self.send_owned(
+        await self._send_owned(
             MessageType.MSG,
             dump_strength_operation(channel, operation_type, value)
         )
@@ -193,14 +193,14 @@ class DGLabWSClient(DGLabClient):
             *pulses: PulseOperation
     ):
         await super().add_pulses(channel, *pulses)
-        await self.send_owned(
+        await self._send_owned(
             MessageType.MSG,
             dump_add_pulses(channel, *pulses)
         )
 
     async def clear_pulses(self, channel: Channel):
         await super().clear_pulses(channel)
-        await self.send_owned(
+        await self._send_owned(
             MessageType.MSG,
             dump_clear_pulses(channel)
         )
@@ -237,7 +237,7 @@ class DGLabWSClient(DGLabClient):
         """
         await self._websocket.send(message.model_dump_json(by_alias=True))
 
-    async def send_owned(self, msg_type: MessageType, msg: str):
+    async def _send_owned(self, msg_type: MessageType, msg: str):
         """
         与 :meth:`_send` 类似，但代为设置 ``client_id``, ``target_id``
 
