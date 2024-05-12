@@ -7,6 +7,14 @@ from pydglabws.enums import MessageType
 
 
 class WebSocketMessage(BaseModel):
+    """
+    WebSocket 消息
+
+    :ivar type: 消息类型
+    :ivar client_id: 第三方终端 ID
+    :ivar target_id: App ID
+    :ivar message: 消息 / 指令
+    """
     model_config = ConfigDict(alias_generator=to_camel)
 
     type: MessageType
@@ -20,6 +28,14 @@ class WebSocketMessage(BaseModel):
 
 
 class StrengthData(BaseModel):
+    """
+    强度数据
+
+    :ivar a: A 通道强度
+    :ivar b: B 通道强度
+    :ivar a_limit: A 通道强度上限
+    :ivar b_limit: B 通道强度上限
+    """
     a: int
     b: int
     a_limit: int
