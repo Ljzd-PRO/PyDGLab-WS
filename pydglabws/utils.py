@@ -48,7 +48,7 @@ def parse_feedback_data(data: str) -> FeedbackButton:
     :raise InvalidFeedbackData: :class:`InvalidFeedbackData`
     """
     try:
-        return FeedbackButton(data.split("-")[1])
+        return FeedbackButton(int(data.split("-")[1]))
     except IndexError as e:
         raise InvalidFeedbackData(data) from e
 
@@ -66,7 +66,7 @@ def dump_strength_operation(
     :param value: 强度数值，范围在 [0, 200]
     :return: 返回数据可作为 WebSocket 消息中的 ``message``
     """
-    return f"{MessageDataHead.STRENGTH}-{channel}+{operation_type}+{value}"
+    return f"{MessageDataHead.STRENGTH.value}-{channel.value}+{operation_type.value}+{value}"
 
 
 def dump_clear_pulses(channel: Channel) -> str:
@@ -76,7 +76,7 @@ def dump_clear_pulses(channel: Channel) -> str:
     :param channel: 通道选择
     :return: 返回数据可作为 WebSocket 消息中的 ``message``
     """
-    return f"{MessageDataHead.CLEAR}-{channel}"
+    return f"{MessageDataHead.CLEAR.value}-{channel.value}"
 
 
 def dump_pulse_operation(pulse: PulseOperation) -> str:
@@ -104,7 +104,7 @@ def dump_add_pulses(
     :return: 返回数据可作为 WebSocket 消息中的 ``message``
     """
     dict_data = {
-        f"{MessageDataHead.PULSE}-{channel}": [dump_pulse_operation(pulse) for pulse in pulses]
+        f"{MessageDataHead.PULSE.value}-{channel.value}": [dump_pulse_operation(pulse) for pulse in pulses]
     }
     return json.dumps(dict_data)
 
