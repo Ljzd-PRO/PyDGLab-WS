@@ -3,7 +3,7 @@
 """
 from typing import Optional
 
-from pydantic import BaseModel, UUID4, ConfigDict, field_serializer
+from pydantic import BaseModel, UUID4, ConfigDict, field_serializer, AliasGenerator
 from pydantic.alias_generators import to_camel
 
 from .enums import MessageType
@@ -20,14 +20,18 @@ class WebSocketMessage(BaseModel):
     :ivar target_id: App ID
     :ivar message: 消息 / 指令
     """
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(
+        alias_generator=AliasGenerator(
+            serialization_alias=to_camel
+        )
+    )
 
     type: MessageType
-    client_id: Optional[UUID4]
-    target_id: Optional[UUID4]
+    client_id: Optional[UUID4] = None
+    target_id: Optional[UUID4] = None
     message: str
 
-    @field_serializer("client_id", "target_id", when_used="json")
+    @field_serializer("client_id", "target_id")
     def serialize_id(self, value: Optional[UUID4]):
         return value or ""
 
