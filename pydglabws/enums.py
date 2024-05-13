@@ -15,7 +15,7 @@ class MessageType(Enum):
     WebSocket 消息类型
 
     :ivar HEARTBEAT: 心跳包数据
-    :ivar BIND: ID关系绑定
+    :ivar BIND: ID 关系绑定
     :ivar MSG: 波形下发/强度变化/队列清空等数据指令
     :ivar BREAK: 连接断开
     :ivar ERROR: 服务错误
@@ -33,14 +33,14 @@ class RetCode(IntEnum):
 
     :ivar SUCCESS: 成功
     :ivar CLIENT_DISCONNECTED: 对方客户端已断开
-    :ivar INVALID_CLIENT_ID: 二维码中没有有效的 clientID
-    :ivar SERVER_DELAY: socket连接上了，但服务器迟迟不下发 App 端的 ID 来绑定
-    :ivar ID_ALREADY_BOUND: 此id已被其他客户端绑定关系
+    :ivar INVALID_CLIENT_ID: 二维码中没有有效的 ``clientId``
+    :ivar SERVER_DELAY: Socket 连接上了，但服务器迟迟不下发 App 端的 ID 来绑定
+    :ivar ID_ALREADY_BOUND: 此 ID 已被其他客户端绑定关系
     :ivar TARGET_CLIENT_NOT_FOUND: 要绑定的目标客户端不存在
     :ivar INCOMPATIBLE_RELATIONSHIP: 收信方和寄信方不是绑定关系
     :ivar NON_JSON_CONTENT: 发送的内容不是标准 JSON 对象
     :ivar RECIPIENT_NOT_FOUND: 未找到收信人（离线）
-    :ivar MESSAGE_TOO_LONG: 下发的 message 长度大于 1950
+    :ivar MESSAGE_TOO_LONG: 下发的 ``message`` 长度大于 1950
     :ivar SERVER_INTERNAL_ERROR: 服务器内部异常
     """
     SUCCESS = 200
@@ -103,7 +103,7 @@ class StrengthOperationType(IntEnum):
 #     SET_TO = 0b11
 
 
-class FeedbackButton(Enum):
+class FeedbackButton(IntEnum):
     """
     App 反馈按钮
 
