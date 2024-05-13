@@ -3,7 +3,9 @@ from typing import Optional
 from pydantic import BaseModel, UUID4, ConfigDict, field_serializer
 from pydantic.alias_generators import to_camel
 
-from pydglabws.enums import MessageType
+from .enums import MessageType
+
+__all__ = ("WebSocketMessage", "StrengthData")
 
 
 class WebSocketMessage(BaseModel):

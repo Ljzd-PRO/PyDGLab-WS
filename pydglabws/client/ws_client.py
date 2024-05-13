@@ -2,8 +2,10 @@ from typing import Optional
 
 from websockets import WebSocketClientProtocol
 
-from pydglabws import WebSocketMessage
-from pydglabws.client.base import DGLabClient
+from .base import DGLabClient
+from ..models import WebSocketMessage
+
+__all__ = ["DGLabWSClient"]
 
 
 class DGLabWSClient(DGLabClient):

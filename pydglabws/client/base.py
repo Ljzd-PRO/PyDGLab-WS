@@ -3,12 +3,14 @@ from typing import Optional, AsyncGenerator, Any, Union
 
 from pydantic import UUID4
 
-from pydglabws import WebSocketMessage, MessageType
-from pydglabws.enums import MessageDataHead, RetCode, StrengthOperationType, Channel, FeedbackButton
-from pydglabws.models import StrengthData
-from pydglabws.typing import PulseOperation
-from pydglabws.utils import dg_lab_client_qrcode, parse_strength_data, parse_feedback_data, dump_strength_operation, \
+from ..enums import MessageDataHead, RetCode, StrengthOperationType, Channel, FeedbackButton, MessageType
+from ..models import StrengthData
+from ..models import WebSocketMessage
+from ..typing import PulseOperation
+from ..utils import dg_lab_client_qrcode, parse_strength_data, parse_feedback_data, dump_strength_operation, \
     dump_add_pulses, dump_clear_pulses
+
+__all__ = ["DGLabClient"]
 
 
 class DGLabClient(ABC):

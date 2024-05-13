@@ -1,5 +1,13 @@
 from typing import NewType, Tuple
 
+__all__ = (
+    "WaveformFrequency",
+    "WaveformStrength",
+    "WaveformFrequencyOperation",
+    "WaveformStrengthOperation",
+    "PulseOperation"
+)
+
 WaveformFrequency = NewType("WaveformFrequency", int)
 """波形频率"""
 WaveformStrength = NewType("WaveformStrength", int)

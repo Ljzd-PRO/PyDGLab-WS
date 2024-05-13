@@ -3,8 +3,10 @@ from typing import Callable, Any, Coroutine
 
 from pydantic import UUID4
 
-from pydglabws import WebSocketMessage
-from pydglabws.client.base import DGLabClient
+from .base import DGLabClient
+from ..models import WebSocketMessage
+
+__all__ = ["DGLabLocalClient"]
 
 
 class DGLabLocalClient(DGLabClient):
