@@ -19,9 +19,16 @@ class DGLabWSClient(DGLabClient):
         super().__init__()
         self._websocket = websocket
 
+    async def __aenter__(self) -> "DGLabWSClient":
+        await self.register()
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        pass
+
     async def _recv(self) -> WebSocketMessage:
         raw_message = await self._websocket.recv()
-        return WebSocketMessage.model_validate_strings(raw_message)
+        return WebSocketMessage.model_validate_json(raw_message)
 
     async def _send(self, message: WebSocketMessage):
         await self._websocket.send(message.model_dump_json(by_alias=True))
