@@ -53,21 +53,33 @@ class DGLabWSServer:
             MessageType.MSG: self._handle_msg
         }
         self._heartbeat_interval = heartbeat_interval
-        self._stop_heartbeat = False
         self._heartbeat_task: Optional[Task] = None
-        self._heartbeat_lock = asyncio.Lock()
+
+    @property
+    def heartbeat_interval(self) -> Optional[float]:
+        """心跳包发送间隔（秒）"""
+        return self._heartbeat_interval
+
+    @heartbeat_interval.setter
+    def heartbeat_interval(self, value: float):
+        if value is not None:
+            self._heartbeat_interval = value
+
+    @property
+    def heartbeat_enabled(self) -> bool:
+        """是否开启了心跳包发送计时器"""
+        return self._heartbeat_interval is not None
 
     async def __aenter__(self):
         await self._serve.__aenter__()
-        if self._heartbeat_interval is not None:
+        if self.heartbeat_enabled:
             self._heartbeat_task = asyncio.create_task(self._heartbeat_sender())
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
-        self._stop_heartbeat = True
-        # 等待心跳包停止发送
-        async with self._heartbeat_lock:
-            await self._serve.__aexit__(exc_type, exc_val, exc_tb)
+        if self.heartbeat_enabled:
+            self._heartbeat_task.cancel()
+        await self._serve.__aexit__(exc_type, exc_val, exc_tb)
 
     @property
     def client_id_to_target_id(self) -> Dict[UUID4, UUID4]:
@@ -128,19 +140,18 @@ class DGLabWSServer:
         """
         心跳包发送器
         """
-        async with self._heartbeat_lock:
-            while not self._stop_heartbeat:
-                for uuid, websocket in self._uuid_to_ws.items():
-                    await self._send(
-                        WebSocketMessage(
-                            type=MessageType.HEARTBEAT,
-                            client_id=uuid,
-                            target_id=self._client_id_to_target_id.get(uuid),
-                            message=str(RetCode.SUCCESS)
-                        ),
-                        websocket
-                    )
-                await asyncio.sleep(self._heartbeat_interval)
+        while True:
+            for uuid, websocket in self._uuid_to_ws.items():
+                await self._send(
+                    WebSocketMessage(
+                        type=MessageType.HEARTBEAT,
+                        client_id=uuid,
+                        target_id=self._client_id_to_target_id.get(uuid),
+                        message=str(RetCode.SUCCESS)
+                    ),
+                    websocket
+                )
+            await asyncio.sleep(self._heartbeat_interval)
 
     async def _ws_handler(self, websocket: WebSocketServerProtocol):
         """
