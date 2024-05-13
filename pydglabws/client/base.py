@@ -115,7 +115,7 @@ class DGLabClient(ABC):
         """
         while self.not_registered:
             message = await self._recv()
-            if message.type == MessageType.BIND and message.message == MessageDataHead.TARGET_ID:
+            if message.type == MessageType.BIND and message.message == MessageDataHead.TARGET_ID.value:
                 self._client_id = message.client_id
 
     async def ensure_bind(self):
