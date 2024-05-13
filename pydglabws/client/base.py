@@ -2,14 +2,13 @@ from abc import ABC, abstractmethod
 from typing import Optional, AsyncGenerator, Any, Union
 
 from pydantic import UUID4
-from websockets import WebSocketClientProtocol
 
 from pydglabws import WebSocketMessage, MessageType
 from pydglabws.enums import MessageDataHead, RetCode, StrengthOperationType, Channel, FeedbackButton
 from pydglabws.models import StrengthData
 from pydglabws.types import PulseOperation
-from pydglabws.utils import parse_strength_data, dump_strength_operation, dump_clear_pulses, dump_add_pulses, \
-    parse_feedback_data, dg_lab_client_qrcode
+from pydglabws.utils import dg_lab_client_qrcode, parse_strength_data, parse_feedback_data, dump_strength_operation, \
+    dump_add_pulses, dump_clear_pulses
 
 
 class DGLabClient(ABC):
@@ -48,6 +47,22 @@ class DGLabClient(ABC):
         """终端是否未完成与 App 的绑定"""
         return self._client_id is None or self.target_id is None
 
+    @abstractmethod
+    async def _recv(self) -> WebSocketMessage:
+        """
+        收取来自 WebSocket 服务端的消息，并解析为 :class:`WebSocketMessage`
+        """
+        ...
+
+    @abstractmethod
+    async def _send(self, message: WebSocketMessage):
+        """
+        向 WebSocket 服务端发送消息
+
+        :param message: 解析为 :class:`WebSocketMessage` 的消息
+        """
+        ...
+
     def get_qrcode(self, host: str, port: int) -> Optional[str]:
         """
         终端二维码，二维码图像需要自行生成
@@ -59,13 +74,6 @@ class DGLabClient(ABC):
         if host is None or port is None or self.not_registered:
             return None
         return dg_lab_client_qrcode(host, port, self._client_id)
-
-    @abstractmethod
-    async def _recv(self) -> WebSocketMessage:
-        """
-        收取来自 WebSocket 服务端的消息，并解析为 :class:`WebSocketMessage`
-        """
-        ...
 
     async def _recv_owned(self) -> WebSocketMessage:
         """
@@ -83,15 +91,6 @@ class DGLabClient(ABC):
         """
         await self.ensure_bind()
         return await self._recv_owned()
-
-    @abstractmethod
-    async def _send(self, message: WebSocketMessage):
-        """
-        向 WebSocket 服务端发送消息
-
-        :param message: 解析为 :class:`WebSocketMessage` 的消息
-        """
-        ...
 
     async def _send_owned(self, msg_type: MessageType, msg: str):
         """
@@ -117,20 +116,29 @@ class DGLabClient(ABC):
             if message.type == MessageType.BIND and message.message == MessageDataHead.TARGET_ID:
                 self._client_id = message.client_id
 
-    @abstractmethod
     async def ensure_bind(self):
         """确保终端已完成与 App 的绑定"""
-        ...
+        while True:
+            if self.not_registered:
+                await self.register()
+            elif self.not_bind:
+                await self.bind()
+            else:
+                break
 
-    @abstractmethod
     async def bind(self) -> RetCode:
         """
         等待与 DG-Lab App 的关系绑定，并保存 ``target_id``
         :return: 响应码
         """
-        ...
+        while self.not_bind:
+            message = await self._recv_owned()
+            if message.type == MessageType.BIND and message.message.isdigit():
+                ret_code = RetCode(message.message)
+                if ret_code == RetCode.SUCCESS:
+                    self._target_id = message.target_id
+                return ret_code
 
-    @abstractmethod
     async def recv_app_data(self) -> Union[StrengthData, FeedbackButton]:
         """
         获取来自 DG-Lab App 的数据
@@ -139,7 +147,14 @@ class DGLabClient(ABC):
 
         :return: 已解析的 **强度数据** 或 **App 反馈数据**
         """
-        ...
+        await self.ensure_bind()
+        while True:
+            message = await self._recv_owned()
+            if message.type == MessageType.MSG:
+                if message.message.startswith(MessageDataHead.STRENGTH.value):
+                    return parse_strength_data(message.message)
+                elif message.message.startswith(MessageDataHead.FEEDBACK.value):
+                    return parse_feedback_data(message.message)
 
     async def app_data(self) -> AsyncGenerator[Union[StrengthData, FeedbackButton], Any]:
         """
@@ -155,7 +170,6 @@ class DGLabClient(ABC):
         while True:
             yield await self.recv_app_data()
 
-    @abstractmethod
     async def set_strength(
             self,
             channel: Channel,
@@ -170,8 +184,11 @@ class DGLabClient(ABC):
         :param value: 强度数值，范围在 [0, 200]
         """
         await self.ensure_bind()
+        await self._send_owned(
+            MessageType.MSG,
+            dump_strength_operation(channel, operation_type, value)
+        )
 
-    @abstractmethod
     async def add_pulses(
             self,
             channel: Channel,
@@ -184,8 +201,11 @@ class DGLabClient(ABC):
         :param pulses: 波形操作数据，最大长度为 100
         """
         await self.ensure_bind()
+        await self._send_owned(
+            MessageType.MSG,
+            dump_add_pulses(channel, *pulses)
+        )
 
-    @abstractmethod
     async def clear_pulses(self, channel: Channel):
         """
         清空波形队列
@@ -193,91 +213,6 @@ class DGLabClient(ABC):
         :param channel: 通道选择
         """
         await self.ensure_bind()
-
-
-class DGLabWSClient(DGLabClient):
-    """
-    DG-Lab WebSocket 终端
-
-    :param websocket: 与 WebSocket 服务端的连接
-    """
-
-    def __init__(self, websocket: WebSocketClientProtocol):
-        super().__init__()
-        self._websocket = websocket
-
-    def get_qrcode(self, host: str = None, port: int = None) -> Optional[str]:
-        if host is None or port is None:
-            host, port = self._websocket.remote_address or (None, None)
-        return super().get_qrcode(host, port)
-
-    @property
-    def qrcode(self) -> Optional[str]:
-        if self._websocket.remote_address is None:
-            return None
-        host, port = self._websocket.remote_address
-        return dg_lab_client_qrcode(host, port, self._client_id)
-
-    async def _recv(self) -> WebSocketMessage:
-        raw_message = await self._websocket.recv()
-        return WebSocketMessage.model_validate_strings(raw_message)
-
-    async def _send(self, message: WebSocketMessage):
-        await self._websocket.send(message.model_dump_json(by_alias=True))
-
-    async def ensure_bind(self):
-        while True:
-            if self.not_registered:
-                await self.register()
-            elif self.not_bind:
-                await self.bind()
-            else:
-                break
-
-    async def bind(self) -> RetCode:
-        while self.not_bind:
-            message = await self._recv_owned()
-            if message.type == MessageType.BIND and message.message.isdigit():
-                ret_code = RetCode(message.message)
-                if ret_code == RetCode.SUCCESS:
-                    self._target_id = message.target_id
-                return ret_code
-
-    async def recv_app_data(self) -> Union[StrengthData, FeedbackButton]:
-        await self.ensure_bind()
-        while True:
-            message = await self._recv_owned()
-            if message.type == MessageType.MSG:
-                if message.message.startswith(MessageDataHead.STRENGTH.value):
-                    return parse_strength_data(message.message)
-                elif message.message.startswith(MessageDataHead.FEEDBACK.value):
-                    return parse_feedback_data(message.message)
-
-    async def set_strength(
-            self,
-            channel: Channel,
-            operation_type: StrengthOperationType,
-            value: int
-    ):
-        await super().set_strength(channel, operation_type, value)
-        await self._send_owned(
-            MessageType.MSG,
-            dump_strength_operation(channel, operation_type, value)
-        )
-
-    async def add_pulses(
-            self,
-            channel: Channel,
-            *pulses: PulseOperation
-    ):
-        await super().add_pulses(channel, *pulses)
-        await self._send_owned(
-            MessageType.MSG,
-            dump_add_pulses(channel, *pulses)
-        )
-
-    async def clear_pulses(self, channel: Channel):
-        await super().clear_pulses(channel)
         await self._send_owned(
             MessageType.MSG,
             dump_clear_pulses(channel)
