@@ -1,7 +1,7 @@
 import asyncio
 from asyncio import Task
 from json import JSONDecodeError
-from typing import Union, Optional, Sequence, Dict, Callable, Coroutine, Any
+from typing import Union, Optional, Sequence, Dict, Callable, Coroutine, Any, Set
 from uuid import uuid4
 
 from pydantic import UUID4
@@ -96,13 +96,18 @@ class DGLabWSServer:
         return self._target_id_to_client_id.copy()
 
     @property
-    def ws_client_ids(self):
+    def ws_client_ids(self) -> Set[UUID4]:
         """
-        所有的 WebSocket 客户端
+        所有的 WebSocket 客户端 ID（包含终端与 App）
+        """
+        return set(self._uuid_to_ws.keys())
 
-        :return: A set-like object providing a view on IDs
+    @property
+    def local_client_ids(self) -> Set[UUID4]:
         """
-        return self._uuid_to_ws.keys()
+        所有的本地终端 ID
+        """
+        return set(self._client_id_to_queue.keys())
 
     def new_local_client(self, max_queue: int = 2 ** 5):
         """
