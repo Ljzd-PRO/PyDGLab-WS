@@ -1,3 +1,6 @@
+"""
+此处定义了一些 Pydantic 模型，使用 Pydantic V2
+"""
 from typing import Optional
 
 from pydantic import BaseModel, UUID4, ConfigDict, field_serializer

@@ -1,3 +1,6 @@
+"""
+此处定义了一些常量枚举
+"""
 from enum import Enum, IntEnum
 
 __all__ = (

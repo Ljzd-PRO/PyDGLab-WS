@@ -1,3 +1,6 @@
+"""
+此处创建了一些自定义类型
+"""
 from typing import NewType, Tuple
 
 __all__ = (

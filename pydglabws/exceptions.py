@@ -1,3 +1,6 @@
+"""
+此处定义了一些异常类
+"""
 __all__ = ("InvalidStrengthData", "InvalidFeedbackData")
 
 
