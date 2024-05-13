@@ -2,6 +2,7 @@ import asyncio
 from asyncio import Task
 from json import JSONDecodeError
 from typing import Union, Optional, Sequence, Dict, Callable, Coroutine, Any
+from uuid import uuid4
 
 from pydantic import UUID4
 from websockets import WebSocketServerProtocol
@@ -97,7 +98,7 @@ class DGLabWSServer:
         :param max_queue: 终端消息队列最大长度
         :return: 创建好的本地终端对象
         """
-        client_id = UUID4()
+        client_id = uuid4()
         return DGLabLocalClient(
             client_id,
             self._message_handler,
@@ -129,12 +130,12 @@ class DGLabWSServer:
         """
         async with self._heartbeat_lock:
             while not self._stop_heartbeat:
-                for uuid4, websocket in self._uuid_to_ws.items():
+                for uuid, websocket in self._uuid_to_ws.items():
                     await self._send(
                         WebSocketMessage(
                             type=MessageType.HEARTBEAT,
-                            client_id=uuid4,
-                            target_id=self._client_id_to_target_id.get(uuid4),
+                            client_id=uuid,
+                            target_id=self._client_id_to_target_id.get(uuid),
                             message=str(RetCode.SUCCESS)
                         ),
                         websocket
@@ -146,12 +147,12 @@ class DGLabWSServer:
         WebSocket 连接接收器，响应处理每个连接
         """
         # 登记 WebSocket 客户端
-        uuid4 = UUID4()
-        self._uuid_to_ws[uuid4] = websocket
+        uuid = uuid4()
+        self._uuid_to_ws[uuid] = websocket
         await self._send(
             WebSocketMessage(
                 type=MessageType.BIND,
-                client_id=uuid4,
+                client_id=uuid,
                 message=MessageDataHead.TARGET_ID.value
             ),
             websocket
@@ -172,23 +173,23 @@ class DGLabWSServer:
                 await self._message_handler(parsed_message, websocket)
 
         # 掉线处理
-        self._uuid_to_ws.pop(uuid4)
-        if uuid4 in self._client_id_to_target_id.keys():
-            notice_id = self._client_id_to_target_id[uuid4]
-            self._client_id_to_target_id.pop(uuid4)
+        self._uuid_to_ws.pop(uuid)
+        if uuid in self._client_id_to_target_id.keys():
+            notice_id = self._client_id_to_target_id[uuid]
+            self._client_id_to_target_id.pop(uuid)
             message = WebSocketMessage(
                 type=MessageType.BREAK,
-                client_id=uuid4,
+                client_id=uuid,
                 target_id=notice_id,
                 message=str(RetCode.CLIENT_DISCONNECTED)
             )
         else:
-            notice_id = self._target_id_to_client_id[uuid4]
-            self._target_id_to_client_id.pop(uuid4)
+            notice_id = self._target_id_to_client_id[uuid]
+            self._target_id_to_client_id.pop(uuid)
             message = WebSocketMessage(
                 type=MessageType.BREAK,
                 client_id=notice_id,
-                target_id=uuid4,
+                target_id=uuid,
                 message=str(RetCode.CLIENT_DISCONNECTED)
             )
         await self._send(
