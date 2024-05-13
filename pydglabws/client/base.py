@@ -164,10 +164,11 @@ class DGLabClient(ABC):
 
         注意，是从队列中最早的数据开始获取，可能不是最新的
 
-        示例::
-
-            async for data in client.app_data():
-                print(f"Got data from App: {data}")
+        示例：
+        ```python3
+        async for data in client.app_data():
+            print(f"Got data from App: {data}")
+        ```
         """
         while True:
             yield await self.recv_app_data()

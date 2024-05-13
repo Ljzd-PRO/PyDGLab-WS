@@ -71,6 +71,7 @@ class MessageDataHead(Enum):
     :ivar FEEDBACK: App 反馈
     """
     TARGET_ID = "targetId"
+    # noinspection SpellCheckingInspection
     DG_LAB = "DGLAB"
     STRENGTH = "strength"
     PULSE = "pulse"

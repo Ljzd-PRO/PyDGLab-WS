@@ -9,11 +9,12 @@ class DGLabWSConnect:
     """
     DG-Lab 终端的 WebSocket 连接管理器
 
-    示例::
-
-        async with DGLabWSConnect("wss://localhost:5678") as client:
-            await client.bind()
-            await client.
+    示例：
+    ```python3
+    async with DGLabWSConnect("wss://localhost:5678") as client:
+        await client.bind()
+        await client.
+    ```
 
     :param uri: WebSocket 服务端 Uri
     :param kwargs: :class:`websockets.client.connect` 的其他参数

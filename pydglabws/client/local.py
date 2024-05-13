@@ -10,16 +10,17 @@ __all__ = ["DGLabLocalClient"]
 
 
 class DGLabLocalClient(DGLabClient):
+    # noinspection SpellCheckingInspection
     """
-    DG-Lab 终端，并不实际发送 WebSocket 消息，而是直接与本地服务端进行通信
+        DG-Lab 终端，并不实际发送 WebSocket 消息，而是直接与本地服务端进行通信
 
-    本地服务端指同一线程下的 :class:`pydglabws.server.server.DGLabWSServer`
+        本地服务端指同一线程下的 :class:`pydglabws.server.server.DGLabWSServer`
 
-    :param client_id: 终端 ID
-    :param sender: 用于客户端发送消息的回调函数
-    :param queue_setter: 回调函数，用于服务端设置客户端的消息队列
-    :param max_queue: 消息队列最大长度
-    """
+        :param client_id: 终端 ID
+        :param sender: 用于客户端发送消息的回调函数
+        :param queue_setter: 回调函数，用于服务端设置客户端的消息队列
+        :param max_queue: 消息队列最大长度
+        """
 
     def __init__(
             self,
