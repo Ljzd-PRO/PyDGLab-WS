@@ -1,16 +1,18 @@
 """
 此处定义了一些 Pydantic 模型，使用 Pydantic V2
 """
-from typing import Optional
+from typing import Optional, Any
 
-from pydantic import BaseModel, UUID4, ConfigDict, field_serializer, AliasGenerator
-from pydantic.alias_generators import to_camel
+from pydantic import BaseModel, UUID4, ConfigDict, field_serializer, AliasGenerator, model_validator, \
+    field_validator
+from pydantic.alias_generators import to_camel, to_snake
 
 from .enums import MessageType
 
 __all__ = ("WebSocketMessage", "StrengthData")
 
 
+# noinspection PyNestedDecorators
 class WebSocketMessage(BaseModel):
     """
     WebSocket 消息
@@ -20,6 +22,8 @@ class WebSocketMessage(BaseModel):
     :ivar target_id: App ID
     :ivar message: 消息 / 指令
     """
+    # 仅在序列化时将键转为驼峰命名法作为别名
+    # 验证时不取别名的原因是，取别名会影响对象初始化参数名，而 AliasChoices 不知为何不起作用
     model_config = ConfigDict(
         alias_generator=AliasGenerator(
             serialization_alias=to_camel
@@ -32,8 +36,32 @@ class WebSocketMessage(BaseModel):
     message: str
 
     @field_serializer("client_id", "target_id")
-    def serialize_id(self, value: Optional[UUID4]):
+    def _serialize_id(self, value: Optional[UUID4]):
+        """
+        序列化时，当值为 ``None``，序列化成空字符串
+        """
         return value or ""
+
+    @field_validator("client_id", "target_id", mode="before")
+    @classmethod
+    def _validate_id(cls, value: Any):
+        """
+        验证 UUID 值时，当值为空字符串，更改为 ``None``，与 :meth:`serialize_id` 相对应
+        """
+        return value if value != "" else None
+
+    @model_validator(mode="before")
+    @classmethod
+    def _field_to_pascal(cls, data: Any):
+        """
+        验证模型时，将所有的键名更改为蛇形命名法（下划线）
+
+        验证时不取别名的原因是，取别名会影响对象初始化参数名，而 AliasChoices 不知为何不起作用
+        """
+        if isinstance(data, dict):
+            for key in list(data.keys()):
+                data[to_snake(key)] = data.pop(key)
+        return data
 
 
 class StrengthData(BaseModel):
