@@ -7,7 +7,7 @@ from pydantic import UUID4
 from websockets import WebSocketServerProtocol
 from websockets.server import serve as ws_serve
 
-from ..client.local_client import DGLabLocalClient
+from ..client.local import DGLabLocalClient
 from ..enums import MessageDataHead, RetCode, MessageType
 from ..models import WebSocketMessage
 

@@ -1,6 +1,6 @@
 from websockets.client import connect as ws_connect
 
-from .ws_client import DGLabWSClient
+from .ws import DGLabWSClient
 
 __all__ = ["DGLabWSConnect"]
 
