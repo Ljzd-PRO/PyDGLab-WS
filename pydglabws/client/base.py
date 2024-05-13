@@ -6,7 +6,7 @@ from pydantic import UUID4
 from pydglabws import WebSocketMessage, MessageType
 from pydglabws.enums import MessageDataHead, RetCode, StrengthOperationType, Channel, FeedbackButton
 from pydglabws.models import StrengthData
-from pydglabws.types import PulseOperation
+from pydglabws.typing import PulseOperation
 from pydglabws.utils import dg_lab_client_qrcode, parse_strength_data, parse_feedback_data, dump_strength_operation, \
     dump_add_pulses, dump_clear_pulses
 

@@ -5,7 +5,7 @@ from pydantic import UUID4
 from pydglabws.enums import StrengthOperationType, Channel, MessageDataHead, FeedbackButton
 from pydglabws.exceptions import InvalidStrengthData, InvalidFeedbackData
 from pydglabws.models import StrengthData
-from pydglabws.types import PulseOperation
+from pydglabws.typing import PulseOperation
 
 
 def parse_strength_data(data: str) -> StrengthData:
