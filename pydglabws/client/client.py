@@ -84,7 +84,7 @@ class DGLabClient(ABC):
         """
         ...
 
-    async def app_data(self) -> AsyncGenerator[StrengthData, Any]:
+    async def app_data(self) -> AsyncGenerator[Union[StrengthData, FeedbackButton], Any]:
         """
         强度数据异步生成器
 
