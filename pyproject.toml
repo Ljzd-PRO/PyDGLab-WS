@@ -4,9 +4,9 @@ version = "0.1.0"
 description = "一个通过 WebSocket 控制郊狼 DG-Lab 的 Python 库"
 authors = ["Ljzd-PRO <ljzd@office.ljzd-pro.asia>"]
 readme = "README.md"
-homepage = "https://github.com/Ljzd-PRO/PyDGLabWS"
-repository = "https://github.com/Ljzd-PRO/PyDGLabWS"
-documentation = "https://github.com/Ljzd-PRO/PyDGLabWS"
+homepage = "https://github.com/Ljzd-PRO/PyDGLab-WS"
+repository = "https://github.com/Ljzd-PRO/PyDGLab-WS"
+documentation = "https://github.com/Ljzd-PRO/PyDGLab-WS"
 
 keywords = ["dg-lab", "dg-lab-v3", "websocket", "library", "os-independent"]
 classifiers = [
