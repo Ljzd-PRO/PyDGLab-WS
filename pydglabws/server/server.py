@@ -57,7 +57,7 @@ class DGLabWSServer:
 
     @property
     def heartbeat_interval(self) -> Optional[float]:
-        """心跳包发送间隔（秒）"""
+        """心跳包发送间隔，可修改（秒）"""
         return self._heartbeat_interval
 
     @heartbeat_interval.setter
@@ -109,7 +109,7 @@ class DGLabWSServer:
         """
         return set(self._client_id_to_queue.keys())
 
-    def new_local_client(self, max_queue: int = 2 ** 5):
+    def new_local_client(self, max_queue: int = 2 ** 5) -> DGLabLocalClient:
         """
         创建新的本地终端 :class:`DGLabLocalClient`，记录并返回
         :param max_queue: 终端消息队列最大长度
