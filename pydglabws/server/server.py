@@ -70,7 +70,7 @@ class DGLabWSServer:
         """是否开启了心跳包发送计时器"""
         return self._heartbeat_interval is not None
 
-    async def __aenter__(self):
+    async def __aenter__(self) -> "DGLabWSServer":
         await self._serve.__aenter__()
         if self.heartbeat_enabled:
             self._heartbeat_task = asyncio.create_task(self._heartbeat_sender())
