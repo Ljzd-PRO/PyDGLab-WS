@@ -15,6 +15,9 @@ from pydglabws.utils import parse_strength_data, dump_strength_operation, dump_c
 class DGLabClient(ABC):
     """
     DG-Lab 终端基础类
+
+    :param client_id: 终端 ID
+    :param target_id: App ID
     """
 
     def __init__(
@@ -46,7 +49,13 @@ class DGLabClient(ABC):
         return self._client_id is None or self.target_id is None
 
     def get_qrcode(self, host: str, port: int) -> Optional[str]:
-        """终端二维码，二维码图像需要自行生成"""
+        """
+        终端二维码，二维码图像需要自行生成
+
+        :param host: WebSocket 服务端主机
+        :param port: WebSocket 服务端端口
+        :return: URL 字符串，如果需要二维码图像需要自行从返回的文本进行生成
+        """
         if host is None or port is None or self.not_registered:
             return None
         return dg_lab_client_qrcode(host, port, self._client_id)
