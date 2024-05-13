@@ -8,6 +8,7 @@ from websockets import WebSocketServerProtocol
 from websockets.server import serve as ws_serve
 
 from pydglabws import WebSocketMessage, MessageType
+from pydglabws.client.local_client import DGLabLocalClient
 from pydglabws.enums import MessageDataHead, RetCode
 
 
@@ -34,13 +35,14 @@ class DGLabWSServer:
             port=port,
             **kwargs
         )
-        self._ws_client_id_to_ws: Dict[UUID4, WebSocketServerProtocol] = {}
+        self._client_id_to_queue: Dict[UUID4, asyncio.Queue] = {}
+        self._uuid_to_ws: Dict[UUID4, WebSocketServerProtocol] = {}
         self._client_id_to_target_id: Dict[UUID4, UUID4] = {}
         self._target_id_to_client_id: Dict[UUID4, UUID4] = {}
         self._message_type_to_handler: Dict[
             MessageType,
             Callable[
-                [DGLabWSServer, WebSocketMessage, WebSocketServerProtocol],
+                [DGLabWSServer, WebSocketMessage, Optional[WebSocketServerProtocol]],
                 Coroutine[Any, Any, None]
             ]
         ] = {
@@ -84,12 +86,27 @@ class DGLabWSServer:
 
         :return: A set-like object providing a view on IDs
         """
-        return self._ws_client_id_to_ws.keys()
+        return self._uuid_to_ws.keys()
 
-    @staticmethod
+    def new_local_client(self, max_queue: int = 2 ** 5):
+        """
+        创建新的本地终端 :class:`DGLabLocalClient`，记录并返回
+        :param max_queue: 终端消息队列最大长度
+        :return: 创建好的本地终端对象
+        """
+        client_id = UUID4()
+        return DGLabLocalClient(
+            client_id,
+            self._message_handler,
+            self._client_id_to_queue.setdefault,
+            max_queue
+        )
+
     async def _send(
+            self,
             message: WebSocketMessage,
-            *wss: WebSocketServerProtocol
+            *wss: WebSocketServerProtocol,
+            to_local_client: bool = False
     ):
         """
         发送 WebSocket 消息
@@ -99,6 +116,9 @@ class DGLabWSServer:
         """
         for websocket in wss:
             await websocket.send(message.model_dump_json(by_alias=True))
+        if to_local_client:
+            if queue := self._client_id_to_queue.get(message.client_id):
+                await queue.put(message)
 
     async def _heartbeat_sender(self):
         """
@@ -106,7 +126,7 @@ class DGLabWSServer:
         """
         async with self._heartbeat_lock:
             while not self._stop_heartbeat:
-                for uuid4, websocket in self._ws_client_id_to_ws.items():
+                for uuid4, websocket in self._uuid_to_ws.items():
                     await self._send(
                         WebSocketMessage(
                             type=MessageType.HEARTBEAT,
@@ -124,7 +144,7 @@ class DGLabWSServer:
         """
         # 登记 WebSocket 客户端
         uuid4 = UUID4()
-        self._ws_client_id_to_ws[uuid4] = websocket
+        self._uuid_to_ws[uuid4] = websocket
         await self._send(
             WebSocketMessage(
                 type=MessageType.BIND,
@@ -149,7 +169,7 @@ class DGLabWSServer:
                 await self._message_handler(parsed_message, websocket)
 
         # 掉线处理
-        self._ws_client_id_to_ws.pop(uuid4)
+        self._uuid_to_ws.pop(uuid4)
         if uuid4 in self._client_id_to_target_id.keys():
             notice_id = self._client_id_to_target_id[uuid4]
             self._client_id_to_target_id.pop(uuid4)
@@ -168,12 +188,16 @@ class DGLabWSServer:
                 target_id=uuid4,
                 message=str(RetCode.CLIENT_DISCONNECTED)
             )
-        await self._send(message, self._ws_client_id_to_ws[notice_id])
+        await self._send(
+            message,
+            is_client_id := self._uuid_to_ws.get(notice_id),
+            to_local_client=is_client_id is None
+        )
 
     async def _message_handler(
             self,
             message: WebSocketMessage,
-            websocket: WebSocketServerProtocol
+            websocket: WebSocketServerProtocol = None
     ):
         """
         消息接收器，接收消息并进行处理
@@ -182,8 +206,9 @@ class DGLabWSServer:
         :param websocket: 消息来源连接
         """
         # 非法消息来源拒绝
-        if self._ws_client_id_to_ws[message.client_id] != websocket \
-                and self._ws_client_id_to_ws[message.target_id] != websocket:
+        if websocket is not None \
+                and self._uuid_to_ws[message.client_id] != websocket \
+                and self._uuid_to_ws[message.target_id] != websocket:
             await self._send(
                 WebSocketMessage(
                     type=MessageType.MSG,
@@ -198,7 +223,7 @@ class DGLabWSServer:
     async def _handle_bind(
             self: "DGLabWSServer",
             message: WebSocketMessage,
-            websocket: WebSocketServerProtocol
+            websocket: WebSocketServerProtocol = None
     ):
         """
         响应关系绑定（``bind`` 类型）消息
@@ -213,7 +238,8 @@ class DGLabWSServer:
             msg_to_send = message.model_copy()
 
             # 服务端中存在 client_id 和 target_id
-            if message.client_id in self._ws_client_id_to_ws and message.target_id in self._ws_client_id_to_ws:
+            if (message.client_id in self._uuid_to_ws or message.client_id in self._client_id_to_queue) \
+                    and message.target_id in self._uuid_to_ws:
                 # 双方均未被绑定
                 if message.client_id not in self._client_id_to_target_id.keys() \
                         and message.target_id not in self._target_id_to_client_id.keys():
@@ -227,15 +253,16 @@ class DGLabWSServer:
 
             await self._send(
                 msg_to_send,
-                self._ws_client_id_to_ws[message.client_id],
+                self._uuid_to_ws.get(message.client_id),
                 websocket,
+                to_local_client=websocket is None
             )
 
     @staticmethod
     async def _handle_msg(
             self: "DGLabWSServer",
             message: WebSocketMessage,
-            websocket: WebSocketServerProtocol
+            websocket: WebSocketServerProtocol = None
     ):
         """
         响应 `msg` 类型的消息
@@ -250,8 +277,17 @@ class DGLabWSServer:
             if self._client_id_to_target_id.get(message.client_id) != message.target_id:
                 msg_to_send.type = MessageType.BIND
                 msg_to_send.message = str(RetCode.INCOMPATIBLE_RELATIONSHIP)
-                await self._send(msg_to_send, websocket)
-            elif (target_ws := self._ws_client_id_to_ws[message.target_id]) == websocket:
-                await self._send(msg_to_send, self._ws_client_id_to_ws[message.client_id])
+                await self._send(
+                    msg_to_send,
+                    websocket,
+                    to_local_client=websocket is None
+                )
+            # 进行转发
+            elif (target_ws := self._uuid_to_ws[message.target_id]) == websocket:
+                await self._send(
+                    msg_to_send,
+                    self._uuid_to_ws.get(message.client_id),
+                    to_local_client=websocket is None
+                )
             else:
                 await self._send(msg_to_send, target_ws)
