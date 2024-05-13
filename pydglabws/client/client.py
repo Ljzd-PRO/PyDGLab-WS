@@ -45,11 +45,11 @@ class DGLabClient(ABC):
         """终端是否未完成与 App 的绑定"""
         return self._client_id is None or self.target_id is None
 
-    @property
-    @abstractmethod
-    def qrcode(self) -> Optional[str]:
+    def get_qrcode(self, host: str, port: int) -> Optional[str]:
         """终端二维码，二维码图像需要自行生成"""
-        ...
+        if host is None or port is None or self.not_registered:
+            return None
+        return dg_lab_client_qrcode(host, port, self._client_id)
 
     @abstractmethod
     async def ensure_bind(self):
@@ -139,6 +139,11 @@ class DGLabWSClient(DGLabClient):
     def __init__(self, websocket: WebSocketClientProtocol):
         super().__init__()
         self._websocket = websocket
+
+    def get_qrcode(self, host: str = None, port: int = None) -> Optional[str]:
+        if host is None or port is None:
+            host, port = self._websocket.remote_address or (None, None)
+        return super().get_qrcode(host, port)
 
     @property
     def qrcode(self) -> Optional[str]:
