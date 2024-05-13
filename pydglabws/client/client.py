@@ -61,6 +61,63 @@ class DGLabClient(ABC):
         return dg_lab_client_qrcode(host, port, self._client_id)
 
     @abstractmethod
+    async def _recv(self) -> WebSocketMessage:
+        """
+        收取来自 WebSocket 服务端的消息，并解析为 :class:`WebSocketMessage`
+        """
+        ...
+
+    async def _recv_owned(self) -> WebSocketMessage:
+        """
+        与 :meth:`_recv` 类似，但只接收目标为自身终端的消息
+        """
+        message = await self._recv()
+        if message.client_id == self._client_id:
+            return message
+
+    async def recv_message(self) -> WebSocketMessage:
+        """
+        在确保该终端已注册并绑定，获取了 ``client_id``, ``target_id`` 的前提下，收取消息
+
+        这是为了防止在注册之前就收取了 ``bind`` 消息，导致 ``client_id``, ``target_id`` 丢失
+        """
+        await self.ensure_bind()
+        return await self._recv_owned()
+
+    @abstractmethod
+    async def _send(self, message: WebSocketMessage):
+        """
+        向 WebSocket 服务端发送消息
+
+        :param message: 解析为 :class:`WebSocketMessage` 的消息
+        """
+        ...
+
+    async def _send_owned(self, msg_type: MessageType, msg: str):
+        """
+        与 :meth:`_send` 类似，但代为设置 ``client_id``, ``target_id``
+
+        :param msg_type: :attr:`WebSocketMessage.type`
+        :param msg: :attr:`WebSocketMessage.message`
+        """
+        message = WebSocketMessage(
+            type=msg_type,
+            client_id=self._client_id,
+            target_id=self._target_id,
+            message=msg
+        )
+        await self._send(message)
+
+    async def register(self):
+        """
+        从 WebSocket 服务端中获取 ``client_id`` 并保存
+        """
+        while self.not_registered:
+            message = await self._recv()
+            if message.type == MessageType.BIND and message.message == MessageDataHead.TARGET_ID:
+                self._client_id = message.client_id
+
+    @abstractmethod
     async def ensure_bind(self):
         """确保终端已完成与 App 的绑定"""
         ...
@@ -161,6 +218,13 @@ class DGLabWSClient(DGLabClient):
         host, port = self._websocket.remote_address
         return dg_lab_client_qrcode(host, port, self._client_id)
 
+    async def _recv(self) -> WebSocketMessage:
+        raw_message = await self._websocket.recv()
+        return WebSocketMessage.model_validate_strings(raw_message)
+
+    async def _send(self, message: WebSocketMessage):
+        await self._websocket.send(message.model_dump_json(by_alias=True))
+
     async def ensure_bind(self):
         while True:
             if self.not_registered:
@@ -218,59 +282,3 @@ class DGLabWSClient(DGLabClient):
             MessageType.MSG,
             dump_clear_pulses(channel)
         )
-
-    async def _recv(self) -> WebSocketMessage:
-        """
-        收取来自 WebSocket 服务端的消息，并解析为 :class:`WebSocketMessage`
-        """
-        raw_message = await self._websocket.recv()
-        return WebSocketMessage.model_validate_strings(raw_message)
-
-    async def _recv_owned(self) -> WebSocketMessage:
-        """
-        与 :meth:`_recv` 类似，但只接收目标为自身终端的消息
-        """
-        message = await self._recv()
-        if message.client_id == self._client_id:
-            return message
-
-    async def recv_message(self) -> WebSocketMessage:
-        """
-        在确保该终端已注册并绑定，获取了 ``client_id``, ``target_id`` 的前提下，收取消息
-
-        这是为了防止在注册之前就收取了 ``bind`` 消息，导致 ``client_id``, ``target_id`` 丢失
-        """
-        await self.ensure_bind()
-        return await self._recv_owned()
-
-    async def _send(self, message: WebSocketMessage):
-        """
-        向 WebSocket 服务端发送消息
-
-        :param message: 解析为 :class:`WebSocketMessage` 的消息
-        """
-        await self._websocket.send(message.model_dump_json(by_alias=True))
-
-    async def _send_owned(self, msg_type: MessageType, msg: str):
-        """
-        与 :meth:`_send` 类似，但代为设置 ``client_id``, ``target_id``
-
-        :param msg_type: :attr:`WebSocketMessage.type`
-        :param msg: :attr:`WebSocketMessage.message`
-        """
-        message = WebSocketMessage(
-            type=msg_type,
-            client_id=self._client_id,
-            target_id=self._target_id,
-            message=msg
-        )
-        await self._send(message)
-
-    async def register(self):
-        """
-        从 WebSocket 服务端中获取 ``client_id`` 并保存
-        """
-        while self.not_registered:
-            message = await self._recv()
-            if message.type == MessageType.BIND and message.message == MessageDataHead.TARGET_ID:
-                self._client_id = message.client_id
