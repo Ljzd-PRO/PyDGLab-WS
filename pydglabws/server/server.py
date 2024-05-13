@@ -60,6 +60,7 @@ class DGLabWSServer:
         await self._serve.__aenter__()
         if self._heartbeat_interval is not None:
             self._heartbeat_task = asyncio.create_task(self._heartbeat_sender())
+        return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         self._stop_heartbeat = True
