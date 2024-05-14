@@ -6,6 +6,8 @@ from websockets import WebSocketClientProtocol
 from websockets.client import connect
 
 from pydglabws.client import DGLabWSClient, DGLabLocalClient, DGLabClient
+from pydglabws.enums import FeedbackButton
+from pydglabws.models import StrengthData
 from pydglabws.server import DGLabWSServer
 from tests.app_simulator import DGLabAppSimulator
 
@@ -13,6 +15,11 @@ WEBSOCKET_HOST = "localhost"
 WEBSOCKET_PORT = 5678
 WEBSOCKET_URI = f"ws://{WEBSOCKET_HOST}:{WEBSOCKET_PORT}"
 HEARTBEAT_INTERVAL: float = 10
+
+ClientAppPair = Tuple[
+    DGLabClient,
+    DGLabAppSimulator
+]
 
 
 @pytest_asyncio.fixture(name="dg_lab_ws_server", scope="session")
@@ -51,6 +58,19 @@ async def app_simulator_for_local_fixture() -> DGLabAppSimulator:
 async def app_simulator_for_ws_fixture() -> DGLabAppSimulator:
     async with connect(WEBSOCKET_URI) as app_ws:
         yield DGLabAppSimulator(app_ws)
+
+
+@pytest_asyncio.fixture(name="client_app_pairs", scope="session")
+def client_app_pairs_fixture(
+        dg_lab_local_client: DGLabLocalClient,
+        dg_lab_ws_client: DGLabWSClient,
+        app_simulator_for_local: DGLabAppSimulator,
+        app_simulator_for_ws: DGLabAppSimulator,
+) -> List[ClientAppPair]:
+    return [
+        (dg_lab_local_client, app_simulator_for_local),
+        (dg_lab_ws_client, app_simulator_for_ws)
+    ]
 
 
 @pytest.mark.parametrize(
@@ -148,20 +168,19 @@ def test_dg_lab_client_get_qrcode(
     ]
 )  # After registered
 async def test_dg_lab_client_bind(
-        dg_lab_local_client: DGLabLocalClient,
-        dg_lab_ws_client: DGLabWSClient,
-        app_simulator_for_local: DGLabAppSimulator,
-        app_simulator_for_ws: DGLabAppSimulator,
+        client_app_pairs: List[ClientAppPair],
         dg_lab_ws_server: DGLabWSServer
 ):
     assert not dg_lab_ws_server.client_id_to_target_id
     assert not dg_lab_ws_server.target_id_to_client_id
 
-    client_app_pairs: List[Tuple[DGLabClient, DGLabAppSimulator, Callable[[DGLabClient], Coroutine]]] = [
-        (dg_lab_local_client, app_simulator_for_local, lambda x: x.bind()),
-        (dg_lab_ws_client, app_simulator_for_ws, lambda x: x.ensure_bind())
-    ]
-    for client, app, get_bind in client_app_pairs:
+    for (client, app), get_bind in zip(
+            client_app_pairs,
+            [
+                lambda x: x.bind(),
+                lambda x: x.ensure_bind()
+            ]
+    ):  # type: (DGLabClient, DGLabAppSimulator), Callable[[DGLabClient], Coroutine]
         await app.register()
         await app.bind(client.client_id)
         await get_bind(client)
@@ -170,3 +189,46 @@ async def test_dg_lab_client_bind(
         assert dg_lab_ws_server.target_id_to_client_id.get(app.target_id) == client.client_id
         assert client.target_id == app.target_id
         assert client.not_bind is not True
+
+
+@pytest.mark.asyncio
+@pytest.mark.order(after="test_dg_lab_client_bind")  # After bind
+@pytest.mark.parametrize(
+    "strength_data",
+    [
+        StrengthData(a=0, b=0, a_limit=0, b_limit=0),
+        StrengthData(a=200, b=0, a_limit=0, b_limit=0),
+        StrengthData(a=0, b=200, a_limit=0, b_limit=0),
+        StrengthData(a=0, b=0, a_limit=200, b_limit=0),
+        StrengthData(a=0, b=0, a_limit=0, b_limit=200),
+    ]
+)
+async def test_dg_lab_client_recv_strength(
+        strength_data: StrengthData,
+        client_app_pairs: List[ClientAppPair],
+        app_simulator_for_ws: DGLabAppSimulator,
+):
+    for client, app in client_app_pairs:
+        await app.send_strength(strength_data)
+        assert await client.recv_app_data() == strength_data
+
+
+@pytest.mark.asyncio
+@pytest.mark.order(after="test_dg_lab_client_bind")  # After bind
+@pytest.mark.parametrize(
+    "feedback_button",
+    [
+        FeedbackButton(0),
+        FeedbackButton(4),
+        FeedbackButton(5),
+        FeedbackButton(9),
+    ]
+)
+async def test_dg_lab_client_recv_feedback(
+        feedback_button: FeedbackButton,
+        client_app_pairs: List[ClientAppPair],
+        app_simulator_for_ws: DGLabAppSimulator,
+):
+    for client, app in client_app_pairs:
+        await app.send_feedback(feedback_button)
+        assert await client.recv_app_data() == feedback_button

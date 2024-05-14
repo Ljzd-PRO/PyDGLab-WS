@@ -3,8 +3,8 @@ from typing import Optional
 from pydantic import UUID4
 from websockets import WebSocketClientProtocol
 
-from pydglabws.enums import MessageType, MessageDataHead
-from pydglabws.models import WebSocketMessage
+from pydglabws.enums import MessageType, MessageDataHead, FeedbackButton
+from pydglabws.models import WebSocketMessage, StrengthData
 
 
 class DGLabAppSimulator:
@@ -44,6 +44,26 @@ class DGLabAppSimulator:
             )
         )
         self.client_id = client_id
+
+    async def send_strength(self, data: StrengthData):
+        await self._send(
+            WebSocketMessage(
+                type=MessageType.MSG,
+                client_id=self.client_id,
+                target_id=self.target_id,
+                message=f"{MessageDataHead.STRENGTH.value}-{data.a}+{data.b}+{data.a_limit}+{data.b_limit}"
+            )
+        )
+
+    async def send_feedback(self, data: FeedbackButton):
+        await self._send(
+            WebSocketMessage(
+                type=MessageType.MSG,
+                client_id=self.client_id,
+                target_id=self.target_id,
+                message=f"{MessageDataHead.FEEDBACK.value}-{data.value}"
+            )
+        )
 
     async def recv_client_data(self) -> WebSocketMessage:
         while True:
