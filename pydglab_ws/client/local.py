@@ -8,6 +8,11 @@ from ..models import WebSocketMessage
 
 __all__ = ["DGLabLocalClient"]
 
+try:
+    WebSocketMessageQueue = asyncio.Queue[WebSocketMessage]
+except TypeError:
+    WebSocketMessageQueue = asyncio.Queue
+
 
 class DGLabLocalClient(DGLabClient):
     # noinspection SpellCheckingInspection
@@ -26,13 +31,13 @@ class DGLabLocalClient(DGLabClient):
             self,
             client_id: UUID4,
             sender: Callable[[WebSocketMessage], Coroutine[Any, Any, Any]],
-            queue_setter: Callable[[UUID4, asyncio.Queue[WebSocketMessage]], Any],
+            queue_setter: Callable[[UUID4, WebSocketMessageQueue], Any],
             max_queue: int = 2 ** 5
     ):
         super().__init__()
         self._client_id = client_id
         self._send_callable = sender
-        self._message_queue: asyncio.Queue[WebSocketMessage] = asyncio.Queue(max_queue)
+        self._message_queue: WebSocketMessageQueue = asyncio.Queue(max_queue)
         queue_setter(client_id, self._message_queue)
 
     async def _recv(self) -> WebSocketMessage:
