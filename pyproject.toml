@@ -34,7 +34,6 @@ pytest = "^8.2.0"
 pytest-asyncio = "^0.23.6"
 pytest-cov = "^5.0.0"
 pytest-order = "^1.2.1"
-allpairspy = "^2.5.1"
 
 [tool.poetry.group.docs]
 optional = true
