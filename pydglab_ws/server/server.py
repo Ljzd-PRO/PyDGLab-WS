@@ -190,8 +190,7 @@ class DGLabWSServer:
 
         # 掉线处理
         self._uuid_to_ws.pop(uuid)
-        if uuid in self._client_id_to_target_id.keys():
-            notice_id = self._client_id_to_target_id[uuid]
+        if notice_id := self._client_id_to_target_id.get(uuid):
             self._client_id_to_target_id.pop(uuid)
             message = WebSocketMessage(
                 type=MessageType.BREAK,
@@ -199,8 +198,7 @@ class DGLabWSServer:
                 target_id=notice_id,
                 message=str(RetCode.CLIENT_DISCONNECTED)
             )
-        else:
-            notice_id = self._target_id_to_client_id[uuid]
+        elif notice_id := self._target_id_to_client_id.get(uuid):
             self._target_id_to_client_id.pop(uuid)
             message = WebSocketMessage(
                 type=MessageType.BREAK,
@@ -208,11 +206,14 @@ class DGLabWSServer:
                 target_id=uuid,
                 message=str(RetCode.CLIENT_DISCONNECTED)
             )
-        await self._send(
-            message,
-            is_client_id := self._uuid_to_ws.get(notice_id),
-            to_local_client=is_client_id is None
-        )
+        else:
+            message = None
+        if message is not None:
+            await self._send(
+                message,
+                is_client_id := self._uuid_to_ws.get(notice_id),
+                to_local_client=is_client_id is None
+            )
 
     async def _message_handler(
             self,
