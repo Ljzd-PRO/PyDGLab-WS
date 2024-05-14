@@ -1,10 +1,5 @@
 """
-这段代码不仅提供 DG-Lab WebSocket 服务端服务，还生成了一个本地终端可供 App 连接。
-
-不管是本地终端 :class:`DGLabLocalClient` 还是 WebSocket 终端 :class:`DGLabWSClient`，包含的主要方法都相同，
-因此在该端代码中，终端相关的逻辑与 ``ws_client.py`` WebSocket 终端的实现基本相同。
-
-这种方式，省去了终端连接 WebSocket 服务端的环节，终端与 WebSocket 服务端一体，网络延迟更低，部署更方便。
+请先安装 qrcode：``pip install qrcode``
 """
 import asyncio
 import io
