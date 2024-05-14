@@ -1,1 +1,1 @@
-::: pydglabws.typing
+::: pydglab_ws.typing

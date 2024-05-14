@@ -17,7 +17,7 @@
 ### 安装
 
 ```bash
-pip3 install pydglabws
+pip3 install pydglab-ws
 ```
 
 ### 命令

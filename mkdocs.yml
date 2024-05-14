@@ -1,13 +1,13 @@
 #file: noinspection SpellCheckingInspection
 site_name: PyDGLab-WS
-#site_url: https://pydglabws.readthedocs.io/
+#site_url: https://pydglab-ws.readthedocs.io/
 site_description: Documentation for PyDGLab-WS
 repo_url: https://github.com/Ljzd-PRO/PyDGLab-WS
 repo_name: Ljzd-PRO/PyDGLab-WS
 copyright: Copyright © 2024 by Ljzd-PRO
 
 watch:
-  - pydglabws
+  - pydglab_ws
 
 nav:
   - Get Started:
@@ -17,7 +17,7 @@ nav:
   - Usage: usage.md
   - Examples: examples.md
   - API Documentation:
-    - pydglabws:
+    - pydglab_ws:
       - enums: api/enums.md
       - exceptions: api/exceptions.md
       - models: api/models.md
@@ -65,7 +65,7 @@ plugins:
             Examples: 演示示例
             API Documentation: API 文档
             FAQ: 常见问题
-            pydglabws: pydglabws
+            pydglab_ws: pydglab_ws
             enums: enums
             exceptions: exceptions
             models: models

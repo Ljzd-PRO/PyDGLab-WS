@@ -2,7 +2,7 @@
 
 ## 链接
 
-- PyPI: 🔗[pydglabws](https://pypi.org/project/pydglabws/)
+- PyPI: 🔗[pydglab-ws](https://pypi.org/project/pydglab-ws/)
 - 开发版分支：[🔗dev](https://github.com/Ljzd-PRO/PyDGLab-WS/tree/dev)
 
 ## 代码覆盖率

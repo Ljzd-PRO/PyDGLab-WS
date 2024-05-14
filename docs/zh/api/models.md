@@ -1,1 +1,1 @@
-::: pydglabws.models
+::: pydglab_ws.models

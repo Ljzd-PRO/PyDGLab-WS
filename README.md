@@ -2,7 +2,7 @@
 
 一个用于创建郊狼 DG-Lab App Socket 被控的客户端和服务端的 Python 库
 
-📖 完整文档：https://pydglabws.readthedocs.io
+📖 完整文档：https://pydglab-ws.readthedocs.io
 
 ## 💡 特性
 
@@ -17,5 +17,5 @@
 ### 安装
 
 ```bash
-pip3 install pydglabws
+pip3 install pydglab-ws
 ```

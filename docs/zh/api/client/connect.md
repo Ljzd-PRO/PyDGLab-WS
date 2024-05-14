@@ -1,1 +1,1 @@
-::: pydglabws.client.connect
+::: pydglab_ws.client.connect

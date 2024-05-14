@@ -3,11 +3,11 @@ from uuid import uuid4
 
 import pytest
 
-from pydglabws.enums import FeedbackButton, Channel, StrengthOperationType
-from pydglabws.exceptions import InvalidStrengthData, InvalidFeedbackData
-from pydglabws.models import StrengthData
-from pydglabws.typing import PulseOperation
-from pydglabws.utils import parse_strength_data, parse_feedback_data, dump_strength_operation, dump_clear_pulses, \
+from pydglab_ws.enums import FeedbackButton, Channel, StrengthOperationType
+from pydglab_ws.exceptions import InvalidStrengthData, InvalidFeedbackData
+from pydglab_ws.models import StrengthData
+from pydglab_ws.typing import PulseOperation
+from pydglab_ws.utils import parse_strength_data, parse_feedback_data, dump_strength_operation, dump_clear_pulses, \
     dump_pulse_operation, dump_add_pulses, dg_lab_client_qrcode
 
 

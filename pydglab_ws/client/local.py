@@ -14,7 +14,7 @@ class DGLabLocalClient(DGLabClient):
     """
         DG-Lab 终端，并不实际发送 WebSocket 消息，而是直接与本地服务端进行通信
 
-        本地服务端指同一线程下的 :class:`pydglabws.server.server.DGLabWSServer`
+        本地服务端指同一线程下的 :class:`pydglab_ws.server.server.DGLabWSServer`
 
         :param client_id: 终端 ID
         :param sender: 用于客户端发送消息的回调函数

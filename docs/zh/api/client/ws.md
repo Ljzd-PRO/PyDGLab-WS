@@ -1,1 +1,1 @@
-::: pydglabws.client.ws
+::: pydglab_ws.client.ws

@@ -1,8 +1,8 @@
 import json
 from uuid import uuid4
 
-from pydglabws.enums import MessageType, MessageDataHead
-from pydglabws.models import WebSocketMessage
+from pydglab_ws.enums import MessageType, MessageDataHead
+from pydglab_ws.models import WebSocketMessage
 
 
 def test_web_socket_message():

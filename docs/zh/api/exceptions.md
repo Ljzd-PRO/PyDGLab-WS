@@ -1,1 +1,1 @@
-::: pydglabws.exceptions
+::: pydglab_ws.exceptions

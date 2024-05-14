@@ -6,10 +6,10 @@ import pytest_asyncio
 from websockets import WebSocketClientProtocol
 from websockets.client import connect
 
-from pydglabws.client import DGLabWSClient, DGLabLocalClient, DGLabClient, DGLabWSConnect
-from pydglabws.enums import FeedbackButton, Channel, MessageType, StrengthOperationType
-from pydglabws.models import StrengthData
-from pydglabws.server import DGLabWSServer
+from pydglab_ws.client import DGLabWSClient, DGLabLocalClient, DGLabClient, DGLabWSConnect
+from pydglab_ws.enums import FeedbackButton, Channel, MessageType, StrengthOperationType
+from pydglab_ws.models import StrengthData
+from pydglab_ws.server import DGLabWSServer
 from tests.app_simulator import DGLabAppSimulator
 
 WEBSOCKET_HOST = "127.0.0.1"

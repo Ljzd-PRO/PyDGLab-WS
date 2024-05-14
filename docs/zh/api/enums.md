@@ -1,1 +1,1 @@
-::: pydglabws.enums
+::: pydglab_ws.enums

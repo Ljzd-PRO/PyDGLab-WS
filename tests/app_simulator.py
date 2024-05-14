@@ -3,8 +3,8 @@ from typing import Optional
 from pydantic import UUID4
 from websockets import WebSocketClientProtocol
 
-from pydglabws.enums import MessageType, MessageDataHead, FeedbackButton
-from pydglabws.models import WebSocketMessage, StrengthData
+from pydglab_ws.enums import MessageType, MessageDataHead, FeedbackButton
+from pydglab_ws.models import WebSocketMessage, StrengthData
 
 
 class DGLabAppSimulator:

@@ -1,1 +1,1 @@
-::: pydglabws.utils
+::: pydglab_ws.utils

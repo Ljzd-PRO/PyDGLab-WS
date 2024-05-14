@@ -1,1 +1,1 @@
-::: pydglabws.server.server
+::: pydglab_ws.server.server
