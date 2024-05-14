@@ -192,17 +192,22 @@ class DGLabWSServer:
             pass
 
         # 掉线处理
+        # 与官方标准相比，补充了解绑操作
         self._uuid_to_ws.pop(uuid)
+        # 第三方终端掉线
         if notice_id := self._client_id_to_target_id.get(uuid):
             self._client_id_to_target_id.pop(uuid)
+            self._target_id_to_client_id.pop(notice_id)
             message = WebSocketMessage(
                 type=MessageType.BREAK,
                 client_id=uuid,
                 target_id=notice_id,
                 message=str(RetCode.CLIENT_DISCONNECTED)
             )
+        # App 掉线
         elif notice_id := self._target_id_to_client_id.get(uuid):
             self._target_id_to_client_id.pop(uuid)
+            self._client_id_to_target_id.pop(notice_id)
             message = WebSocketMessage(
                 type=MessageType.BREAK,
                 client_id=notice_id,
