@@ -11,7 +11,7 @@ class DGLabWSConnect:
 
     示例：
     ```python3
-    async with DGLabWSConnect("wss://localhost:5678") as client:
+    async with DGLabWSConnect("ws://localhost:5678") as client:
         await client.bind()
         await client.
     ```
