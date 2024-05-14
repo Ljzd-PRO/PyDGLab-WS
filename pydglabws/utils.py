@@ -109,15 +109,15 @@ def dump_add_pulses(
     return json.dumps(dict_data)
 
 
-def dg_lab_client_qrcode(host: str, port: int, client_id: UUID4):
+def dg_lab_client_qrcode(uri: str, client_id: UUID4):
     """
     生成终端二维码，二维码图像需要自行生成
 
-    :param host: WebSocket 服务端主机
-    :param port: WebSocket 服务端端口
+    :param uri: WebSocket 服务端 URI，例如：``ws://107.47.91.92:4567``
+            （注意末尾不能有 ``/``）
     :param client_id: 终端 ID
     :return:
     """
     return (f"https://www.dungeon-lab.com/app-download.php"
             f"#DGLAB-SOCKET"
-            f"#wss://{host}:{port}/{client_id}")
+            f"#{uri}/{client_id}")

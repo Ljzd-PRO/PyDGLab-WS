@@ -65,17 +65,17 @@ class DGLabClient(ABC):
         """
         ...
 
-    def get_qrcode(self, host: str, port: int) -> Optional[str]:
+    def get_qrcode(self, uri: str) -> Optional[str]:
         """
         终端二维码，二维码图像需要自行生成
 
-        :param host: WebSocket 服务端主机
-        :param port: WebSocket 服务端端口
+        :param uri: WebSocket 服务端 URI，例如：``ws://107.47.91.92:4567``
+            （注意末尾不能有 ``/``）
         :return: URL 字符串，如果需要二维码图像需要自行从返回的文本进行生成
         """
-        if host is None or port is None or self.not_registered:
+        if uri is None or self.not_registered:
             return None
-        return dg_lab_client_qrcode(host, port, self._client_id)
+        return dg_lab_client_qrcode(uri, self._client_id)
 
     async def _recv_owned(self) -> WebSocketMessage:
         """
