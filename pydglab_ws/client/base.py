@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional, AsyncGenerator, Any, Union
+from typing import Optional, AsyncGenerator, Any, Union, Dict, Callable, Literal
 
 from pydantic import UUID4
 
@@ -28,6 +28,14 @@ class DGLabClient(ABC):
     ):
         self._client_id: Optional[UUID4] = client_id
         self._target_id: Optional[UUID4] = target_id
+        self._message_type_to_handler: Dict[
+            MessageType,
+            Callable[[WebSocketMessage], Any]
+        ] = {
+            MessageType.MSG: self._handle_msg,
+            MessageType.BREAK: self._handle_break,
+            MessageType.HEARTBEAT: self._handle_heartbeat
+        }
 
     @property
     def client_id(self) -> Optional[UUID4]:
@@ -100,6 +108,26 @@ class DGLabClient(ABC):
         )
         await self._send(message)
 
+    @staticmethod
+    def _handle_msg(message: WebSocketMessage) -> Optional[Union[StrengthData, FeedbackButton]]:
+        """处理类型为 ``msg`` 的消息"""
+        if message.message.startswith(MessageDataHead.STRENGTH.value):
+            return parse_strength_data(message.message)
+        elif message.message.startswith(MessageDataHead.FEEDBACK.value):
+            return parse_feedback_data(message.message)
+        else:
+            return None
+
+    @staticmethod
+    def _handle_break(message: WebSocketMessage) -> Optional[Literal[RetCode.CLIENT_DISCONNECTED]]:
+        """处理类型为 ``break`` 的消息"""
+        return RetCode(int(message.message)) if message.message.isdigit() else None
+
+    @staticmethod
+    def _handle_heartbeat(message: WebSocketMessage) -> Optional[Literal[RetCode.SUCCESS]]:
+        """处理类型为 ``heartbeat`` 的消息"""
+        return RetCode(int(message.message)) if message.message.isdigit() else None
+
     async def register(self):
         """
         从 WebSocket 服务端中获取 ``client_id`` 并保存
@@ -132,24 +160,23 @@ class DGLabClient(ABC):
                     self._target_id = message.target_id
                 return ret_code
 
-    async def recv_app_data(self) -> Union[StrengthData, FeedbackButton]:
+    async def recv_data(self) -> Union[StrengthData, FeedbackButton, RetCode]:
         """
-        获取来自 DG-Lab App 的数据
+        获取 WebSocket 服务端的数据
 
         注意，获取到的是队列中最早的数据，可能不是最新的
 
-        :return: 已解析的 **强度数据** 或 **App 反馈数据**
+        :return: 可能为 **强度数据** - :class:`StrengthData`、**App 反馈数据** - :class:`FeedbackButton` \
+            、**心跳** - ``RetCode.SUCCESS``、**App 断开连接** - ``RetCode.CLIENT_DISCONNECTED``
         """
         await self.ensure_bind()
         while True:
             message = await self._recv_owned()
-            if message.type == MessageType.MSG:
-                if message.message.startswith(MessageDataHead.STRENGTH.value):
-                    return parse_strength_data(message.message)
-                elif message.message.startswith(MessageDataHead.FEEDBACK.value):
-                    return parse_feedback_data(message.message)
+            handler = self._message_type_to_handler.get(message.type)
+            if handler and (result := handler(message)) is not None:
+                return result
 
-    async def app_data(self) -> AsyncGenerator[Union[StrengthData, FeedbackButton], Any]:
+    async def data_generator(self) -> AsyncGenerator[Union[StrengthData, FeedbackButton, RetCode], Any]:
         """
         强度数据异步生成器
 
@@ -157,12 +184,14 @@ class DGLabClient(ABC):
 
         示例：
         ```python3
-        async for data in client.app_data():
+        async for data in client.data_generator():
             print(f"Got data from App: {data}")
         ```
+        :return: 可能为 **强度数据** - :class:`StrengthData`、**App 反馈数据** - :class:`FeedbackButton` \
+            、**心跳** - ``RetCode.SUCCESS``、**App 断开连接** - ``RetCode.CLIENT_DISCONNECTED``
         """
         while True:
-            yield await self.recv_app_data()
+            yield await self.recv_data()
 
     async def set_strength(
             self,
