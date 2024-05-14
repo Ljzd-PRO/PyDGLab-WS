@@ -1,4 +1,4 @@
-from typing import Tuple, List, Callable, Coroutine
+from typing import Tuple, List, Callable, Coroutine, Literal
 
 import pytest
 import pytest_asyncio
@@ -11,7 +11,7 @@ from pydglabws.models import StrengthData
 from pydglabws.server import DGLabWSServer
 from tests.app_simulator import DGLabAppSimulator
 
-WEBSOCKET_HOST = "localhost"
+WEBSOCKET_HOST = "127.0.0.1"
 WEBSOCKET_PORT = 5678
 WEBSOCKET_URI = f"ws://{WEBSOCKET_HOST}:{WEBSOCKET_PORT}"
 HEARTBEAT_INTERVAL: float = 10
@@ -127,37 +127,71 @@ async def test_dg_lab_ws_register(
     assert dg_lab_ws_client.not_bind is True
 
 
+@pytest.mark.order(
+    after=[
+        "test_dg_lab_ws_register",
+        "test_dg_lab_local_register"
+    ]
+)  # After registered
 @pytest.mark.parametrize(
-    "args,expected_generator",
+    "uri,expected_generator,only_for",
     [
         (
-                ("localhost", 8080),
+                "ws://localhost:8080",
                 lambda uuid: "https://www.dungeon-lab.com/app-download.php"
                              "#DGLAB-SOCKET"
-                             f"#wss://localhost:8080/{uuid}"
+                             f"#ws://localhost:8080/{uuid}",
+                None
         ),
         (
-                ("153.216.254.135", 5678),
+                "ws://153.216.254.135:5678",
                 lambda uuid: "https://www.dungeon-lab.com/app-download.php"
                              "#DGLAB-SOCKET"
-                             f"#wss://153.216.254.135:5678/{uuid}"
+                             f"#ws://153.216.254.135:5678/{uuid}",
+                None
         ),
         (
-                ("website.cir", 4567),
+                "wss://website.cir:4567",
                 lambda uuid: "https://www.dungeon-lab.com/app-download.php"
                              "#DGLAB-SOCKET"
-                             f"#wss://website.cir:4567/{uuid}"
+                             f"#wss://website.cir:4567/{uuid}",
+                None
+        ),
+        (
+                "ws://[2001:0db8:85a3:0000:0000:8a2e:0370:7334]:4567",
+                lambda uuid: "https://www.dungeon-lab.com/app-download.php"
+                             "#DGLAB-SOCKET"
+                             f"#ws://[2001:0db8:85a3:0000:0000:8a2e:0370:7334]:4567/{uuid}",
+                None
+        ),
+        (
+                None,
+                lambda uuid: "https://www.dungeon-lab.com/app-download.php"
+                             "#DGLAB-SOCKET"
+                             f"#ws://{WEBSOCKET_HOST}:{WEBSOCKET_PORT}/{uuid}",
+                "ws"
+        ),
+        (
+                None,
+                lambda _: None,
+                "local"
         ),
     ]
 )
 def test_dg_lab_client_get_qrcode(
-        args,
+        uri: str,
+        only_for: Literal["local", "ws"],
         expected_generator,
         dg_lab_local_client: DGLabLocalClient,
         dg_lab_ws_client: DGLabWSClient
 ):
     for client in dg_lab_local_client, dg_lab_ws_client:
-        assert client.get_qrcode(*args) == expected_generator(client.client_id)
+        if (
+                (only_for == "local" and isinstance(client, DGLabWSClient)) or
+                (only_for == "ws" and isinstance(client, DGLabLocalClient))
+        ):
+            continue
+        assert client.get_qrcode(uri) == expected_generator(client.client_id)
 
 
 @pytest.mark.asyncio

@@ -141,22 +141,28 @@ def test_dump_add_pulses(args, expected):
     "args,expected",
     [
         (
-                ("localhost", 8080, uuid := uuid4()),
+                ("ws://localhost:8080", uuid := uuid4()),
                 "https://www.dungeon-lab.com/app-download.php"
                 "#DGLAB-SOCKET"
-                f"#wss://localhost:8080/{uuid}"
+                f"#ws://localhost:8080/{uuid}"
         ),
         (
-                ("153.216.254.135", 5678, uuid := uuid4()),
+                ("ws://153.216.254.135:5678", uuid := uuid4()),
                 "https://www.dungeon-lab.com/app-download.php"
                 "#DGLAB-SOCKET"
-                f"#wss://153.216.254.135:5678/{uuid}"
+                f"#ws://153.216.254.135:5678/{uuid}"
         ),
         (
-                ("website.cir", 4567, "fd94c0fb-6daf-4c4f-a385-3901506418c7"),
+                ("wss://website.cir:4567", "fd94c0fb-6daf-4c4f-a385-3901506418c7"),
                 "https://www.dungeon-lab.com/app-download.php"
                 "#DGLAB-SOCKET"
                 "#wss://website.cir:4567/fd94c0fb-6daf-4c4f-a385-3901506418c7"
+        ),
+        (
+                ("ws://[2001:0db8:85a3:0000:0000:8a2e:0370:7334]:4567", uuid := uuid4()),
+                "https://www.dungeon-lab.com/app-download.php"
+                "#DGLAB-SOCKET"
+                f"#ws://[2001:0db8:85a3:0000:0000:8a2e:0370:7334]:4567/{uuid}"
         ),
     ]
 )
