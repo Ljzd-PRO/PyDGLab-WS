@@ -1,6 +1,5 @@
 import asyncio
 from asyncio import Task
-from json import JSONDecodeError
 from typing import Union, Optional, Sequence, Dict, Callable, Coroutine, Any, Set
 from uuid import uuid4
 
@@ -62,7 +61,7 @@ class DGLabWSServer:
 
     @heartbeat_interval.setter
     def heartbeat_interval(self, value: float):
-        if value is not None:
+        if value is not None and self.heartbeat_enabled:
             self._heartbeat_interval = value
 
     @property
@@ -136,7 +135,8 @@ class DGLabWSServer:
         :param wss: 发送目标连接
         """
         for websocket in wss:
-            await websocket.send(message.model_dump_json(by_alias=True))
+            if websocket is not None:
+                await websocket.send(message.model_dump_json(by_alias=True))
         if to_local_client:
             if queue := self._client_id_to_queue.get(message.client_id):
                 await queue.put(message)
@@ -177,8 +177,8 @@ class DGLabWSServer:
         # 响应消息
         async for message in websocket:
             try:
-                parsed_message = WebSocketMessage.model_validate_strings(message)
-            except JSONDecodeError:
+                parsed_message = WebSocketMessage.model_validate_json(message)
+            except ValueError:
                 await self._send(
                     WebSocketMessage(
                         type=MessageType.MSG,
@@ -227,8 +227,8 @@ class DGLabWSServer:
         """
         # 非法消息来源拒绝
         if websocket is not None \
-                and self._uuid_to_ws[message.client_id] != websocket \
-                and self._uuid_to_ws[message.target_id] != websocket:
+                and self._uuid_to_ws.get(message.client_id) != websocket \
+                and self._uuid_to_ws.get(message.target_id) != websocket:
             await self._send(
                 WebSocketMessage(
                     type=MessageType.MSG,
@@ -252,7 +252,7 @@ class DGLabWSServer:
         :param message: 关系绑定消息
         :param websocket: 消息来源连接
         """
-        if message.message == MessageDataHead.DG_LAB \
+        if message.message == MessageDataHead.DG_LAB.value \
                 and message.client_id is not None \
                 and message.target_id is not None:
             msg_to_send = message.model_copy()
@@ -271,11 +271,12 @@ class DGLabWSServer:
             else:
                 msg_to_send.message = str(RetCode.TARGET_CLIENT_NOT_FOUND)
 
+            client_ws = self._uuid_to_ws.get(message.client_id)
             await self._send(
                 msg_to_send,
                 self._uuid_to_ws.get(message.client_id),
                 websocket,
-                to_local_client=websocket is None
+                to_local_client=client_ws is None
             )
 
     @staticmethod
