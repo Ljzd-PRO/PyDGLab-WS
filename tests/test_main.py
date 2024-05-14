@@ -253,7 +253,11 @@ async def test_dg_lab_client_recv_strength(
 ):
     for client, app in client_app_pairs:
         await app.send_strength(strength_data)
-        assert await client.recv_app_data() == strength_data
+        while True:
+            data = await client.recv_data()
+            if isinstance(data, StrengthData):
+                assert data == strength_data
+                break
 
 
 @pytest.mark.asyncio
@@ -275,11 +279,11 @@ async def test_dg_lab_client_recv_feedback(
         await app.send_feedback(feedback_button)
         if isinstance(client, DGLabWSClient):
             # 顺便测试一下异步生成器
-            async for data in client.app_data():
+            async for data in client.data_generator(FeedbackButton):
                 assert data == feedback_button
                 break
         else:
-            assert await client.recv_app_data() == feedback_button
+            assert await client.recv_data() == feedback_button
 
 
 @pytest.mark.asyncio
