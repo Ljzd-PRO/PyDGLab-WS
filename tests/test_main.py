@@ -295,3 +295,27 @@ async def test_dg_lab_client_add_pulses(
         assert message.client_id == client.client_id
         assert message.target_id == app.target_id
         assert json.loads(message.message) == expected
+
+
+@pytest.mark.asyncio
+@pytest.mark.order(after="test_dg_lab_client_bind")  # After bind
+@pytest.mark.parametrize(
+    "channel,expected",
+    [
+        (Channel.A, "clear-1"),
+        (Channel.B, "clear-2"),
+    ]
+)
+async def test_dg_lab_clear_pulses(
+        channel,
+        expected,
+        client_app_pairs: List[ClientAppPair]
+):
+    for client, app in client_app_pairs:
+        await client.clear_pulses(channel)
+        message = await app.recv_client_data()
+
+        assert message.type == MessageType.MSG
+        assert message.client_id == client.client_id
+        assert message.target_id == app.target_id
+        assert message.message == expected
