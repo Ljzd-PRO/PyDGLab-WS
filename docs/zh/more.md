@@ -7,7 +7,7 @@
 
 ## 代码覆盖率
 
-![codecov.io](https://codecov.io/gh/Ljzd-PRO/KToolBox/graphs/sunburst.svg?token=5XK9CYQHQN)
+![codecov.io](https://codecov.io/github/Ljzd-PRO/PyDGLab-WS/graphs/tree.svg?token=VTr0LB1yWF)
 
 ## 许可证
 

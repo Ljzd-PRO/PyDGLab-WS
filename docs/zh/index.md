@@ -24,7 +24,7 @@
   </a>
 
   <a href="https://codecov.io/gh/Ljzd-PRO/PyDGLab-WS" target="_blank">
-      <img src="https://codecov.io/gh/Ljzd-PRO/PyDGLab-WS/branch/master/graph/badge.svg?token=5XK9CYQHQN" alt="codecov"/>
+      <img src="https://codecov.io/gh/Ljzd-PRO/PyDGLab-WS/branch/master/graph/badge.svg?token=VTr0LB1yWF" alt="codecov"/>
   </a>
 
   <a href='https://pydglab-ws.readthedocs.io/'>
