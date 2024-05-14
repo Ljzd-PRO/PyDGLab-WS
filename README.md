@@ -2,6 +2,8 @@
 
 一个用于创建郊狼 DG-Lab App Socket 被控的客户端和服务端的 Python 库
 
+**目前项目还在开发中，API 可能发生较多变更**
+
 📖 完整文档：https://pydglab-ws.readthedocs.io
 
 ## 💡 特性
