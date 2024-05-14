@@ -305,10 +305,11 @@ class DGLabWSServer:
                 )
             # 进行转发
             elif (target_ws := self._uuid_to_ws[message.target_id]) == websocket:
+                client_ws = self._uuid_to_ws.get(message.client_id)
                 await self._send(
                     msg_to_send,
-                    self._uuid_to_ws.get(message.client_id),
-                    to_local_client=websocket is None
+                    client_ws,
+                    to_local_client=client_ws is None
                 )
             else:
                 await self._send(msg_to_send, target_ws)
