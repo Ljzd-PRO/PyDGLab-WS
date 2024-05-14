@@ -1,4 +1,4 @@
-from typing import Tuple, List
+from typing import Tuple, List, Callable, Coroutine
 
 import pytest
 import pytest_asyncio
@@ -157,14 +157,14 @@ async def test_dg_lab_client_bind(
     assert not dg_lab_ws_server.client_id_to_target_id
     assert not dg_lab_ws_server.target_id_to_client_id
 
-    client_app_pairs: List[Tuple[DGLabClient, DGLabAppSimulator]] = [
-        (dg_lab_local_client, app_simulator_for_local),
-        (dg_lab_ws_client, app_simulator_for_ws)
+    client_app_pairs: List[Tuple[DGLabClient, DGLabAppSimulator, Callable[[DGLabClient], Coroutine]]] = [
+        (dg_lab_local_client, app_simulator_for_local, lambda x: x.bind()),
+        (dg_lab_ws_client, app_simulator_for_ws, lambda x: x.ensure_bind())
     ]
-    for client, app in client_app_pairs:
+    for client, app, get_bind in client_app_pairs:
         await app.register()
         await app.bind(client.client_id)
-        await client.bind()
+        await get_bind(client)
 
         assert dg_lab_ws_server.client_id_to_target_id.get(client.client_id) == app.target_id
         assert dg_lab_ws_server.target_id_to_client_id.get(app.target_id) == client.client_id
