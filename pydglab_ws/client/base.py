@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional, AsyncGenerator, Any, Union, Dict, Callable, Literal
+from typing import Optional, AsyncGenerator, Any, Union, Dict, Callable, Literal, Type, TypeVar
 
 from pydantic import UUID4
 
@@ -11,6 +11,8 @@ from ..utils import dg_lab_client_qrcode, parse_strength_data, parse_feedback_da
     dump_add_pulses, dump_clear_pulses
 
 __all__ = ["DGLabClient"]
+
+_DataType = TypeVar("_DataType", Type[StrengthData], Type[FeedbackButton], Type[RetCode])
 
 
 class DGLabClient(ABC):
@@ -176,7 +178,10 @@ class DGLabClient(ABC):
             if handler and (result := handler(message)) is not None:
                 return result
 
-    async def data_generator(self) -> AsyncGenerator[Union[StrengthData, FeedbackButton, RetCode], Any]:
+    async def data_generator(
+            self,
+            *targets: _DataType,
+    ) -> AsyncGenerator[_DataType, Any]:
         """
         强度数据异步生成器
 
@@ -187,11 +192,14 @@ class DGLabClient(ABC):
         async for data in client.data_generator():
             print(f"Got data from App: {data}")
         ```
+        :param targets: 目标类型，只有为目标类型的数据会被返回，为空即默认值时则不进行限制
         :return: 可能为 **强度数据** - :class:`StrengthData`、**App 反馈数据** - :class:`FeedbackButton` \
             、**心跳** - ``RetCode.SUCCESS``、**App 断开连接** - ``RetCode.CLIENT_DISCONNECTED``
         """
         while True:
-            yield await self.recv_data()
+            data = await self.recv_data()
+            if not targets or type(data) in targets:
+                yield data
 
     async def set_strength(
             self,
