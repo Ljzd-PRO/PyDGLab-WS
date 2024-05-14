@@ -7,12 +7,16 @@ on:
       - master
       - dev
     paths:
+      - ".github/actions/setup-python/**"
+      - ".github/workflows/codecov.yml"
       - "pydglab_ws/**"
       - "tests/**"
       - "pyproject.toml"
       - "poetry.lock"
   pull_request:
     paths:
+      - ".github/actions/setup-python/**"
+      - ".github/workflows/codecov.yml"
       - "pydglab_ws/**"
       - "tests/**"
       - "pyproject.toml"

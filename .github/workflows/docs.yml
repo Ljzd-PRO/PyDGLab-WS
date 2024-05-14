@@ -4,6 +4,8 @@ on:
     branches:
       - master
     paths:
+      - ".github/actions/setup-python/**"
+      - ".github/workflows/docs.yml"
       - "pydglab_ws/**"
       - "pyproject.toml"
       - "poetry.lock"
