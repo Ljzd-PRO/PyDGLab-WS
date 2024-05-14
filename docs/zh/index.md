@@ -1,6 +1,36 @@
-# PyDGLab-WS
+<h1 align="center">
+  PyDGLab-WS
+</h1>
 
-一个用于创建郊狼 DG-Lab App Socket 被控的客户端和服务端的 Python 库
+<p align="center">
+  一个用于创建郊狼 DG-Lab App Socket 被控的客户端和服务端的 Python 库
+</p>
+
+<p align="center">
+  <a href="https://pydglab-ws.readthedocs.io">📖 完整文档</a>
+</p>
+
+<p align="center">
+  <a href="https://pypi.org/project/pydglab-ws" target="_blank">
+    <img src="https://img.shields.io/github/v/release/Ljzd-PRO/PyDGLab-WS?logo=python" alt="Version">
+  </a>
+
+  <a href="./LICENSE">
+    <img src="https://img.shields.io/github/license/Ljzd-PRO/PyDGLab-WS" alt="BSD 3-Clause"/>
+  </a>
+
+  <a href="https://github.com/Ljzd-PRO/PyDGLab-WS/activity">
+    <img src="https://img.shields.io/github/last-commit/Ljzd-PRO/PyDGLab-WS/devel" alt="Last Commit"/>
+  </a>
+
+  <a href="https://codecov.io/gh/Ljzd-PRO/PyDGLab-WS" target="_blank">
+      <img src="https://codecov.io/gh/Ljzd-PRO/PyDGLab-WS/branch/master/graph/badge.svg?token=5XK9CYQHQN" alt="codecov"/>
+  </a>
+
+  <a href='https://pydglab-ws.readthedocs.io/'>
+    <img src='https://readthedocs.org/projects/pydglab-ws/badge/?version=latest' alt='Documentation Status' />
+  </a>
+</p>
 
 !!! warning
     目前项目还在开发中，API 可能发生较多变更
