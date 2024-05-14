@@ -85,15 +85,6 @@ class DGLabClient(ABC):
         if message.client_id == self._client_id:
             return message
 
-    async def recv_message(self) -> WebSocketMessage:
-        """
-        在确保该终端已注册并绑定，获取了 ``client_id``, ``target_id`` 的前提下，收取消息
-
-        这是为了防止在注册之前就收取了 ``bind`` 消息，导致 ``client_id``, ``target_id`` 丢失
-        """
-        await self.ensure_bind()
-        return await self._recv_owned()
-
     async def _send_owned(self, msg_type: MessageType, msg: str):
         """
         与 :meth:`_send` 类似，但代为设置 ``client_id``, ``target_id``
