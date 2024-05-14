@@ -18,7 +18,7 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = ">=3.8"
 pydantic = "^2.7.1"
 websockets = "^12.0"
 
