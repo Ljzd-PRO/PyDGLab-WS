@@ -38,8 +38,6 @@ pip3 install pydglab-ws
 
 ### 📡 搭建服务端
 
-更多演示请查看 [`examples/server.py`](examples/server.py)
-
 ```python3
 import asyncio
 from pydglab_ws.server import DGLabWSServer
@@ -56,11 +54,11 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
+更多演示请查看 [`examples/server.py`](examples/server.py)
+
 ### 🕹️ 搭建客户端 / 第三方终端
 
-当进入 `DGLabWSServer` 的异步生成器时，从 WebSocket 服务端获取 `clientId` 的操作会**自动完成**
-
-更多演示请查看 [`examples/ws_client.py`](examples/ws_client.py)
+当进入 `DGLabWSServer` 的异步生成器时，从 WebSocket 服务端获取 `clientId` 的操作会 **自动完成**
 
 ```python3
 import asyncio
@@ -93,6 +91,8 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
+更多演示请查看 [`examples/ws_client.py`](examples/ws_client.py)
+
 ### 🕹️ 搭建与第三方终端一体的 WebSocket 服务端
 
 这段代码不仅提供 DG-Lab WebSocket 服务端服务，还生成了一个本地终端可供 App 连接。
@@ -101,8 +101,6 @@ if __name__ == "__main__":
 因此在该段代码中，终端相关的逻辑与上面的独立的 WebSocket 终端的实现基本相同。
 
 这种方式，省去了终端连接 WebSocket 服务端的环节，终端与 WebSocket 服务端一体，**网络延迟更低，部署更方便**。
-
-更多演示请查看 [`examples/local_client_with_server.py`](examples/local_client_with_server.py)
 
 ```python3
 import asyncio
@@ -132,3 +130,5 @@ if __name__ == "__main__":
     asyncio.run(main())
 
 ```
+
+更多演示请查看 [`examples/local_client_with_server.py`](examples/server_with_local_client.py)
