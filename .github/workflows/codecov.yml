@@ -10,11 +10,13 @@ on:
       - "pydglab_ws/**"
       - "tests/**"
       - "pyproject.toml"
+      - "poetry.lock"
   pull_request:
     paths:
       - "pydglab_ws/**"
       - "tests/**"
       - "pyproject.toml"
+      - "poetry.lock"
 
 jobs:
   test:

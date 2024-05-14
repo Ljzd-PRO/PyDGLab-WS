@@ -6,6 +6,7 @@ on:
     paths:
       - "pydglab_ws/**"
       - "pyproject.toml"
+      - "poetry.lock"
       - "docs/**"
       - "mkdocs.yml"
   workflow_dispatch:
