@@ -264,7 +264,13 @@ async def test_dg_lab_client_recv_feedback(
 ):
     for client, app in client_app_pairs:
         await app.send_feedback(feedback_button)
-        assert await client.recv_app_data() == feedback_button
+        if isinstance(client, DGLabWSClient):
+            # 顺便测试一下异步生成器
+            async for data in client.app_data():
+                assert data == feedback_button
+                break
+        else:
+            assert await client.recv_app_data() == feedback_button
 
 
 @pytest.mark.asyncio
