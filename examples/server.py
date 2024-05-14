@@ -14,5 +14,6 @@ async def main():
             print(f"关系绑定：{server.client_id_to_target_id}")
             await asyncio.sleep(5)
 
+
 if __name__ == "__main__":
     asyncio.run(main())
