@@ -7,7 +7,7 @@ from websockets import WebSocketClientProtocol
 from websockets.client import connect
 
 from pydglabws.client import DGLabWSClient, DGLabLocalClient, DGLabClient
-from pydglabws.enums import FeedbackButton, Channel, MessageType
+from pydglabws.enums import FeedbackButton, Channel, MessageType, StrengthOperationType
 from pydglabws.models import StrengthData
 from pydglabws.server import DGLabWSServer
 from tests.app_simulator import DGLabAppSimulator
@@ -265,6 +265,43 @@ async def test_dg_lab_client_recv_feedback(
     for client, app in client_app_pairs:
         await app.send_feedback(feedback_button)
         assert await client.recv_app_data() == feedback_button
+
+
+@pytest.mark.asyncio
+@pytest.mark.order(after="test_dg_lab_client_bind")  # After bind
+@pytest.mark.parametrize(
+    "args,expected",
+    [
+        ((
+                 Channel.A,
+                 StrengthOperationType.DECREASE,
+                 0
+         ), "strength-1+0+0"),
+        ((
+                 Channel.A,
+                 StrengthOperationType.INCREASE,
+                 100
+         ), "strength-1+1+100"),
+        ((
+                 Channel.A,
+                 StrengthOperationType.SET_TO,
+                 200
+         ), "strength-1+2+200"),
+    ]
+)
+async def test_dg_lab_client_set_strength(
+        args,
+        expected,
+        client_app_pairs: List[ClientAppPair]
+):
+    for client, app in client_app_pairs:
+        await client.set_strength(*args)
+        message = await app.recv_client_data()
+
+        assert message.type == MessageType.MSG
+        assert message.client_id == client.client_id
+        assert message.target_id == app.target_id
+        assert message.message == expected
 
 
 @pytest.mark.asyncio
