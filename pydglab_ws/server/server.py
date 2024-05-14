@@ -4,7 +4,7 @@ from typing import Union, Optional, Sequence, Dict, Callable, Coroutine, Any, Se
 from uuid import uuid4
 
 from pydantic import UUID4
-from websockets import WebSocketServerProtocol
+from websockets import WebSocketServerProtocol, ConnectionClosedError
 from websockets.server import serve as ws_serve
 
 from ..client.local import DGLabLocalClient
@@ -175,18 +175,21 @@ class DGLabWSServer:
         )
 
         # 响应消息
-        async for message in websocket:
-            try:
-                parsed_message = WebSocketMessage.model_validate_json(message)
-            except ValueError:
-                await self._send(
-                    WebSocketMessage(
-                        type=MessageType.MSG,
-                        message=str(RetCode.NON_JSON_CONTENT)
+        try:
+            async for message in websocket:
+                try:
+                    parsed_message = WebSocketMessage.model_validate_json(message)
+                except ValueError:
+                    await self._send(
+                        WebSocketMessage(
+                            type=MessageType.MSG,
+                            message=str(RetCode.NON_JSON_CONTENT)
+                        )
                     )
-                )
-            else:
-                await self._message_handler(parsed_message, websocket)
+                else:
+                    await self._message_handler(parsed_message, websocket)
+        except ConnectionClosedError:
+            pass
 
         # 掉线处理
         self._uuid_to_ws.pop(uuid)
