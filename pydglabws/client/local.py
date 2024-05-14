@@ -36,8 +36,7 @@ class DGLabLocalClient(DGLabClient):
         queue_setter(client_id, self._message_queue)
 
     async def _recv(self) -> WebSocketMessage:
-        raw_message = await self._message_queue.get()
-        return WebSocketMessage.model_validate_strings(raw_message)
+        return await self._message_queue.get()
 
     async def _send(self, message: WebSocketMessage):
         await self._send_callable(message)
