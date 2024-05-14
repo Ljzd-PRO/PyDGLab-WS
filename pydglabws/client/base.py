@@ -136,7 +136,7 @@ class DGLabClient(ABC):
         while self.not_bind:
             message = await self._recv_owned()
             if message.type == MessageType.BIND and message.message.isdigit():
-                ret_code = RetCode(message.message)
+                ret_code = RetCode(int(message.message))
                 if ret_code == RetCode.SUCCESS:
                     self._target_id = message.target_id
                 return ret_code
