@@ -1,3 +1,4 @@
+import json
 from typing import Tuple, List, Callable, Coroutine, Literal
 
 import pytest
@@ -6,7 +7,7 @@ from websockets import WebSocketClientProtocol
 from websockets.client import connect
 
 from pydglabws.client import DGLabWSClient, DGLabLocalClient, DGLabClient
-from pydglabws.enums import FeedbackButton
+from pydglabws.enums import FeedbackButton, Channel, MessageType
 from pydglabws.models import StrengthData
 from pydglabws.server import DGLabWSServer
 from tests.app_simulator import DGLabAppSimulator
@@ -239,8 +240,7 @@ async def test_dg_lab_client_bind(
 )
 async def test_dg_lab_client_recv_strength(
         strength_data: StrengthData,
-        client_app_pairs: List[ClientAppPair],
-        app_simulator_for_ws: DGLabAppSimulator,
+        client_app_pairs: List[ClientAppPair]
 ):
     for client, app in client_app_pairs:
         await app.send_strength(strength_data)
@@ -260,9 +260,38 @@ async def test_dg_lab_client_recv_strength(
 )
 async def test_dg_lab_client_recv_feedback(
         feedback_button: FeedbackButton,
-        client_app_pairs: List[ClientAppPair],
-        app_simulator_for_ws: DGLabAppSimulator,
+        client_app_pairs: List[ClientAppPair]
 ):
     for client, app in client_app_pairs:
         await app.send_feedback(feedback_button)
         assert await client.recv_app_data() == feedback_button
+
+
+@pytest.mark.asyncio
+@pytest.mark.order(after="test_dg_lab_client_bind")  # After bind
+@pytest.mark.parametrize(
+    "args,expected",
+    [
+        ((
+                 Channel.A,
+                 *[((0, 0, 0, 0), (0, 0, 0, 0))]
+         ), {"pulse-1": ["0000000000000000"]}),
+        ((
+                 Channel.B,
+                 *[((0, 0, 0, 0), (10, 10, 10, 10)), ((15, 15, 15, 15), (15, 15, 15, 15))]
+         ), {"pulse-2": ["000000000a0a0a0a", "0f0f0f0f0f0f0f0f"]}),
+    ]
+)
+async def test_dg_lab_client_add_pulses(
+        args,
+        expected,
+        client_app_pairs: List[ClientAppPair]
+):
+    for client, app in client_app_pairs:
+        await client.add_pulses(*args)
+        message = await app.recv_client_data()
+
+        assert message.type == MessageType.MSG
+        assert message.client_id == client.client_id
+        assert message.target_id == app.target_id
+        assert json.loads(message.message) == expected
