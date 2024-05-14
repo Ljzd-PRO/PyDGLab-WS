@@ -6,7 +6,7 @@ import pytest_asyncio
 from websockets import WebSocketClientProtocol
 from websockets.client import connect
 
-from pydglabws.client import DGLabWSClient, DGLabLocalClient, DGLabClient
+from pydglabws.client import DGLabWSClient, DGLabLocalClient, DGLabClient, DGLabWSConnect
 from pydglabws.enums import FeedbackButton, Channel, MessageType, StrengthOperationType
 from pydglabws.models import StrengthData
 from pydglabws.server import DGLabWSServer
@@ -72,6 +72,15 @@ def client_app_pairs_fixture(
         (dg_lab_local_client, app_simulator_for_local),
         (dg_lab_ws_client, app_simulator_for_ws)
     ]
+
+
+@pytest.mark.asyncio
+async def test_dg_lab_ws_connect(dg_lab_ws_server: DGLabWSServer):
+    async with DGLabWSConnect(WEBSOCKET_URI) as client:
+        assert client.client_id in dg_lab_ws_server.ws_client_ids
+        assert client.client_id is not None
+        assert client.not_registered is False
+        assert client.not_bind is True
 
 
 @pytest.mark.parametrize(
