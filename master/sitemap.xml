@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    <url>
+        <loc>https://pydglab-ws.readthedocs.io/master/</loc>
+        <lastmod>2024-05-14</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/"/>
+    </url>
+    <url>
+        <loc>https://pydglab-ws.readthedocs.io/master/about-dg-lab/</loc>
+        <lastmod>2024-05-14</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/about-dg-lab/"/>
+    </url>
+    <url>
+        <loc>https://pydglab-ws.readthedocs.io/master/faq/</loc>
+        <lastmod>2024-05-14</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/faq/"/>
+    </url>
+    <url>
+        <loc>https://pydglab-ws.readthedocs.io/master/more/</loc>
+        <lastmod>2024-05-14</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/more/"/>
+    </url>
+    <url>
+        <loc>https://pydglab-ws.readthedocs.io/master/usage/</loc>
+        <lastmod>2024-05-14</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/usage/"/>
+    </url>
+    <url>
+        <loc>https://pydglab-ws.readthedocs.io/master/api/enums/</loc>
+        <lastmod>2024-05-14</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/api/enums/"/>
+    </url>
+    <url>
+        <loc>https://pydglab-ws.readthedocs.io/master/api/exceptions/</loc>
+        <lastmod>2024-05-14</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/api/exceptions/"/>
+    </url>
+    <url>
+        <loc>https://pydglab-ws.readthedocs.io/master/api/models/</loc>
+        <lastmod>2024-05-14</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/api/models/"/>
+    </url>
+    <url>
+        <loc>https://pydglab-ws.readthedocs.io/master/api/typing/</loc>
+        <lastmod>2024-05-14</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/api/typing/"/>
+    </url>
+    <url>
+        <loc>https://pydglab-ws.readthedocs.io/master/api/utils/</loc>
+        <lastmod>2024-05-14</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/api/utils/"/>
+    </url>
+    <url>
+        <loc>https://pydglab-ws.readthedocs.io/master/api/client/base/</loc>
+        <lastmod>2024-05-14</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/api/client/base/"/>
+    </url>
+    <url>
+        <loc>https://pydglab-ws.readthedocs.io/master/api/client/connect/</loc>
+        <lastmod>2024-05-14</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/api/client/connect/"/>
+    </url>
+    <url>
+        <loc>https://pydglab-ws.readthedocs.io/master/api/client/local/</loc>
+        <lastmod>2024-05-14</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/api/client/local/"/>
+    </url>
+    <url>
+        <loc>https://pydglab-ws.readthedocs.io/master/api/client/ws/</loc>
+        <lastmod>2024-05-14</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/api/client/ws/"/>
+    </url>
+    <url>
+        <loc>https://pydglab-ws.readthedocs.io/master/api/server/server/</loc>
+        <lastmod>2024-05-14</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/api/server/server/"/>
+    </url>
+    <url>
+        <loc>https://pydglab-ws.readthedocs.io/master/examples/server/</loc>
+        <lastmod>2024-05-14</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/examples/server/"/>
+    </url>
+    <url>
+        <loc>https://pydglab-ws.readthedocs.io/master/examples/server_with_local_client/</loc>
+        <lastmod>2024-05-14</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/examples/server_with_local_client/"/>
+    </url>
+    <url>
+        <loc>https://pydglab-ws.readthedocs.io/master/examples/ws_client/</loc>
+        <lastmod>2024-05-14</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/examples/ws_client/"/>
+    </url>
+</urlset>
