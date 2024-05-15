@@ -21,19 +21,19 @@ nav:
     - WebSocket Client: examples/ws_client.md
     - Server With Local Client: examples/server_with_local_client.md
   - API Documentation:
-    - pydglab_ws:
+    - Client:
+        - DGLabClient: api/client/base.md
+        - DGLabLocalClient: api/client/local.md
+        - DGLabWSClient: api/client/ws.md
+        - DGLabWSConnect: api/client/connect.md
+    - Server:
+        - DGLabWSServer: api/server/server.md
+    - Base:
       - enums: api/enums.md
       - exceptions: api/exceptions.md
       - models: api/models.md
       - typing: api/typing.md
       - utils: api/utils.md
-    - Client:
-      - DGLabClient: api/client/base.md
-      - DGLabLocalClient: api/client/local.md
-      - DGLabWSClient: api/client/ws.md
-      - DGLabWSConnect: api/client/connect.md
-    - Server:
-      - DGLabWSServer: api/server/server.md
   - FAQ: faq.md
 
 plugins:
@@ -73,12 +73,12 @@ plugins:
             Server With Local Client: 与本地终端一体的服务端
             API Documentation: API 文档
             FAQ: 常见问题
-            pydglab_ws: pydglab_ws
-            enums: enums
-            exceptions: exceptions
-            models: models
-            typing: typing
-            utils: utils
+            Base: 基础
+            enums: 枚举
+            exceptions: 异常
+            models: 数据模型
+            typing: 自定义类型
+            utils: 工具函数
             Client: 客户端
             DGLabClient: DG-Lab 终端
             DGLabLocalClient: DG-Lab 本地终端
