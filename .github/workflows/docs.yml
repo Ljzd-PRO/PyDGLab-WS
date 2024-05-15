@@ -33,10 +33,24 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Build and push
+      - name: Build and push (master)
+        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
         run: |
           git pull
+          mike set-default --push latest
           poetry run mike deploy --push --update-aliases master latest
+
+      - name: Get Tag
+        if: startsWith(github.ref, 'refs/tags/')
+        id: get_tag
+        run: echo ::set-output name=TAG::${GITHUB_REF/refs\/tags\//}
+
+      - name: Build and push (tag)
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          git pull
+          mike set-default --push latest
+          poetry run mike deploy --push --update-aliases ${{ steps.get_tag.outputs.TAG }} latest
 
       - name: Upload to GitHub Pages
         uses: actions/upload-pages-artifact@v3
