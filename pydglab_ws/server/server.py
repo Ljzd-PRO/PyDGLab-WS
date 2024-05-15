@@ -246,8 +246,8 @@ class DGLabWSServer:
         if message is not None:
             await self._send(
                 message,
-                is_client_id := self._uuid_to_ws.get(notice_id),
-                to_local_client=is_client_id is None
+                notice_ws := self._uuid_to_ws.get(notice_id),
+                to_local_client=notice_ws is None
             )
 
     async def _message_handler(
