@@ -48,3 +48,13 @@ class DGLabWSClient(DGLabClient):
             secure = isinstance(socket, SSLSocket)
             uri = f"{'wss' if secure else 'ws'}://{host}:{port}"
         return super().get_qrcode(uri)
+
+    @property
+    def websocket(self) -> WebSocketClientProtocol:
+        """
+        终端的 WebSocket 连接对象
+
+        可用来获取连接延迟等信息，但不建议调用它的 recv, send 等方法，可能会影响
+        [`DGLabWSClient`][pydglab_ws.client.ws.DGLabWSClient] 的各项功能
+        """
+        return self._websocket
