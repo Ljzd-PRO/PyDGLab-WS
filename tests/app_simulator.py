@@ -13,15 +13,15 @@ class DGLabAppSimulator:
     """
 
     def __init__(self, websocket: WebSocketClientProtocol):
-        self._websocket = websocket
+        self.websocket = websocket
         self.target_id: Optional[UUID4] = None
         self.client_id: Optional[UUID4] = None
 
     async def _send(self, message: WebSocketMessage):
-        await self._websocket.send(message.model_dump_json(by_alias=True))
+        await self.websocket.send(message.model_dump_json(by_alias=True))
 
     async def _recv(self) -> WebSocketMessage:
-        raw_message = await self._websocket.recv()
+        raw_message = await self.websocket.recv()
         return WebSocketMessage.model_validate_json(raw_message)
 
     async def _recv_owned(self) -> WebSocketMessage:

@@ -47,6 +47,18 @@ async def client_websocket_fixture() -> WebSocketClientProtocol:
         yield client_websocket
 
 
+@pytest_asyncio.fixture(name="app_new_websocket_for_local", scope="session")
+async def app_new_websocket_for_local_fixture() -> WebSocketClientProtocol:
+    async with connect(WEBSOCKET_URI) as app_new_websocket_for_local:
+        yield app_new_websocket_for_local
+
+
+@pytest_asyncio.fixture(name="app_new_websocket_for_ws", scope="session")
+async def app_new_websocket_for_ws_fixture() -> WebSocketClientProtocol:
+    async with connect(WEBSOCKET_URI) as app_new_websocket_for_ws:
+        yield app_new_websocket_for_ws
+
+
 @pytest.fixture(name="dg_lab_ws_client", scope="session")
 def dg_lab_ws_client_fixture(client_websocket: WebSocketClientProtocol) -> DGLabWSClient:
     return DGLabWSClient(client_websocket)
@@ -428,3 +440,52 @@ async def test_dg_lab_heartbeat(
             received_heartbeat += 1
             if received_heartbeat == HEARTBEAT_TEST_TIMES:
                 break
+
+
+@pytest.mark.asyncio
+@pytest.mark.order("last")
+async def test_dg_lab_app_disconnect(
+        dg_lab_ws_server: DGLabWSServer,
+        client_app_pairs: List[ClientAppPair],
+        app_new_websocket_for_local: WebSocketClientProtocol,
+        app_new_websocket_for_ws: WebSocketClientProtocol
+):
+    for client, app in client_app_pairs:
+        await app.websocket.close()
+        async for code in client.data_generator(RetCode):
+            if code == RetCode.CLIENT_DISCONNECTED:
+                # App 重新建立连接，并注册和绑定
+                if isinstance(client, DGLabLocalClient):
+                    app.websocket = app_new_websocket_for_local
+                else:
+                    app.websocket = app_new_websocket_for_ws
+                await app.register()
+                await app.bind(client.client_id)
+                await client.bind()
+                break
+
+
+@pytest.mark.asyncio
+@pytest.mark.order(after="test_dg_lab_app_disconnect")  # 必须等待 App 重新建立连接，并注册和绑定
+async def test_dg_lab_ws_client_disconnect(
+        dg_lab_ws_server: DGLabWSServer,
+        dg_lab_ws_client: DGLabWSClient,
+        app_simulator_for_ws: DGLabAppSimulator
+):
+    await dg_lab_ws_client.websocket.close()
+    assert await app_simulator_for_ws.recv_disconnect() == RetCode.CLIENT_DISCONNECTED
+
+
+@pytest.mark.asyncio
+@pytest.mark.order(after="test_dg_lab_app_disconnect")  # 必须等待 App 重新建立连接，并注册和绑定
+async def test_dg_lab_ws_server_remove_local_client(
+        dg_lab_ws_server: DGLabWSServer,
+        app_simulator_for_local: DGLabAppSimulator
+):
+    assert await dg_lab_ws_server.remove_local_client(
+        app_simulator_for_local.target_id
+    ) is False
+    assert await dg_lab_ws_server.remove_local_client(
+        app_simulator_for_local.client_id
+    ) is True
+    assert await app_simulator_for_local.recv_disconnect() == RetCode.CLIENT_DISCONNECTED
