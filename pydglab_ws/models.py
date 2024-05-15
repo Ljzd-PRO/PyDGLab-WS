@@ -1,13 +1,13 @@
 """
 此处定义了一些 Pydantic 模型，使用 Pydantic V2
 """
-from typing import Optional, Any
+from typing import Optional, Any, Union
 
 from pydantic import BaseModel, UUID4, ConfigDict, field_serializer, AliasGenerator, model_validator, \
     field_validator
 from pydantic.alias_generators import to_camel, to_snake
 
-from .enums import MessageType
+from .enums import MessageType, RetCode, MessageDataHead
 
 __all__ = ("WebSocketMessage", "StrengthData")
 
@@ -33,7 +33,19 @@ class WebSocketMessage(BaseModel):
     type: MessageType
     client_id: Optional[UUID4] = None
     target_id: Optional[UUID4] = None
-    message: str
+    message: Union[str, RetCode, MessageDataHead]
+
+    @field_validator("message")
+    def _validate_message(cls, value: Any):
+        if isinstance(value, str):
+            try:
+                return RetCode(int(value))
+            except ValueError:
+                try:
+                    return MessageDataHead(value)
+                except ValueError:
+                    pass
+        return value
 
     @field_serializer("client_id", "target_id")
     def _serialize_id(self, value: Optional[UUID4]):
@@ -56,7 +68,7 @@ class WebSocketMessage(BaseModel):
         """
         验证模型时，将所有的键名更改为蛇形命名法（下划线）
 
-        验证时不取别名的原因是，取别名会影响对象初始化参数名，而 AliasChoices 不知为何不起作用
+        验证时不取别名的原因是，取别名会影响对象初始化参数名，而 ``AliasChoices`` 不知为何不起作用
         """
         if isinstance(data, dict):
             for key in list(data.keys()):

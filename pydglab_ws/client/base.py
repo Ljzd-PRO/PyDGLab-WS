@@ -113,22 +113,22 @@ class DGLabClient(ABC):
     @staticmethod
     def _handle_msg(message: WebSocketMessage) -> Optional[Union[StrengthData, FeedbackButton]]:
         """处理类型为 ``msg`` 的消息"""
-        if message.message.startswith(MessageDataHead.STRENGTH.value):
-            return parse_strength_data(message.message)
-        elif message.message.startswith(MessageDataHead.FEEDBACK.value):
-            return parse_feedback_data(message.message)
-        else:
-            return None
+        if isinstance(message.message, str):
+            if message.message.startswith(MessageDataHead.STRENGTH.value):
+                return parse_strength_data(message.message)
+            elif message.message.startswith(MessageDataHead.FEEDBACK.value):
+                return parse_feedback_data(message.message)
+        return None
 
     @staticmethod
     def _handle_break(message: WebSocketMessage) -> Optional[Literal[RetCode.CLIENT_DISCONNECTED]]:
         """处理类型为 ``break`` 的消息"""
-        return RetCode(int(message.message)) if message.message.isdigit() else None
+        return message.message
 
     @staticmethod
     def _handle_heartbeat(message: WebSocketMessage) -> Optional[Literal[RetCode.SUCCESS]]:
         """处理类型为 ``heartbeat`` 的消息"""
-        return RetCode(int(message.message)) if message.message.isdigit() else None
+        return message.message
 
     async def register(self):
         """
@@ -136,7 +136,7 @@ class DGLabClient(ABC):
         """
         while self.not_registered:
             message = await self._recv()
-            if message.type == MessageType.BIND and message.message == MessageDataHead.TARGET_ID.value:
+            if message.type == MessageType.BIND and message.message == MessageDataHead.TARGET_ID:
                 self._client_id = message.client_id
 
     async def ensure_bind(self):
@@ -156,11 +156,10 @@ class DGLabClient(ABC):
         """
         while self.not_bind:
             message = await self._recv_owned()
-            if message.type == MessageType.BIND and message.message.isdigit():
-                ret_code = RetCode(int(message.message))
-                if ret_code == RetCode.SUCCESS:
+            if message.type == MessageType.BIND and isinstance(message.message, RetCode):
+                if message.message == RetCode.SUCCESS:
                     self._target_id = message.target_id
-                return ret_code
+                return message.message
 
     async def recv_data(self) -> Union[StrengthData, FeedbackButton, RetCode]:
         """

@@ -152,7 +152,7 @@ class DGLabWSServer:
                         type=MessageType.HEARTBEAT,
                         client_id=uuid,
                         target_id=self._client_id_to_target_id.get(uuid),
-                        message=str(RetCode.SUCCESS)
+                        message=RetCode.SUCCESS
                     ),
                     websocket
                 )
@@ -169,7 +169,7 @@ class DGLabWSServer:
             WebSocketMessage(
                 type=MessageType.BIND,
                 client_id=uuid,
-                message=MessageDataHead.TARGET_ID.value
+                message=MessageDataHead.TARGET_ID
             ),
             websocket
         )
@@ -183,7 +183,7 @@ class DGLabWSServer:
                     await self._send(
                         WebSocketMessage(
                             type=MessageType.MSG,
-                            message=str(RetCode.NON_JSON_CONTENT)
+                            message=RetCode.NON_JSON_CONTENT
                         )
                     )
                 else:
@@ -202,7 +202,7 @@ class DGLabWSServer:
                 type=MessageType.BREAK,
                 client_id=uuid,
                 target_id=notice_id,
-                message=str(RetCode.CLIENT_DISCONNECTED)
+                message=RetCode.CLIENT_DISCONNECTED
             )
         # App 掉线
         elif notice_id := self._target_id_to_client_id.get(uuid):
@@ -212,7 +212,7 @@ class DGLabWSServer:
                 type=MessageType.BREAK,
                 client_id=notice_id,
                 target_id=uuid,
-                message=str(RetCode.CLIENT_DISCONNECTED)
+                message=RetCode.CLIENT_DISCONNECTED
             )
         else:
             message = None
@@ -241,7 +241,7 @@ class DGLabWSServer:
             await self._send(
                 WebSocketMessage(
                     type=MessageType.MSG,
-                    message=str(RetCode.RECIPIENT_NOT_FOUND)
+                    message=RetCode.RECIPIENT_NOT_FOUND
                 )
             )
         handler = self._message_type_to_handler.get(message.type)
@@ -261,7 +261,7 @@ class DGLabWSServer:
         :param message: 关系绑定消息
         :param websocket: 消息来源连接
         """
-        if message.message == MessageDataHead.DG_LAB.value \
+        if message.message == MessageDataHead.DG_LAB \
                 and message.client_id is not None \
                 and message.target_id is not None:
             msg_to_send = message.model_copy()
@@ -274,11 +274,11 @@ class DGLabWSServer:
                         and message.target_id not in self._target_id_to_client_id.keys():
                     self._client_id_to_target_id[message.client_id] = message.target_id
                     self._target_id_to_client_id[message.target_id] = message.client_id
-                    msg_to_send.message = str(RetCode.SUCCESS)
+                    msg_to_send.message = RetCode.SUCCESS
                 else:
-                    msg_to_send.message = str(RetCode.ID_ALREADY_BOUND)
+                    msg_to_send.message = RetCode.ID_ALREADY_BOUND
             else:
-                msg_to_send.message = str(RetCode.TARGET_CLIENT_NOT_FOUND)
+                msg_to_send.message = RetCode.TARGET_CLIENT_NOT_FOUND
 
             client_ws = self._uuid_to_ws.get(message.client_id)
             await self._send(
@@ -306,7 +306,7 @@ class DGLabWSServer:
             # 检查是否为绑定关系
             if self._client_id_to_target_id.get(message.client_id) != message.target_id:
                 msg_to_send.type = MessageType.BIND
-                msg_to_send.message = str(RetCode.INCOMPATIBLE_RELATIONSHIP)
+                msg_to_send.message = RetCode.INCOMPATIBLE_RELATIONSHIP
                 await self._send(
                     msg_to_send,
                     websocket,
