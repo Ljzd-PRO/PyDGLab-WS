@@ -46,6 +46,7 @@ plugins:
             - https://docs.python.org/3/objects.inv
           options:
             docstring_style: sphinx
+            find_stubs_package: true
             members_order: source
             separate_signature: true
             docstring_options:
@@ -79,11 +80,11 @@ plugins:
             typing: typing
             utils: utils
             Client: 客户端
-            DGLabClient: DGLabClient
-            DGLabLocalClient: DGLabLocalClient
-            DGLabWSClient: DGLabWSClient
-            DGLabWSConnect: DGLabWSConnect
-            DGLabWSServer: DGLabWSServer
+            DGLabClient: DG-Lab 终端
+            DGLabLocalClient: DG-Lab 本地终端
+            DGLabWSClient: DG-Lab WebSocket 终端
+            DGLabWSConnect: DG-Lab WebSocket 终端连接器
+            DGLabWSServer: DG-Lab WebSocket 服务端
 
           site_description: "PyDG-Lab-WS 文档"
 

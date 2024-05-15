@@ -13,7 +13,7 @@ class DGLabWSConnect:
     ```python3
     async with DGLabWSConnect("ws://localhost:5678") as client:
         await client.bind()
-        await client.
+        print("成功绑定")
     ```
 
     :param uri: WebSocket 服务端 Uri

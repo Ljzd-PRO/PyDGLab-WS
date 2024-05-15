@@ -26,7 +26,7 @@ def parse_strength_data(data: str) -> StrengthData:
     解析消息中的强度数据
 
     :param data: WebSocket 消息中的 ``message``
-    :raise InvalidStrengthData: :class:`InvalidStrengthData`
+    :raise InvalidStrengthData: [`InvalidStrengthData`][pydglab_ws.exceptions.InvalidStrengthData]
     """
     try:
         values = data.split("-")[1].split("+")
@@ -45,7 +45,7 @@ def parse_feedback_data(data: str) -> FeedbackButton:
     解析消息中的 App 反馈数据
 
     :param data: WebSocket 消息中的 ``message``
-    :raise InvalidFeedbackData: :class:`InvalidFeedbackData`
+    :raise InvalidFeedbackData: [`InvalidFeedbackData`][pydglab_ws.exceptions.InvalidFeedbackData]
     """
     try:
         return FeedbackButton(int(data.split("-")[1]))
@@ -109,14 +109,14 @@ def dump_add_pulses(
     return json.dumps(dict_data)
 
 
-def dg_lab_client_qrcode(uri: str, client_id: UUID4):
+def dg_lab_client_qrcode(uri: str, client_id: UUID4) -> str:
     """
     生成终端二维码，二维码图像需要自行生成
 
     :param uri: WebSocket 服务端 URI，例如：``ws://107.47.91.92:4567``
             （注意末尾不能有 ``/``）
     :param client_id: 终端 ID
-    :return:
+    :return: 终端二维码内容，二维码图像需要自行生成
     """
     return (f"https://www.dungeon-lab.com/app-download.php"
             f"#DGLAB-SOCKET"

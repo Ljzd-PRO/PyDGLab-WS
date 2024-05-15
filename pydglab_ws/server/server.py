@@ -110,7 +110,7 @@ class DGLabWSServer:
 
     def new_local_client(self, max_queue: int = 2 ** 5) -> DGLabLocalClient:
         """
-        创建新的本地终端 :class:`DGLabLocalClient`，记录并返回
+        创建新的本地终端 [`DGLabLocalClient`][pydglab_ws.client.local.DGLabLocalClient]，记录并返回
         :param max_queue: 终端消息队列最大长度
         :return: 创建好的本地终端对象
         """
@@ -257,7 +257,7 @@ class DGLabWSServer:
         """
         响应关系绑定（``bind`` 类型）消息
 
-        :param self: :class:`DGLabWSServer` 对象
+        :param self: [`DGLabWSServer`][pydglab_ws.server.server.DGLabWSServer] 对象
         :param message: 关系绑定消息
         :param websocket: 消息来源连接
         """
@@ -297,7 +297,7 @@ class DGLabWSServer:
         """
         响应 `msg` 类型的消息
 
-        :param self: :class:`DGLabWSServer` 对象
+        :param self: [`DGLabWSServer`][pydglab_ws.server.server.DGLabWSServer] 对象
         :param message: `msg` 类型的消息
         :param websocket: 消息来源连接
         """

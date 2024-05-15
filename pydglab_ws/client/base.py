@@ -62,7 +62,7 @@ class DGLabClient(ABC):
     @abstractmethod
     async def _recv(self) -> WebSocketMessage:
         """
-        收取来自 WebSocket 服务端的消息，并解析为 :class:`WebSocketMessage`
+        收取来自 WebSocket 服务端的消息，并解析为 [`WebSocketMessage`][pydglab_ws.models.WebSocketMessage]
         """
         ...
 
@@ -71,7 +71,7 @@ class DGLabClient(ABC):
         """
         向 WebSocket 服务端发送消息
 
-        :param message: 解析为 :class:`WebSocketMessage` 的消息
+        :param message: 解析为 [`WebSocketMessage`][pydglab_ws.models.WebSocketMessage] 的消息
         """
         ...
 
@@ -168,8 +168,10 @@ class DGLabClient(ABC):
 
         注意，获取到的是队列中最早的数据，可能不是最新的
 
-        :return: 可能为 **强度数据** - :class:`StrengthData`、**App 反馈数据** - :class:`FeedbackButton` \
-            、**心跳** - ``RetCode.SUCCESS``、**App 断开连接** - ``RetCode.CLIENT_DISCONNECTED``
+        :return: 可能为 **强度数据** - [`StrengthData`][pydglab_ws.models.StrengthData]、 \
+            **App 反馈数据** - [`FeedbackButton`][pydglab_ws.enums.FeedbackButton] \
+            、**心跳** - [`RetCode.SUCCESS`][pydglab_ws.enums.RetCode]、 \
+            **App 断开连接** - [`RetCode.CLIENT_DISCONNECTED`][pydglab_ws.enums.RetCode]
         """
         await self.ensure_bind()
         while True:
@@ -189,11 +191,12 @@ class DGLabClient(ABC):
 
         示例：
         ```python3
-        async for data in client.data_generator():
+        async for data in client.data_generator(StrengthData, FeedbackButton):
             print(f"Got data from App: {data}")
         ```
         :param targets: 目标类型，只有为目标类型的数据会被返回，为空即默认值时则不进行限制
-        :return: 可能为 **强度数据** - :class:`StrengthData`、**App 反馈数据** - :class:`FeedbackButton` \
+        :return: 可能为 **强度数据** - [`StrengthData`][pydglab_ws.models.StrengthData]、 \
+            **App 反馈数据** - [`FeedbackButton`][pydglab_ws.enums.FeedbackButton] \
             、**心跳** - ``RetCode.SUCCESS``、**App 断开连接** - ``RetCode.CLIENT_DISCONNECTED``
         """
         while True:
