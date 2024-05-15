@@ -87,7 +87,11 @@ def dump_pulse_operation(pulse: PulseOperation) -> str:
     :return: 返回数据可作为 WebSocket 消息中的 ``message``
     """
     pulse_bytes = bytes().join(
-        value.to_bytes() for operation in pulse for value in operation
+        # int.to_bytes Python 3.11 才添加了 length, byteorder 的默认参数值
+        value.to_bytes(
+            length=1,
+            byteorder='big'
+        ) for operation in pulse for value in operation
     )
     return pulse_bytes.hex()
 
