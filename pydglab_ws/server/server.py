@@ -122,6 +122,31 @@ class DGLabWSServer:
             max_queue
         )
 
+    async def remove_local_client(self, client_id: UUID4) -> bool:
+        """
+        移除已连接的本地终端，并通知 App 终端已掉线
+
+        :param client_id: 要移除的本地终端 [`DGLabLocalClient`][pydglab_ws.client.local.DGLabLocalClient] 的 ID
+        :return: 如果该终端并没有与服务端连接，返回 ``False``，否则返回 ``True``
+        """
+        try:
+            self._client_id_to_queue.pop(client_id)
+        except KeyError:
+            return False
+        else:
+            if client_id in self._client_id_to_target_id:
+                target_id = self._client_id_to_target_id.pop(client_id)
+                self._target_id_to_client_id.pop(target_id)
+                if websocket := self._uuid_to_ws.get(target_id):
+                    message = WebSocketMessage(
+                        type=MessageType.BREAK,
+                        client_id=client_id,
+                        target_id=target_id,
+                        message=RetCode.CLIENT_DISCONNECTED
+                    )
+                    await self._send(message, websocket)
+            return True
+
     async def _send(
             self,
             message: WebSocketMessage,
