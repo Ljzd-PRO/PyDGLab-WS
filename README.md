@@ -11,16 +11,8 @@
 </p>
 
 <p align="center">
-  <a href="https://pypi.org/project/pydglab-ws" target="_blank">
-    <img src="https://img.shields.io/github/v/release/Ljzd-PRO/PyDGLab-WS?logo=python" alt="Version">
-  </a>
-
-  <a href="./LICENSE">
-    <img src="https://img.shields.io/github/license/Ljzd-PRO/PyDGLab-WS" alt="BSD 3-Clause"/>
-  </a>
-
-  <a href="https://github.com/Ljzd-PRO/PyDGLab-WS/activity">
-    <img src="https://img.shields.io/github/last-commit/Ljzd-PRO/PyDGLab-WS/master" alt="Last Commit"/>
+  <a href="https://www.codefactor.io/repository/github/ljzd-pro/pydglab-ws">
+    <img src="https://www.codefactor.io/repository/github/ljzd-pro/pydglab-ws/badge" alt="CodeFactor" />
   </a>
 
   <a href="https://codecov.io/gh/Ljzd-PRO/PyDGLab-WS" target="_blank">
@@ -29,6 +21,18 @@
 
   <a href='https://pydglab-ws.readthedocs.io/'>
     <img src='https://readthedocs.org/projects/pydglab-ws/badge/?version=latest' alt='Documentation Status' />
+  </a>
+
+  <a href="https://github.com/Ljzd-PRO/PyDGLab-WS/activity">
+    <img src="https://img.shields.io/github/last-commit/Ljzd-PRO/PyDGLab-WS/master" alt="Last Commit"/>
+  </a>
+
+  <a href="./LICENSE">
+    <img src="https://img.shields.io/github/license/Ljzd-PRO/PyDGLab-WS" alt="BSD 3-Clause"/>
+  </a>
+
+  <a href="https://pypi.org/project/pydglab-ws" target="_blank">
+    <img src="https://img.shields.io/github/v/release/Ljzd-PRO/PyDGLab-WS?logo=python" alt="Version">
   </a>
 </p>
 
@@ -71,6 +75,7 @@ pip3 install pydglab-ws
 import asyncio
 from pydglab_ws.server import DGLabWSServer
 
+
 async def main():
     async with DGLabWSServer("0.0.0.0", 5678, 60) as server:
         while True:
@@ -78,6 +83,7 @@ async def main():
             print(f"已连接的本地终端：{list(server.local_client_ids)}")
             print(f"关系绑定：{server.client_id_to_target_id}")
             await asyncio.sleep(5)
+
 
 if __name__ == "__main__":
     asyncio.run(main())
@@ -94,9 +100,11 @@ import asyncio
 from websockets import ConnectionClosedOK
 from pydglab_ws import DGLabWSConnect
 
+
 def print_qrcode(_: str):
     """输出二维码到终端界面"""
     ...
+
 
 async def main():
     try:
@@ -115,6 +123,7 @@ async def main():
                 print(f"收取到数据：{data}")
     except ConnectionClosedOK:
         print("Socket 服务端断开连接")
+
 
 if __name__ == "__main__":
     asyncio.run(main())
@@ -135,9 +144,11 @@ if __name__ == "__main__":
 import asyncio
 from pydglab_ws import DGLabWSServer
 
+
 def print_qrcode(_: str):
     """输出二维码到终端界面"""
     ...
+
 
 async def main():
     async with DGLabWSServer("0.0.0.0", 5678, 60) as server:
@@ -154,6 +165,7 @@ async def main():
         # 从 App 接收数据更新，并进行远控操作
         async for data in client.data_generator():
             print(f"收取到数据：{data}")
+
 
 if __name__ == "__main__":
     asyncio.run(main())
