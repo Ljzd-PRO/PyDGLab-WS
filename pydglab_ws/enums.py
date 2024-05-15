@@ -1,6 +1,7 @@
 """
 此处定义了一些常量枚举
 """
+import enum
 from enum import Enum, IntEnum
 
 __all__ = (
@@ -13,7 +14,8 @@ __all__ = (
 )
 
 
-class MessageType(Enum):
+@enum.unique
+class MessageType(str, Enum):
     """
     WebSocket 消息类型
 
@@ -30,6 +32,7 @@ class MessageType(Enum):
     ERROR = "error"
 
 
+@enum.unique
 class RetCode(IntEnum):
     """
     WebSocket 消息错误码枚举
@@ -59,7 +62,8 @@ class RetCode(IntEnum):
     SERVER_INTERNAL_ERROR = 500
 
 
-class MessageDataHead(Enum):
+@enum.unique
+class MessageDataHead(str, Enum):
     """
     WebSocket 消息数据开头部分
 
@@ -79,6 +83,7 @@ class MessageDataHead(Enum):
     FEEDBACK = "feedback"
 
 
+@enum.unique
 class StrengthOperationType(IntEnum):
     """
     强度变化模式
@@ -107,6 +112,7 @@ class StrengthOperationType(IntEnum):
 #     SET_TO = 0b11
 
 
+@enum.unique
 class FeedbackButton(IntEnum):
     """
     App 反馈按钮
@@ -126,6 +132,7 @@ class FeedbackButton(IntEnum):
     B5 = 9
 
 
+@enum.unique
 class Channel(IntEnum):
     """
     通道
