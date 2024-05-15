@@ -169,6 +169,8 @@ class DGLabWSServer:
     async def _heartbeat_sender(self):
         """
         心跳包发送器
+
+        注意此处 ``client_id`` 为心跳包接收方 ID，``target_id`` 为绑定方
         """
         while True:
             for uuid, websocket in self._uuid_to_ws.items():
