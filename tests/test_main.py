@@ -220,6 +220,31 @@ def test_dg_lab_client_get_qrcode(
 
 
 @pytest.mark.asyncio
+@pytest.mark.order(before="test_dg_lab_client_bind")  # Before App need to receive other message
+@pytest.mark.parametrize(
+    "raw_message",
+    [
+        "f05f7b2c-921f-426e-a79b-f275fa5623b4",
+        "[]",
+        "{type=bind}",
+        '""',
+        "{'type':'bind','clientId':'','targetId':'','message':''}",
+        '{"type":"bind","clientId":"","targetId":""}'
+    ]
+)
+async def test_dg_lab_non_json_content(
+        raw_message: str,
+        app_simulator_for_local: DGLabAppSimulator,
+        app_simulator_for_ws: DGLabAppSimulator
+):
+    for app in app_simulator_for_local, app_simulator_for_ws:
+        if app.target_id is None:
+            await app.register()
+        await app.websocket.send(raw_message)
+        assert await app.recv_non_json_content() == RetCode.NON_JSON_CONTENT
+
+
+@pytest.mark.asyncio
 @pytest.mark.order(
     after=[
         "test_dg_lab_ws_register",
@@ -240,7 +265,8 @@ async def test_dg_lab_client_bind(
                 lambda x: x.ensure_bind()
             ]
     ):  # type: (DGLabClient, DGLabAppSimulator), Callable[[DGLabClient], Coroutine]
-        await app.register()
+        if app.target_id is None:
+            await app.register()
         await app.bind(client.client_id)
         await get_bind(client)
 
@@ -340,7 +366,7 @@ async def test_dg_lab_client_set_strength(
 ):
     for client, app in client_app_pairs:
         await client.set_strength(*args)
-        message = await app.recv_client_data()
+        message = await app.recv_msg_type_data()
 
         assert message.type == MessageType.MSG
         assert message.client_id == client.client_id
@@ -375,7 +401,7 @@ async def test_dg_lab_client_add_pulses(
 ):
     for client, app in client_app_pairs:
         await client.add_pulses(*args)
-        message = await app.recv_client_data()
+        message = await app.recv_msg_type_data()
 
         assert message.type == MessageType.MSG
         assert message.client_id == client.client_id
@@ -404,7 +430,7 @@ async def test_dg_lab_clear_pulses(
 ):
     for client, app in client_app_pairs:
         await client.clear_pulses(channel)
-        message = await app.recv_client_data()
+        message = await app.recv_msg_type_data()
 
         assert message.type == MessageType.MSG
         assert message.client_id == client.client_id

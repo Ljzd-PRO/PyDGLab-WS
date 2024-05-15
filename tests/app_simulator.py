@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Literal
 
 from pydantic import UUID4
 from websockets import WebSocketClientProtocol
@@ -66,7 +66,7 @@ class DGLabAppSimulator:
             )
         )
 
-    async def recv_client_data(self) -> WebSocketMessage:
+    async def recv_msg_type_data(self) -> WebSocketMessage:
         while True:
             message = await self._recv_owned()
             if message.type == MessageType.MSG:
@@ -83,4 +83,10 @@ class DGLabAppSimulator:
         while True:
             message = await self._recv_owned()
             if message.type == MessageType.BREAK:
+                return message.message
+
+    async def recv_non_json_content(self) -> Literal[RetCode.NON_JSON_CONTENT]:
+        while True:
+            message = await self._recv()
+            if message.type == MessageType.MSG and message.message == RetCode.NON_JSON_CONTENT:
                 return message.message
