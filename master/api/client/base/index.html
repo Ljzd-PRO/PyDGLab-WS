@@ -24,7 +24,7 @@
     
     
       
-        <title>DGLabClient - PyDGLab-WS</title>
+        <title>DG-Lab 终端 - PyDGLab-WS</title>
       
     
     
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              DGLabClient
+              DG-Lab 终端
             
           </span>
         </div>
@@ -910,7 +910,7 @@
           
   
   <span class="md-ellipsis">
-    DGLabClient
+    DG-Lab 终端
   </span>
   
 
@@ -921,7 +921,7 @@
         
   
   <span class="md-ellipsis">
-    DGLabClient
+    DG-Lab 终端
   </span>
   
 
@@ -1101,7 +1101,7 @@
         
   
   <span class="md-ellipsis">
-    DGLabLocalClient
+    DG-Lab 本地终端
   </span>
   
 
@@ -1122,7 +1122,7 @@
         
   
   <span class="md-ellipsis">
-    DGLabWSClient
+    DG-Lab WebSocket 终端
   </span>
   
 
@@ -1143,7 +1143,7 @@
         
   
   <span class="md-ellipsis">
-    DGLabWSConnect
+    DG-Lab WebSocket 终端连接器
   </span>
   
 
@@ -1214,7 +1214,7 @@
         
   
   <span class="md-ellipsis">
-    DGLabWSServer
+    DG-Lab WebSocket 服务端
   </span>
   
 
@@ -1447,7 +1447,7 @@
   
 
 
-  <h1>DGLabClient</h1>
+  <h1>DG-Lab 终端</h1>
 
 <div class="doc doc-object doc-module">
 
@@ -1973,7 +1973,7 @@
           </td>
           <td>
             <div class="doc-md-description">
-              <p>可能为 <strong>强度数据</strong> - :class:<code>StrengthData</code>、<strong>App 反馈数据</strong> - :class:<code>FeedbackButton</code>             、<strong>心跳</strong> - <code>RetCode.SUCCESS</code>、<strong>App 断开连接</strong> - <code>RetCode.CLIENT_DISCONNECTED</code></p>
+              <p>可能为 <strong>强度数据</strong> - <a class="autorefs autorefs-internal" href="../../models/#pydglab_ws.models.StrengthData"><code>StrengthData</code></a>、             <strong>App 反馈数据</strong> - <a class="autorefs autorefs-internal" href="../../enums/#pydglab_ws.enums.FeedbackButton"><code>FeedbackButton</code></a>             、<strong>心跳</strong> - <a class="autorefs autorefs-internal" href="../../enums/#pydglab_ws.enums.RetCode"><code>RetCode.SUCCESS</code></a>、             <strong>App 断开连接</strong> - <a class="autorefs autorefs-internal" href="../../enums/#pydglab_ws.enums.RetCode"><code>RetCode.CLIENT_DISCONNECTED</code></a></p>
             </div>
           </td>
         </tr>
@@ -1996,14 +1996,18 @@
 <span class="normal">176</span>
 <span class="normal">177</span>
 <span class="normal">178</span>
-<span class="normal">179</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">recv_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">StrengthData</span><span class="p">,</span> <span class="n">FeedbackButton</span><span class="p">,</span> <span class="n">RetCode</span><span class="p">]:</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">recv_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">StrengthData</span><span class="p">,</span> <span class="n">FeedbackButton</span><span class="p">,</span> <span class="n">RetCode</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    获取 WebSocket 服务端的数据</span>
 
 <span class="sd">    注意，获取到的是队列中最早的数据，可能不是最新的</span>
 
-<span class="sd">    :return: 可能为 **强度数据** - :class:`StrengthData`、**App 反馈数据** - :class:`FeedbackButton` \</span>
-<span class="sd">        、**心跳** - ``RetCode.SUCCESS``、**App 断开连接** - ``RetCode.CLIENT_DISCONNECTED``</span>
+<span class="sd">    :return: 可能为 **强度数据** - [`StrengthData`][pydglab_ws.models.StrengthData]、 \</span>
+<span class="sd">        **App 反馈数据** - [`FeedbackButton`][pydglab_ws.enums.FeedbackButton] \</span>
+<span class="sd">        、**心跳** - [`RetCode.SUCCESS`][pydglab_ws.enums.RetCode]、 \</span>
+<span class="sd">        **App 断开连接** - [`RetCode.CLIENT_DISCONNECTED`][pydglab_ws.enums.RetCode]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_bind</span><span class="p">()</span>
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
@@ -2039,7 +2043,7 @@
       <p>强度数据异步生成器</p>
 <p>注意，是从队列中最早的数据开始获取，可能不是最新的</p>
 <p>示例：
-<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">client</span><span class="o">.</span><span class="n">data_generator</span><span class="p">():</span>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">client</span><span class="o">.</span><span class="n">data_generator</span><span class="p">(</span><span class="n">StrengthData</span><span class="p">,</span> <span class="n">FeedbackButton</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Got data from App: </span><span class="si">{</span><span class="n">data</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div></p>
 
@@ -2090,7 +2094,7 @@
           </td>
           <td>
             <div class="doc-md-description">
-              <p>可能为 <strong>强度数据</strong> - :class:<code>StrengthData</code>、<strong>App 反馈数据</strong> - :class:<code>FeedbackButton</code>             、<strong>心跳</strong> - <code>RetCode.SUCCESS</code>、<strong>App 断开连接</strong> - <code>RetCode.CLIENT_DISCONNECTED</code></p>
+              <p>可能为 <strong>强度数据</strong> - <a class="autorefs autorefs-internal" href="../../models/#pydglab_ws.models.StrengthData"><code>StrengthData</code></a>、             <strong>App 反馈数据</strong> - <a class="autorefs autorefs-internal" href="../../enums/#pydglab_ws.enums.FeedbackButton"><code>FeedbackButton</code></a>             、<strong>心跳</strong> - <code>RetCode.SUCCESS</code>、<strong>App 断开连接</strong> - <code>RetCode.CLIENT_DISCONNECTED</code></p>
             </div>
           </td>
         </tr>
@@ -2099,9 +2103,7 @@
 
           <details class="quote">
             <summary>Source code in <code>pydglab_ws/client/base.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">181</span>
-<span class="normal">182</span>
-<span class="normal">183</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">183</span>
 <span class="normal">184</span>
 <span class="normal">185</span>
 <span class="normal">186</span>
@@ -2120,7 +2122,10 @@
 <span class="normal">199</span>
 <span class="normal">200</span>
 <span class="normal">201</span>
-<span class="normal">202</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">data_generator</span><span class="p">(</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">data_generator</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">*</span><span class="n">targets</span><span class="p">:</span> <span class="n">_DataType</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncGenerator</span><span class="p">[</span><span class="n">_DataType</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
@@ -2131,11 +2136,12 @@
 
 <span class="sd">    示例：</span>
 <span class="sd">    ```python3</span>
-<span class="sd">    async for data in client.data_generator():</span>
+<span class="sd">    async for data in client.data_generator(StrengthData, FeedbackButton):</span>
 <span class="sd">        print(f&quot;Got data from App: {data}&quot;)</span>
 <span class="sd">    ```</span>
 <span class="sd">    :param targets: 目标类型，只有为目标类型的数据会被返回，为空即默认值时则不进行限制</span>
-<span class="sd">    :return: 可能为 **强度数据** - :class:`StrengthData`、**App 反馈数据** - :class:`FeedbackButton` \</span>
+<span class="sd">    :return: 可能为 **强度数据** - [`StrengthData`][pydglab_ws.models.StrengthData]、 \</span>
+<span class="sd">        **App 反馈数据** - [`FeedbackButton`][pydglab_ws.enums.FeedbackButton] \</span>
 <span class="sd">        、**心跳** - ``RetCode.SUCCESS``、**App 断开连接** - ``RetCode.CLIENT_DISCONNECTED``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
@@ -2229,10 +2235,7 @@
 
           <details class="quote">
             <summary>Source code in <code>pydglab_ws/client/base.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">204</span>
-<span class="normal">205</span>
-<span class="normal">206</span>
-<span class="normal">207</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">207</span>
 <span class="normal">208</span>
 <span class="normal">209</span>
 <span class="normal">210</span>
@@ -2246,7 +2249,10 @@
 <span class="normal">218</span>
 <span class="normal">219</span>
 <span class="normal">220</span>
-<span class="normal">221</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">set_strength</span><span class="p">(</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">set_strength</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">channel</span><span class="p">:</span> <span class="n">Channel</span><span class="p">,</span>
         <span class="n">operation_type</span><span class="p">:</span> <span class="n">StrengthOperationType</span><span class="p">,</span>
@@ -2337,10 +2343,7 @@
 
           <details class="quote">
             <summary>Source code in <code>pydglab_ws/client/base.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">223</span>
-<span class="normal">224</span>
-<span class="normal">225</span>
-<span class="normal">226</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">226</span>
 <span class="normal">227</span>
 <span class="normal">228</span>
 <span class="normal">229</span>
@@ -2352,7 +2355,10 @@
 <span class="normal">235</span>
 <span class="normal">236</span>
 <span class="normal">237</span>
-<span class="normal">238</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">add_pulses</span><span class="p">(</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">add_pulses</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">channel</span><span class="p">:</span> <span class="n">Channel</span><span class="p">,</span>
         <span class="o">*</span><span class="n">pulses</span><span class="p">:</span> <span class="n">PulseOperation</span>
@@ -2427,17 +2433,17 @@
 
           <details class="quote">
             <summary>Source code in <code>pydglab_ws/client/base.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">240</span>
-<span class="normal">241</span>
-<span class="normal">242</span>
-<span class="normal">243</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">243</span>
 <span class="normal">244</span>
 <span class="normal">245</span>
 <span class="normal">246</span>
 <span class="normal">247</span>
 <span class="normal">248</span>
 <span class="normal">249</span>
-<span class="normal">250</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">clear_pulses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">:</span> <span class="n">Channel</span><span class="p">):</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">clear_pulses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">:</span> <span class="n">Channel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    清空波形队列</span>
 
@@ -2523,13 +2529,13 @@
         
         
           
-          <a href="../local/" class="md-footer__link md-footer__link--next" aria-label="下一页: DGLabLocalClient">
+          <a href="../local/" class="md-footer__link md-footer__link--next" aria-label="下一页: DG-Lab 本地终端">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 下一页
               </span>
               <div class="md-ellipsis">
-                DGLabLocalClient
+                DG-Lab 本地终端
               </div>
             </div>
             <div class="md-footer__button md-icon">

@@ -1011,7 +1011,7 @@
         
   
   <span class="md-ellipsis">
-    DGLabClient
+    DG-Lab 终端
   </span>
   
 
@@ -1032,7 +1032,7 @@
         
   
   <span class="md-ellipsis">
-    DGLabLocalClient
+    DG-Lab 本地终端
   </span>
   
 
@@ -1053,7 +1053,7 @@
         
   
   <span class="md-ellipsis">
-    DGLabWSClient
+    DG-Lab WebSocket 终端
   </span>
   
 
@@ -1074,7 +1074,7 @@
         
   
   <span class="md-ellipsis">
-    DGLabWSConnect
+    DG-Lab WebSocket 终端连接器
   </span>
   
 
@@ -1145,7 +1145,7 @@
         
   
   <span class="md-ellipsis">
-    DGLabWSServer
+    DG-Lab WebSocket 服务端
   </span>
   
 
@@ -1396,7 +1396,7 @@
           </td>
           <td>
             <div class="doc-md-description">
-              <p>:class:<code>InvalidStrengthData</code></p>
+              <p><a class="autorefs autorefs-internal" href="../exceptions/#pydglab_ws.exceptions.InvalidStrengthData"><code>InvalidStrengthData</code></a></p>
             </div>
           </td>
         </tr>
@@ -1426,7 +1426,7 @@
 <span class="sd">    解析消息中的强度数据</span>
 
 <span class="sd">    :param data: WebSocket 消息中的 ``message``</span>
-<span class="sd">    :raise InvalidStrengthData: :class:`InvalidStrengthData`</span>
+<span class="sd">    :raise InvalidStrengthData: [`InvalidStrengthData`][pydglab_ws.exceptions.InvalidStrengthData]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">values</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;+&quot;</span><span class="p">)</span>
@@ -1508,7 +1508,7 @@
           </td>
           <td>
             <div class="doc-md-description">
-              <p>:class:<code>InvalidFeedbackData</code></p>
+              <p><a class="autorefs autorefs-internal" href="../exceptions/#pydglab_ws.exceptions.InvalidFeedbackData"><code>InvalidFeedbackData</code></a></p>
             </div>
           </td>
         </tr>
@@ -1532,7 +1532,7 @@
 <span class="sd">    解析消息中的 App 反馈数据</span>
 
 <span class="sd">    :param data: WebSocket 消息中的 ``message``</span>
-<span class="sd">    :raise InvalidFeedbackData: :class:`InvalidFeedbackData`</span>
+<span class="sd">    :raise InvalidFeedbackData: [`InvalidFeedbackData`][pydglab_ws.exceptions.InvalidFeedbackData]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">FeedbackButton</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]))</span>
@@ -2004,7 +2004,7 @@
 
 
 <a href="#pydglab_ws.utils.dg_lab_client_qrcode" class="headerlink" title="Permanent link">&para;</a></h2>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">dg_lab_client_qrcode</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">,</span> <span class="n">client_id</span><span class="p">:</span> <span class="n"><span title="pydantic.UUID4">UUID4</span></span><span class="p">)</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">dg_lab_client_qrcode</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">,</span> <span class="n">client_id</span><span class="p">:</span> <span class="n"><span title="pydantic.UUID4">UUID4</span></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
@@ -2068,10 +2068,11 @@
     <tbody>
         <tr class="doc-section-item">
           <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
           </td>
           <td>
             <div class="doc-md-description">
-              
+              <p>终端二维码内容，二维码图像需要自行生成</p>
             </div>
           </td>
         </tr>
@@ -2091,14 +2092,14 @@
 <span class="normal">120</span>
 <span class="normal">121</span>
 <span class="normal">122</span>
-<span class="normal">123</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">dg_lab_client_qrcode</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">client_id</span><span class="p">:</span> <span class="n">UUID4</span><span class="p">):</span>
+<span class="normal">123</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">dg_lab_client_qrcode</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">client_id</span><span class="p">:</span> <span class="n">UUID4</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    生成终端二维码，二维码图像需要自行生成</span>
 
 <span class="sd">    :param uri: WebSocket 服务端 URI，例如：``ws://107.47.91.92:4567``</span>
 <span class="sd">            （注意末尾不能有 ``/``）</span>
 <span class="sd">    :param client_id: 终端 ID</span>
-<span class="sd">    :return:</span>
+<span class="sd">    :return: 终端二维码内容，二维码图像需要自行生成</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;https://www.dungeon-lab.com/app-download.php&quot;</span>
             <span class="sa">f</span><span class="s2">&quot;#DGLAB-SOCKET&quot;</span>
@@ -2168,13 +2169,13 @@
         
         
           
-          <a href="../client/base/" class="md-footer__link md-footer__link--next" aria-label="下一页: DGLabClient">
+          <a href="../client/base/" class="md-footer__link md-footer__link--next" aria-label="下一页: DG-Lab 终端">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 下一页
               </span>
               <div class="md-ellipsis">
-                DGLabClient
+                DG-Lab 终端
               </div>
             </div>
             <div class="md-footer__button md-icon">

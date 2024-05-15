@@ -809,6 +809,33 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#pydglab_ws.exceptions.__all__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __all__
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pydglab_ws.exceptions.InvalidStrengthData" class="md-nav__link">
+    <span class="md-ellipsis">
+      InvalidStrengthData
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pydglab_ws.exceptions.InvalidFeedbackData" class="md-nav__link">
+    <span class="md-ellipsis">
+      InvalidFeedbackData
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -948,7 +975,7 @@
         
   
   <span class="md-ellipsis">
-    DGLabClient
+    DG-Lab 终端
   </span>
   
 
@@ -969,7 +996,7 @@
         
   
   <span class="md-ellipsis">
-    DGLabLocalClient
+    DG-Lab 本地终端
   </span>
   
 
@@ -990,7 +1017,7 @@
         
   
   <span class="md-ellipsis">
-    DGLabWSClient
+    DG-Lab WebSocket 终端
   </span>
   
 
@@ -1011,7 +1038,7 @@
         
   
   <span class="md-ellipsis">
-    DGLabWSConnect
+    DG-Lab WebSocket 终端连接器
   </span>
   
 
@@ -1082,7 +1109,7 @@
         
   
   <span class="md-ellipsis">
-    DGLabWSServer
+    DG-Lab WebSocket 服务端
   </span>
   
 
@@ -1160,6 +1187,33 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#pydglab_ws.exceptions.__all__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __all__
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pydglab_ws.exceptions.InvalidStrengthData" class="md-nav__link">
+    <span class="md-ellipsis">
+      InvalidStrengthData
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pydglab_ws.exceptions.InvalidFeedbackData" class="md-nav__link">
+    <span class="md-ellipsis">
+      InvalidFeedbackData
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1204,6 +1258,119 @@
 
 
 
+<div class="doc doc-object doc-attribute">
+
+
+
+<h2 id="pydglab_ws.exceptions.__all__" class="doc doc-heading">
+          <span class="doc doc-object-name doc-attribute-name">__all__</span>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+<a href="#pydglab_ws.exceptions.__all__" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;InvalidStrengthData&#39;</span><span class="p">,</span> <span class="s1">&#39;InvalidFeedbackData&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="pydglab_ws.exceptions.InvalidStrengthData" class="doc doc-heading">
+          <span class="doc doc-object-name doc-class-name">InvalidStrengthData</span>
+
+
+<a href="#pydglab_ws.exceptions.InvalidStrengthData" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">InvalidStrengthData</span><span class="p">(</span><span class="n">strength_data</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">)</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/exceptions.html#Exception">Exception</a></code></p>
+
+
+                <details class="quote">
+                  <summary>Source code in <code>pydglab_ws/exceptions.py</code></summary>
+                  <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strength_data</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid strength data: </span><span class="si">{</span><span class="n">strength_data</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+                </details>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="pydglab_ws.exceptions.InvalidFeedbackData" class="doc doc-heading">
+          <span class="doc doc-object-name doc-class-name">InvalidFeedbackData</span>
+
+
+<a href="#pydglab_ws.exceptions.InvalidFeedbackData" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">InvalidFeedbackData</span><span class="p">(</span><span class="n">feedback_data</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">)</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/exceptions.html#Exception">Exception</a></code></p>
+
+
+                <details class="quote">
+                  <summary>Source code in <code>pydglab_ws/exceptions.py</code></summary>
+                  <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">13</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feedback_data</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid strength data: </span><span class="si">{</span><span class="n">feedback_data</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+                </details>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
 
 
 
