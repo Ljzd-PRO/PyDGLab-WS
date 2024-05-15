@@ -32,7 +32,7 @@ class DGLabAppSimulator:
 
     async def register(self):
         message = await self._recv()
-        if message.type == MessageType.BIND and message.message == MessageDataHead.TARGET_ID.value:
+        if message.type == MessageType.BIND and message.message == MessageDataHead.TARGET_ID:
             self.target_id = message.client_id
 
     async def bind(self, client_id: UUID4):
@@ -41,7 +41,7 @@ class DGLabAppSimulator:
                 type=MessageType.BIND,
                 client_id=client_id,
                 target_id=self.target_id,
-                message=MessageDataHead.DG_LAB.value
+                message=MessageDataHead.DG_LAB
             )
         )
         self.client_id = client_id
