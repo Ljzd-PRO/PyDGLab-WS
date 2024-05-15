@@ -1804,7 +1804,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">not_registered</span><span class="p">:</span>
         <span class="n">message</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_recv</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">message</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">MessageType</span><span class="o">.</span><span class="n">BIND</span> <span class="ow">and</span> <span class="n">message</span><span class="o">.</span><span class="n">message</span> <span class="o">==</span> <span class="n">MessageDataHead</span><span class="o">.</span><span class="n">TARGET_ID</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">message</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">MessageType</span><span class="o">.</span><span class="n">BIND</span> <span class="ow">and</span> <span class="n">message</span><span class="o">.</span><span class="n">message</span> <span class="o">==</span> <span class="n">MessageDataHead</span><span class="o">.</span><span class="n">TARGET_ID</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_client_id</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">client_id</span>
 </code></pre></div></td></tr></table></div>
           </details>
@@ -1915,19 +1915,17 @@
 <span class="normal">159</span>
 <span class="normal">160</span>
 <span class="normal">161</span>
-<span class="normal">162</span>
-<span class="normal">163</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">bind</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RetCode</span><span class="p">:</span>
+<span class="normal">162</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">bind</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RetCode</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    等待与 DG-Lab App 的关系绑定，并保存 ``target_id``</span>
 <span class="sd">    :return: 响应码</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">not_bind</span><span class="p">:</span>
         <span class="n">message</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_recv_owned</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">message</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">MessageType</span><span class="o">.</span><span class="n">BIND</span> <span class="ow">and</span> <span class="n">message</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
-            <span class="n">ret_code</span> <span class="o">=</span> <span class="n">RetCode</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">message</span><span class="p">))</span>
-            <span class="k">if</span> <span class="n">ret_code</span> <span class="o">==</span> <span class="n">RetCode</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">message</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">MessageType</span><span class="o">.</span><span class="n">BIND</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">message</span><span class="p">,</span> <span class="n">RetCode</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">message</span><span class="o">.</span><span class="n">message</span> <span class="o">==</span> <span class="n">RetCode</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_target_id</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">target_id</span>
-            <span class="k">return</span> <span class="n">ret_code</span>
+            <span class="k">return</span> <span class="n">message</span><span class="o">.</span><span class="n">message</span>
 </code></pre></div></td></tr></table></div>
           </details>
   </div>
@@ -1982,7 +1980,8 @@
 
           <details class="quote">
             <summary>Source code in <code>pydglab_ws/client/base.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">165</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">164</span>
+<span class="normal">165</span>
 <span class="normal">166</span>
 <span class="normal">167</span>
 <span class="normal">168</span>
@@ -1997,8 +1996,7 @@
 <span class="normal">177</span>
 <span class="normal">178</span>
 <span class="normal">179</span>
-<span class="normal">180</span>
-<span class="normal">181</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">recv_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">StrengthData</span><span class="p">,</span> <span class="n">FeedbackButton</span><span class="p">,</span> <span class="n">RetCode</span><span class="p">]:</span>
+<span class="normal">180</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">recv_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">StrengthData</span><span class="p">,</span> <span class="n">FeedbackButton</span><span class="p">,</span> <span class="n">RetCode</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    获取 WebSocket 服务端的数据</span>
 
@@ -2103,7 +2101,8 @@
 
           <details class="quote">
             <summary>Source code in <code>pydglab_ws/client/base.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">183</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">182</span>
+<span class="normal">183</span>
 <span class="normal">184</span>
 <span class="normal">185</span>
 <span class="normal">186</span>
@@ -2124,8 +2123,7 @@
 <span class="normal">201</span>
 <span class="normal">202</span>
 <span class="normal">203</span>
-<span class="normal">204</span>
-<span class="normal">205</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">data_generator</span><span class="p">(</span>
+<span class="normal">204</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">data_generator</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">*</span><span class="n">targets</span><span class="p">:</span> <span class="n">_DataType</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncGenerator</span><span class="p">[</span><span class="n">_DataType</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
@@ -2235,7 +2233,8 @@
 
           <details class="quote">
             <summary>Source code in <code>pydglab_ws/client/base.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">207</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">206</span>
+<span class="normal">207</span>
 <span class="normal">208</span>
 <span class="normal">209</span>
 <span class="normal">210</span>
@@ -2251,8 +2250,7 @@
 <span class="normal">220</span>
 <span class="normal">221</span>
 <span class="normal">222</span>
-<span class="normal">223</span>
-<span class="normal">224</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">set_strength</span><span class="p">(</span>
+<span class="normal">223</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">set_strength</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">channel</span><span class="p">:</span> <span class="n">Channel</span><span class="p">,</span>
         <span class="n">operation_type</span><span class="p">:</span> <span class="n">StrengthOperationType</span><span class="p">,</span>
@@ -2343,7 +2341,8 @@
 
           <details class="quote">
             <summary>Source code in <code>pydglab_ws/client/base.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">226</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">225</span>
+<span class="normal">226</span>
 <span class="normal">227</span>
 <span class="normal">228</span>
 <span class="normal">229</span>
@@ -2357,8 +2356,7 @@
 <span class="normal">237</span>
 <span class="normal">238</span>
 <span class="normal">239</span>
-<span class="normal">240</span>
-<span class="normal">241</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">add_pulses</span><span class="p">(</span>
+<span class="normal">240</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">add_pulses</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">channel</span><span class="p">:</span> <span class="n">Channel</span><span class="p">,</span>
         <span class="o">*</span><span class="n">pulses</span><span class="p">:</span> <span class="n">PulseOperation</span>
@@ -2433,7 +2431,8 @@
 
           <details class="quote">
             <summary>Source code in <code>pydglab_ws/client/base.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">243</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">242</span>
+<span class="normal">243</span>
 <span class="normal">244</span>
 <span class="normal">245</span>
 <span class="normal">246</span>
@@ -2442,8 +2441,7 @@
 <span class="normal">249</span>
 <span class="normal">250</span>
 <span class="normal">251</span>
-<span class="normal">252</span>
-<span class="normal">253</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">clear_pulses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">:</span> <span class="n">Channel</span><span class="p">):</span>
+<span class="normal">252</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">clear_pulses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">:</span> <span class="n">Channel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    清空波形队列</span>
 
