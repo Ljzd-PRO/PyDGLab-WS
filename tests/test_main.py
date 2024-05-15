@@ -1,3 +1,4 @@
+import asyncio
 import json
 from typing import Tuple, List, Callable, Coroutine, Literal
 
@@ -7,7 +8,7 @@ from websockets import WebSocketClientProtocol
 from websockets.client import connect
 
 from pydglab_ws.client import DGLabWSClient, DGLabLocalClient, DGLabClient, DGLabWSConnect
-from pydglab_ws.enums import FeedbackButton, Channel, MessageType, StrengthOperationType
+from pydglab_ws.enums import FeedbackButton, Channel, MessageType, StrengthOperationType, RetCode
 from pydglab_ws.models import StrengthData
 from pydglab_ws.server import DGLabWSServer
 from tests.app_simulator import DGLabAppSimulator
@@ -15,7 +16,9 @@ from tests.app_simulator import DGLabAppSimulator
 WEBSOCKET_HOST = "127.0.0.1"
 WEBSOCKET_PORT = 5678
 WEBSOCKET_URI = f"ws://{WEBSOCKET_HOST}:{WEBSOCKET_PORT}"
-HEARTBEAT_INTERVAL: float = 10
+HEARTBEAT_INTERVAL: float = 1
+HEARTBEAT_TEST_TIMES: int = 3
+HEARTBEAT_TEST_EXTRA_WAIT: float = 1
 
 ClientAppPair = Tuple[
     DGLabClient,
@@ -261,7 +264,12 @@ async def test_dg_lab_client_recv_strength(
 
 
 @pytest.mark.asyncio
-@pytest.mark.order(after="test_dg_lab_client_bind")  # After bind
+@pytest.mark.order(
+    after=[
+        "test_dg_lab_client_bind",  # After bind
+        "test_dg_lab_client_recv_strength"  # 防止并发导致数据被忽略丢失
+    ]
+)
 @pytest.mark.parametrize(
     "feedback_button",
     [
@@ -287,7 +295,12 @@ async def test_dg_lab_client_recv_feedback(
 
 
 @pytest.mark.asyncio
-@pytest.mark.order(after="test_dg_lab_client_bind")  # After bind
+@pytest.mark.order(
+    after=[
+        "test_dg_lab_client_bind",  # After bind
+        "test_dg_lab_client_recv_feedback"  # 防止并发导致数据被忽略丢失
+    ]
+)
 @pytest.mark.parametrize(
     "args,expected",
     [
@@ -324,7 +337,12 @@ async def test_dg_lab_client_set_strength(
 
 
 @pytest.mark.asyncio
-@pytest.mark.order(after="test_dg_lab_client_bind")  # After bind
+@pytest.mark.order(
+    after=[
+        "test_dg_lab_client_bind",  # After bind
+        "test_dg_lab_client_set_strength"  # 防止并发导致数据被忽略丢失
+    ]
+)
 @pytest.mark.parametrize(
     "args,expected",
     [
@@ -354,7 +372,12 @@ async def test_dg_lab_client_add_pulses(
 
 
 @pytest.mark.asyncio
-@pytest.mark.order(after="test_dg_lab_client_bind")  # After bind
+@pytest.mark.order(
+    after=[
+        "test_dg_lab_client_bind",  # After bind
+        "test_dg_lab_client_add_pulses"  # 防止并发导致数据被忽略丢失
+    ]
+)
 @pytest.mark.parametrize(
     "channel,expected",
     [
@@ -375,3 +398,33 @@ async def test_dg_lab_clear_pulses(
         assert message.client_id == client.client_id
         assert message.target_id == app.target_id
         assert message.message == expected
+
+
+@pytest.mark.asyncio
+@pytest.mark.order(
+    after=[
+        "test_dg_lab_client_bind",  # After bind
+        "test_dg_lab_clear_pulses"  # 防止并发导致数据被忽略丢失
+    ]
+)
+@pytest.mark.timeout(HEARTBEAT_INTERVAL * HEARTBEAT_TEST_TIMES + HEARTBEAT_TEST_EXTRA_WAIT)
+async def test_dg_lab_heartbeat(
+        dg_lab_ws_server: DGLabWSServer,
+        dg_lab_ws_client: DGLabWSClient,
+        app_simulator_for_ws: DGLabAppSimulator
+):
+    await asyncio.sleep(HEARTBEAT_INTERVAL * HEARTBEAT_TEST_TIMES)
+
+    received_heartbeat = 0
+    async for code in dg_lab_ws_client.data_generator(RetCode):
+        if code == RetCode.SUCCESS:
+            received_heartbeat += 1
+            if received_heartbeat == HEARTBEAT_TEST_TIMES:
+                break
+
+    received_heartbeat = 0
+    while received_heartbeat != HEARTBEAT_TEST_TIMES:
+        if (await app_simulator_for_ws.recv_heartbeat()) == RetCode.SUCCESS:
+            received_heartbeat += 1
+            if received_heartbeat == HEARTBEAT_TEST_TIMES:
+                break

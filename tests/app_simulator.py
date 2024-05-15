@@ -3,7 +3,7 @@ from typing import Optional
 from pydantic import UUID4
 from websockets import WebSocketClientProtocol
 
-from pydglab_ws.enums import MessageType, MessageDataHead, FeedbackButton
+from pydglab_ws.enums import MessageType, MessageDataHead, FeedbackButton, RetCode
 from pydglab_ws.models import WebSocketMessage, StrengthData
 
 
@@ -71,3 +71,16 @@ class DGLabAppSimulator:
             message = await self._recv_owned()
             if message.type == MessageType.MSG:
                 return message
+
+    async def recv_heartbeat(self) -> RetCode:
+        while True:
+            message = await self._recv()
+            # 注意此处 clientId 为心跳包接收方 ID，targetId 为绑定方
+            if message.type == MessageType.HEARTBEAT and message.client_id == self.target_id:
+                return message.message
+
+    async def recv_disconnect(self) -> RetCode:
+        while True:
+            message = await self._recv_owned()
+            if message.type == MessageType.BREAK:
+                return message.message
