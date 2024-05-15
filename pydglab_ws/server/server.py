@@ -211,7 +211,8 @@ class DGLabWSServer:
                         WebSocketMessage(
                             type=MessageType.MSG,
                             message=RetCode.NON_JSON_CONTENT
-                        )
+                        ),
+                        websocket
                     )
                 else:
                     await self._message_handler(parsed_message, websocket)
