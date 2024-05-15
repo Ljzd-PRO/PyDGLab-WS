@@ -6,7 +6,7 @@ import json
 from pydantic import UUID4
 
 from .enums import StrengthOperationType, Channel, MessageDataHead, FeedbackButton
-from .exceptions import InvalidStrengthData, InvalidFeedbackData
+from .exceptions import InvalidStrengthData, InvalidFeedbackData, InvalidPulseOperation
 from .models import StrengthData
 from .typing import PulseOperation
 
@@ -84,16 +84,21 @@ def dump_pulse_operation(pulse: PulseOperation) -> str:
     生成波形操作的数据
 
     :param pulse: 波形操作数据
-    :return: 返回数据可作为 WebSocket 消息中的 ``message``
+    :return: 返回数据与蓝牙协议类似
+    :raise InvalidPulseOperation: [`InvalidPulseOperation`][pydglab_ws.exceptions.InvalidPulseOperation]
     """
-    pulse_bytes = bytes().join(
-        # int.to_bytes Python 3.11 才添加了 length, byteorder 的默认参数值
-        value.to_bytes(
-            length=1,
-            byteorder='big'
-        ) for operation in pulse for value in operation
-    )
-    return pulse_bytes.hex()
+    try:
+        pulse_bytes = bytes().join(
+            # int.to_bytes Python 3.11 才添加了 length, byteorder 的默认参数值
+            value.to_bytes(
+                length=1,
+                byteorder='big'
+            ) for operation in pulse for value in operation
+        )
+    except (TypeError, AttributeError, OverflowError) as e:
+        raise InvalidPulseOperation(pulse) from e
+    else:
+        return pulse_bytes.hex()
 
 
 def dump_add_pulses(
@@ -106,6 +111,7 @@ def dump_add_pulses(
     :param channel: 通道选择
     :param pulses: 波形操作数据
     :return: 返回数据可作为 WebSocket 消息中的 ``message``
+    :raise InvalidPulseOperation: [`InvalidPulseOperation`][pydglab_ws.exceptions.InvalidPulseOperation]
     """
     dict_data = {
         f"{MessageDataHead.PULSE.value}-{channel.value}": [dump_pulse_operation(pulse) for pulse in pulses]

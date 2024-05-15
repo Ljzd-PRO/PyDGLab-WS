@@ -112,7 +112,12 @@ class DGLabClient(ABC):
 
     @staticmethod
     def _handle_msg(message: WebSocketMessage) -> Optional[Union[StrengthData, FeedbackButton]]:
-        """处理类型为 ``msg`` 的消息"""
+        """
+        处理类型为 ``msg`` 的消息
+
+        :raise InvalidStrengthData: [`InvalidStrengthData`][pydglab_ws.exceptions.InvalidStrengthData]
+        :raise InvalidFeedbackData: [`InvalidFeedbackData`][pydglab_ws.exceptions.InvalidFeedbackData]
+        """
         if isinstance(message.message, str):
             if message.message.startswith(MessageDataHead.STRENGTH.value):
                 return parse_strength_data(message.message)
@@ -171,6 +176,8 @@ class DGLabClient(ABC):
             **App 反馈数据** - [`FeedbackButton`][pydglab_ws.enums.FeedbackButton] \
             、**心跳** - [`RetCode.SUCCESS`][pydglab_ws.enums.RetCode]、 \
             **App 断开连接** - [`RetCode.CLIENT_DISCONNECTED`][pydglab_ws.enums.RetCode]
+        :raise InvalidStrengthData: [`InvalidStrengthData`][pydglab_ws.exceptions.InvalidStrengthData]
+        :raise InvalidFeedbackData: [`InvalidFeedbackData`][pydglab_ws.exceptions.InvalidFeedbackData]
         """
         await self.ensure_bind()
         while True:
@@ -244,6 +251,7 @@ class DGLabClient(ABC):
         清空波形队列
 
         :param channel: 通道选择
+        :raise InvalidPulseOperation: [`InvalidPulseOperation`][pydglab_ws.exceptions.InvalidPulseOperation]
         """
         await self.ensure_bind()
         await self._send_owned(
