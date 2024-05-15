@@ -19,6 +19,10 @@
       <img src="https://codecov.io/gh/Ljzd-PRO/PyDGLab-WS/branch/master/graph/badge.svg?token=VTr0LB1yWF" alt="codecov"/>
   </a>
 
+  <a href="https://github.com/Ljzd-PRO/PyDGLab-WS/actions/workflows/codecov.yml" target="_blank">
+    <img alt="Test Result" src="https://img.shields.io/github/actions/workflow/status/Ljzd-PRO/PyDGLab-WS/codecov.yml">
+  </a>
+
   <a href='https://pydglab-ws.readthedocs.io/'>
     <img src='https://readthedocs.org/projects/pydglab-ws/badge/?version=latest' alt='Documentation Status' />
   </a>
