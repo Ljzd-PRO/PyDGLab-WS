@@ -32,7 +32,8 @@
   </a>
 </p>
 
-**目前项目还在开发中，API 可能发生较多变更**
+> [!Warning]
+> 目前项目还在开发中，API 可能发生较多变更
 
 ## 💡 特性
 
@@ -54,11 +55,9 @@
 
 📖 更多用法和完整 API 请查看文档：https://pydglab-ws.readthedocs.io
 
-### ❗ 前言
-
-注意，您可能需要先大致了解一下第三方终端通过 WebSocket 连接控制 DG-Lab App 的基本流程和原理
-
-官方文档：https://github.com/DG-LAB-OPENSOURCE/DG-LAB-OPENSOURCE/blob/main/socket/README.md
+> [!Note]
+> 注意，您可能需要先大致了解一下第三方终端通过 WebSocket 连接控制 DG-Lab App 的基本流程和原理 \
+> 官方文档：https://github.com/DG-LAB-OPENSOURCE/DG-LAB-OPENSOURCE/blob/main/socket/README.md
 
 ### 🔨 安装
 
@@ -127,10 +126,10 @@ if __name__ == "__main__":
 
 这段代码不仅提供 DG-Lab WebSocket 服务端服务，还生成了一个本地终端可供 App 连接。
 
-不管是本地终端 `DGLabLocalClient` 还是 WebSocket 终端 `DGLabWSClient`，**包含的主要方法都相同**，
-因此在该段代码中，终端相关的逻辑与上面的独立的 WebSocket 终端的实现基本相同。
-
-这种方式，省去了终端连接 WebSocket 服务端的环节，终端与 WebSocket 服务端一体，**网络延迟更低，部署更方便**。
+> [!Tip]
+> 不管是本地终端 `DGLabLocalClient` 还是 WebSocket 终端 `DGLabWSClient`，**包含的主要方法都相同** \
+> 因此在该段代码中，终端相关的逻辑与上面的独立的 WebSocket 终端的实现基本相同。 \
+> 这种方式，省去了终端连接 WebSocket 服务端的环节，终端与 WebSocket 服务端一体，**网络延迟更低，部署更方便**。
 
 ```python3
 import asyncio
