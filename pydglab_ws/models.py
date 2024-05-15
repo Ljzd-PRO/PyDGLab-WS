@@ -36,7 +36,11 @@ class WebSocketMessage(BaseModel):
     message: Union[str, RetCode, MessageDataHead]
 
     @field_validator("message")
+    @classmethod
     def _validate_message(cls, value: Any):
+        """
+        自动先行尝试解析 `message`
+        """
         if isinstance(value, str):
             try:
                 return RetCode(int(value))
