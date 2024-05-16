@@ -1,5 +1,6 @@
 import asyncio
 import json
+from contextlib import asynccontextmanager
 from typing import Tuple, List, Callable, Coroutine, Literal
 
 import pytest
@@ -24,6 +25,50 @@ ClientAppPair = Tuple[
     DGLabClient,
     DGLabAppSimulator
 ]
+
+
+@asynccontextmanager
+async def locks_context_manager(*locks: asyncio.Lock):
+    for lock in locks:
+        await lock.acquire()
+    yield
+    for lock in locks:
+        lock.release()
+
+
+@pytest.fixture(name="global_lock", scope="session")
+def global_lock_fixture() -> asyncio.Lock:
+    return asyncio.Lock()
+
+
+@pytest_asyncio.fixture(name="local_register_lock", scope="session")
+async def local_register_lock_fixture() -> asyncio.Lock:
+    # 先锁上，只有执行注册的测试不需要获得锁，以实现先注册
+    lock = asyncio.Lock()
+    await lock.acquire()
+    return lock
+
+
+@pytest_asyncio.fixture(name="ws_register_lock", scope="session")
+async def ws_register_lock_fixture() -> asyncio.Lock:
+    # 先锁上，只有执行注册的测试不需要获得锁，以实现先注册
+    lock = asyncio.Lock()
+    await lock.acquire()
+    return lock
+
+
+@pytest_asyncio.fixture(name="local_bind_lock", scope="session")
+async def local_bind_lock_fixture(local_register_lock: asyncio.Lock) -> asyncio.Lock:
+    # 先锁上，只有执行绑定的测试不需要获得锁，以实现先绑定
+    await local_register_lock.acquire()
+    return local_register_lock
+
+
+@pytest_asyncio.fixture(name="ws_bind_lock", scope="session")
+async def ws_bind_lock_fixture(ws_register_lock: asyncio.Lock) -> asyncio.Lock:
+    # 先锁上，只有执行绑定的测试不需要获得锁，以实现先绑定
+    await ws_register_lock.acquire()
+    return ws_register_lock
 
 
 @pytest_asyncio.fixture(name="dg_lab_ws_server", scope="session")
@@ -120,44 +165,49 @@ def test_dg_lab_ws_server(
 @pytest.mark.asyncio
 async def test_dg_lab_local_register(
         dg_lab_ws_server: DGLabWSServer,
-        dg_lab_local_client: DGLabLocalClient
+        dg_lab_local_client: DGLabLocalClient,
+        local_register_lock: asyncio.Lock,
+        global_lock: asyncio.Lock
 ):
-    assert dg_lab_local_client.client_id is not None
-    assert dg_lab_local_client.not_registered is False
-    assert dg_lab_local_client.not_bind is True
+    async with global_lock:
+        assert dg_lab_local_client.client_id is not None
+        assert dg_lab_local_client.not_registered is False
+        assert dg_lab_local_client.not_bind is True
 
-    # Local client will register when initializing
-    await dg_lab_local_client.register()
+        # Local client will register when initializing
+        await dg_lab_local_client.register()
 
-    assert dg_lab_local_client.client_id in dg_lab_ws_server.local_client_ids
-    assert dg_lab_local_client.client_id is not None
-    assert dg_lab_local_client.not_registered is False
-    assert dg_lab_local_client.not_bind is True
+        assert dg_lab_local_client.client_id in dg_lab_ws_server.local_client_ids
+        assert dg_lab_local_client.client_id is not None
+        assert dg_lab_local_client.not_registered is False
+        assert dg_lab_local_client.not_bind is True
+
+        local_register_lock.release()
 
 
 @pytest.mark.asyncio
 async def test_dg_lab_ws_register(
         dg_lab_ws_server: DGLabWSServer,
-        dg_lab_ws_client: DGLabWSClient
+        dg_lab_ws_client: DGLabWSClient,
+        ws_register_lock: asyncio.Lock,
+        global_lock: asyncio.Lock
 ):
-    assert dg_lab_ws_client.client_id is None
-    assert dg_lab_ws_client.not_registered is True
-    assert dg_lab_ws_client.not_bind is True
+    async with global_lock:
+        assert dg_lab_ws_client.client_id is None
+        assert dg_lab_ws_client.not_registered is True
+        assert dg_lab_ws_client.not_bind is True
 
-    await dg_lab_ws_client.register()
+        await dg_lab_ws_client.register()
 
-    assert dg_lab_ws_client.client_id in dg_lab_ws_server.ws_client_ids
-    assert dg_lab_ws_client.client_id is not None
-    assert dg_lab_ws_client.not_registered is False
-    assert dg_lab_ws_client.not_bind is True
+        assert dg_lab_ws_client.client_id in dg_lab_ws_server.ws_client_ids
+        assert dg_lab_ws_client.client_id is not None
+        assert dg_lab_ws_client.not_registered is False
+        assert dg_lab_ws_client.not_bind is True
+
+        ws_register_lock.release()
 
 
-@pytest.mark.order(
-    after=[
-        "test_dg_lab_ws_register",
-        "test_dg_lab_local_register"
-    ]
-)  # After registered
+@pytest.mark.asyncio
 @pytest.mark.parametrize(
     "uri,expected_generator,only_for",
     [
@@ -203,24 +253,31 @@ async def test_dg_lab_ws_register(
         ),
     ]
 )
-def test_dg_lab_client_get_qrcode(
+async def test_dg_lab_client_get_qrcode(
         uri: str,
         only_for: Literal["local", "ws"],
         expected_generator,
         dg_lab_local_client: DGLabLocalClient,
-        dg_lab_ws_client: DGLabWSClient
+        dg_lab_ws_client: DGLabWSClient,
+        local_register_lock: asyncio.Lock,
+        ws_register_lock: asyncio.Lock,
+        global_lock: asyncio.Lock
 ):
-    for client in dg_lab_local_client, dg_lab_ws_client:
-        if (
-                (only_for == "local" and isinstance(client, DGLabWSClient)) or
-                (only_for == "ws" and isinstance(client, DGLabLocalClient))
-        ):
-            continue
-        assert client.get_qrcode(uri) == expected_generator(client.client_id)
+    async with locks_context_manager(
+            local_register_lock,
+            ws_register_lock,
+            global_lock
+    ):
+        for client in dg_lab_local_client, dg_lab_ws_client:
+            if (
+                    (only_for == "local" and isinstance(client, DGLabWSClient)) or
+                    (only_for == "ws" and isinstance(client, DGLabLocalClient))
+            ):
+                continue
+            assert client.get_qrcode(uri) == expected_generator(client.client_id)
 
 
 @pytest.mark.asyncio
-@pytest.mark.order(before="test_dg_lab_client_bind")  # Before App need to receive other message
 @pytest.mark.parametrize(
     "raw_message",
     [
@@ -235,49 +292,51 @@ def test_dg_lab_client_get_qrcode(
 async def test_dg_lab_non_json_content(
         raw_message: str,
         app_simulator_for_local: DGLabAppSimulator,
-        app_simulator_for_ws: DGLabAppSimulator
+        app_simulator_for_ws: DGLabAppSimulator,
+        global_lock: asyncio.Lock  # 只需要全局锁，因为此处只有 App 需要注册
 ):
-    for app in app_simulator_for_local, app_simulator_for_ws:
-        if app.target_id is None:
-            await app.register()
-        await app.websocket.send(raw_message)
-        assert await app.recv_non_json_content() == RetCode.NON_JSON_CONTENT
+    async with global_lock:
+        for app in app_simulator_for_local, app_simulator_for_ws:
+            if app.target_id is None:
+                await app.register()
+            await app.websocket.send(raw_message)
+            assert await app.recv_non_json_content() == RetCode.NON_JSON_CONTENT
 
 
 @pytest.mark.asyncio
-@pytest.mark.order(
-    after=[
-        "test_dg_lab_ws_register",
-        "test_dg_lab_local_register"
-    ]
-)  # After registered
 async def test_dg_lab_client_bind(
         client_app_pairs: List[ClientAppPair],
-        dg_lab_ws_server: DGLabWSServer
+        dg_lab_ws_server: DGLabWSServer,
+        local_bind_lock: asyncio.Lock,
+        ws_bind_lock: asyncio.Lock,
+        global_lock: asyncio.Lock
 ):
-    assert not dg_lab_ws_server.client_id_to_target_id
-    assert not dg_lab_ws_server.target_id_to_client_id
+    async with global_lock:
+        assert not dg_lab_ws_server.client_id_to_target_id
+        assert not dg_lab_ws_server.target_id_to_client_id
 
-    for (client, app), get_bind in zip(
-            client_app_pairs,
-            [
-                lambda x: x.bind(),
-                lambda x: x.ensure_bind()
-            ]
-    ):  # type: (DGLabClient, DGLabAppSimulator), Callable[[DGLabClient], Coroutine]
-        if app.target_id is None:
-            await app.register()
-        await app.bind(client.client_id)
-        await get_bind(client)
+        for (client, app), get_bind in zip(
+                client_app_pairs,
+                [
+                    lambda x: x.bind(),
+                    lambda x: x.ensure_bind()
+                ]
+        ):  # type: (DGLabClient, DGLabAppSimulator), Callable[[DGLabClient], Coroutine]
+            if app.target_id is None:
+                await app.register()
+            await app.bind(client.client_id)
+            await get_bind(client)
 
-        assert dg_lab_ws_server.client_id_to_target_id.get(client.client_id) == app.target_id
-        assert dg_lab_ws_server.target_id_to_client_id.get(app.target_id) == client.client_id
-        assert client.target_id == app.target_id
-        assert client.not_bind is not True
+            assert dg_lab_ws_server.client_id_to_target_id.get(client.client_id) == app.target_id
+            assert dg_lab_ws_server.target_id_to_client_id.get(app.target_id) == client.client_id
+            assert client.target_id == app.target_id
+            assert client.not_bind is not True
+
+        for lock in local_bind_lock, ws_bind_lock:
+            lock.release()
 
 
 @pytest.mark.asyncio
-@pytest.mark.order(after="test_dg_lab_client_bind")  # After bind
 @pytest.mark.parametrize(
     "strength_data",
     [
@@ -290,24 +349,26 @@ async def test_dg_lab_client_bind(
 )
 async def test_dg_lab_client_recv_strength(
         strength_data: StrengthData,
-        client_app_pairs: List[ClientAppPair]
+        client_app_pairs: List[ClientAppPair],
+        local_bind_lock: asyncio.Lock,
+        ws_bind_lock: asyncio.Lock,
+        global_lock: asyncio.Lock
 ):
-    for client, app in client_app_pairs:
-        await app.send_strength(strength_data)
-        while True:
-            data = await client.recv_data()
-            if isinstance(data, StrengthData):
-                assert data == strength_data
-                break
+    async with locks_context_manager(
+            local_bind_lock,
+            ws_bind_lock,
+            global_lock
+    ):
+        for client, app in client_app_pairs:
+            await app.send_strength(strength_data)
+            while True:
+                data = await client.recv_data()
+                if isinstance(data, StrengthData):
+                    assert data == strength_data
+                    break
 
 
 @pytest.mark.asyncio
-@pytest.mark.order(
-    after=[
-        "test_dg_lab_client_bind",  # After bind
-        "test_dg_lab_client_recv_strength"  # 防止并发导致数据被忽略丢失
-    ]
-)
 @pytest.mark.parametrize(
     "feedback_button",
     [
@@ -319,26 +380,28 @@ async def test_dg_lab_client_recv_strength(
 )
 async def test_dg_lab_client_recv_feedback(
         feedback_button: FeedbackButton,
-        client_app_pairs: List[ClientAppPair]
+        client_app_pairs: List[ClientAppPair],
+        local_bind_lock: asyncio.Lock,
+        ws_bind_lock: asyncio.Lock,
+        global_lock: asyncio.Lock
 ):
-    for client, app in client_app_pairs:
-        await app.send_feedback(feedback_button)
-        if isinstance(client, DGLabWSClient):
-            # 顺便测试一下异步生成器
-            async for data in client.data_generator(FeedbackButton):
-                assert data == feedback_button
-                break
-        else:
-            assert await client.recv_data() == feedback_button
+    async with locks_context_manager(
+            local_bind_lock,
+            ws_bind_lock,
+            global_lock
+    ):
+        for client, app in client_app_pairs:
+            await app.send_feedback(feedback_button)
+            if isinstance(client, DGLabWSClient):
+                # 顺便测试一下异步生成器
+                async for data in client.data_generator(FeedbackButton):
+                    assert data == feedback_button
+                    break
+            else:
+                assert await client.recv_data() == feedback_button
 
 
 @pytest.mark.asyncio
-@pytest.mark.order(
-    after=[
-        "test_dg_lab_client_bind",  # After bind
-        "test_dg_lab_client_recv_feedback"  # 防止并发导致数据被忽略丢失
-    ]
-)
 @pytest.mark.parametrize(
     "args,expected",
     [
@@ -362,25 +425,27 @@ async def test_dg_lab_client_recv_feedback(
 async def test_dg_lab_client_set_strength(
         args,
         expected,
-        client_app_pairs: List[ClientAppPair]
+        client_app_pairs: List[ClientAppPair],
+        local_bind_lock: asyncio.Lock,
+        ws_bind_lock: asyncio.Lock,
+        global_lock: asyncio.Lock
 ):
-    for client, app in client_app_pairs:
-        await client.set_strength(*args)
-        message = await app.recv_msg_type_data()
+    async with locks_context_manager(
+            local_bind_lock,
+            ws_bind_lock,
+            global_lock
+    ):
+        for client, app in client_app_pairs:
+            await client.set_strength(*args)
+            message = await app.recv_msg_type_data()
 
-        assert message.type == MessageType.MSG
-        assert message.client_id == client.client_id
-        assert message.target_id == app.target_id
-        assert message.message == expected
+            assert message.type == MessageType.MSG
+            assert message.client_id == client.client_id
+            assert message.target_id == app.target_id
+            assert message.message == expected
 
 
 @pytest.mark.asyncio
-@pytest.mark.order(
-    after=[
-        "test_dg_lab_client_bind",  # After bind
-        "test_dg_lab_client_set_strength"  # 防止并发导致数据被忽略丢失
-    ]
-)
 @pytest.mark.parametrize(
     "args,expected",
     [
@@ -397,25 +462,27 @@ async def test_dg_lab_client_set_strength(
 async def test_dg_lab_client_add_pulses(
         args,
         expected,
-        client_app_pairs: List[ClientAppPair]
+        client_app_pairs: List[ClientAppPair],
+        local_bind_lock: asyncio.Lock,
+        ws_bind_lock: asyncio.Lock,
+        global_lock: asyncio.Lock
 ):
-    for client, app in client_app_pairs:
-        await client.add_pulses(*args)
-        message = await app.recv_msg_type_data()
+    async with locks_context_manager(
+            local_bind_lock,
+            ws_bind_lock,
+            global_lock
+    ):
+        for client, app in client_app_pairs:
+            await client.add_pulses(*args)
+            message = await app.recv_msg_type_data()
 
-        assert message.type == MessageType.MSG
-        assert message.client_id == client.client_id
-        assert message.target_id == app.target_id
-        assert json.loads(message.message) == expected
+            assert message.type == MessageType.MSG
+            assert message.client_id == client.client_id
+            assert message.target_id == app.target_id
+            assert json.loads(message.message) == expected
 
 
 @pytest.mark.asyncio
-@pytest.mark.order(
-    after=[
-        "test_dg_lab_client_bind",  # After bind
-        "test_dg_lab_client_add_pulses"  # 防止并发导致数据被忽略丢失
-    ]
-)
 @pytest.mark.parametrize(
     "channel,expected",
     [
@@ -426,92 +493,107 @@ async def test_dg_lab_client_add_pulses(
 async def test_dg_lab_clear_pulses(
         channel,
         expected,
-        client_app_pairs: List[ClientAppPair]
+        client_app_pairs: List[ClientAppPair],
+        local_bind_lock: asyncio.Lock,
+        ws_bind_lock: asyncio.Lock,
+        global_lock: asyncio.Lock
 ):
-    for client, app in client_app_pairs:
-        await client.clear_pulses(channel)
-        message = await app.recv_msg_type_data()
+    async with locks_context_manager(
+            local_bind_lock,
+            ws_bind_lock,
+            global_lock
+    ):
+        for client, app in client_app_pairs:
+            await client.clear_pulses(channel)
+            message = await app.recv_msg_type_data()
 
-        assert message.type == MessageType.MSG
-        assert message.client_id == client.client_id
-        assert message.target_id == app.target_id
-        assert message.message == expected
+            assert message.type == MessageType.MSG
+            assert message.client_id == client.client_id
+            assert message.target_id == app.target_id
+            assert message.message == expected
 
 
 @pytest.mark.asyncio
-@pytest.mark.order(
-    after=[
-        "test_dg_lab_client_bind",  # After bind
-        "test_dg_lab_clear_pulses"  # 防止并发导致数据被忽略丢失
-    ]
-)
 @pytest.mark.timeout(HEARTBEAT_INTERVAL * HEARTBEAT_TEST_TIMES + HEARTBEAT_TEST_EXTRA_WAIT)
 async def test_dg_lab_heartbeat(
         dg_lab_ws_server: DGLabWSServer,
         dg_lab_ws_client: DGLabWSClient,
-        app_simulator_for_ws: DGLabAppSimulator
+        app_simulator_for_ws: DGLabAppSimulator,
+        ws_register_lock: asyncio.Lock,
+        global_lock: asyncio.Lock
 ):
-    await asyncio.sleep(HEARTBEAT_INTERVAL * HEARTBEAT_TEST_TIMES)
+    async with locks_context_manager(ws_register_lock, global_lock):
+        if app_simulator_for_ws.target_id is None:
+            await app_simulator_for_ws.register()
+        await asyncio.sleep(HEARTBEAT_INTERVAL * HEARTBEAT_TEST_TIMES)
 
-    received_heartbeat = 0
-    async for code in dg_lab_ws_client.data_generator(RetCode):
-        if code == RetCode.SUCCESS:
-            received_heartbeat += 1
-            if received_heartbeat == HEARTBEAT_TEST_TIMES:
-                break
+        received_heartbeat = 0
+        async for code in dg_lab_ws_client.data_generator(RetCode):
+            if code == RetCode.SUCCESS:
+                received_heartbeat += 1
+                if received_heartbeat == HEARTBEAT_TEST_TIMES:
+                    break
 
-    received_heartbeat = 0
-    while received_heartbeat != HEARTBEAT_TEST_TIMES:
-        if (await app_simulator_for_ws.recv_heartbeat()) == RetCode.SUCCESS:
-            received_heartbeat += 1
-            if received_heartbeat == HEARTBEAT_TEST_TIMES:
-                break
+        received_heartbeat = 0
+        while received_heartbeat != HEARTBEAT_TEST_TIMES:
+            if (await app_simulator_for_ws.recv_heartbeat()) == RetCode.SUCCESS:
+                received_heartbeat += 1
+                if received_heartbeat == HEARTBEAT_TEST_TIMES:
+                    break
 
 
 @pytest.mark.asyncio
-@pytest.mark.order("last")
 async def test_dg_lab_app_disconnect(
         dg_lab_ws_server: DGLabWSServer,
         client_app_pairs: List[ClientAppPair],
         app_new_websocket_for_local: WebSocketClientProtocol,
-        app_new_websocket_for_ws: WebSocketClientProtocol
+        app_new_websocket_for_ws: WebSocketClientProtocol,
+        local_bind_lock: asyncio.Lock,
+        ws_bind_lock: asyncio.Lock,
+        global_lock: asyncio.Lock
 ):
-    for client, app in client_app_pairs:
-        await app.websocket.close()
-        async for code in client.data_generator(RetCode):
-            if code == RetCode.CLIENT_DISCONNECTED:
-                # App 重新建立连接，并注册和绑定
-                if isinstance(client, DGLabLocalClient):
-                    app.websocket = app_new_websocket_for_local
-                else:
-                    app.websocket = app_new_websocket_for_ws
-                await app.register()
-                await app.bind(client.client_id)
-                await client.bind()
-                break
+    async with locks_context_manager(
+            local_bind_lock,
+            ws_bind_lock,
+            global_lock
+    ):
+        for client, app in client_app_pairs:
+            await app.websocket.close()
+            async for code in client.data_generator(RetCode):
+                if code == RetCode.CLIENT_DISCONNECTED:
+                    # App 重新建立连接，并注册和绑定
+                    if isinstance(client, DGLabLocalClient):
+                        app.websocket = app_new_websocket_for_local
+                    else:
+                        app.websocket = app_new_websocket_for_ws
+                    await app.register()
+                    await app.bind(client.client_id)
+                    await client.bind()
+                    break
 
 
 @pytest.mark.asyncio
-@pytest.mark.order(after="test_dg_lab_app_disconnect")  # 必须等待 App 重新建立连接，并注册和绑定
-async def test_dg_lab_ws_client_disconnect(
-        dg_lab_ws_server: DGLabWSServer,
-        dg_lab_ws_client: DGLabWSClient,
-        app_simulator_for_ws: DGLabAppSimulator
-):
-    await dg_lab_ws_client.websocket.close()
-    assert await app_simulator_for_ws.recv_disconnect() == RetCode.CLIENT_DISCONNECTED
+async def test_dg_lab_ws_client_disconnect(dg_lab_ws_server: DGLabWSServer):
+    # 创建新的终端和 App，防止干扰到其他测试
+    async with DGLabWSConnect(WEBSOCKET_URI) as ws_client:
+        async with connect(WEBSOCKET_URI) as websocket:
+            app = DGLabAppSimulator(websocket)
+            await app.register()
+            await app.bind(ws_client.client_id)
+            await ws_client.bind()
+            await ws_client.websocket.close()
+            assert await app.recv_disconnect() == RetCode.CLIENT_DISCONNECTED
 
 
 @pytest.mark.asyncio
-@pytest.mark.order(after="test_dg_lab_app_disconnect")  # 必须等待 App 重新建立连接，并注册和绑定
-async def test_dg_lab_ws_server_remove_local_client(
-        dg_lab_ws_server: DGLabWSServer,
-        app_simulator_for_local: DGLabAppSimulator
-):
-    assert await dg_lab_ws_server.remove_local_client(
-        app_simulator_for_local.target_id
-    ) is False
-    assert await dg_lab_ws_server.remove_local_client(
-        app_simulator_for_local.client_id
-    ) is True
-    assert await app_simulator_for_local.recv_disconnect() == RetCode.CLIENT_DISCONNECTED
+async def test_dg_lab_ws_server_remove_local_client(dg_lab_ws_server: DGLabWSServer):
+    # 创建新的终端和 App，防止干扰到其他测试
+    local_client = dg_lab_ws_server.new_local_client()
+    async with connect(WEBSOCKET_URI) as websocket:
+        app = DGLabAppSimulator(websocket)
+        await app.register()
+        await app.bind(local_client.client_id)
+        await local_client.bind()
+        assert await dg_lab_ws_server.remove_local_client(app.target_id) is False
+        assert await dg_lab_ws_server.remove_local_client(app.client_id) is True
+        assert await app.recv_disconnect() == RetCode.CLIENT_DISCONNECTED
