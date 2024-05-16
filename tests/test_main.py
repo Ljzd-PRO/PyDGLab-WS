@@ -646,13 +646,14 @@ async def test_dg_lab_app_disconnect(
 async def test_dg_lab_ws_client_disconnect(dg_lab_ws_server: DGLabWSServer):
     # 创建新的终端和 App，防止干扰到其他测试
     async with DGLabWSConnect(WEBSOCKET_URI) as ws_client:
-        async with connect(WEBSOCKET_URI) as websocket:
-            app = DGLabAppSimulator(websocket)
-            await app.register()
-            await app.bind(ws_client.client_id)
-            await ws_client.bind()
-            await ws_client.websocket.close()
-            assert await app.recv_disconnect() == RetCode.CLIENT_DISCONNECTED
+        async with ws_client:
+            async with connect(WEBSOCKET_URI) as websocket:
+                app = DGLabAppSimulator(websocket)
+                await app.register()
+                await app.bind(ws_client.client_id)
+                await ws_client.bind()
+                await ws_client.websocket.close()
+                assert await app.recv_disconnect() == RetCode.CLIENT_DISCONNECTED
 
 
 @pytest.mark.asyncio
