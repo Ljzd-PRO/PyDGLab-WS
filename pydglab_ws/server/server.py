@@ -1,6 +1,6 @@
 import asyncio
 from asyncio import Task
-from typing import Union, Optional, Sequence, Dict, Callable, Coroutine, Any, Set
+from typing import Union, Optional, Sequence, Dict, Callable, Coroutine, Any, Set, Literal, Tuple
 from uuid import uuid4
 
 from pydantic import UUID4
@@ -51,6 +51,18 @@ class DGLabWSServer:
             MessageType.BIND: self._handle_bind,
             MessageType.MSG: self._handle_msg
         }
+        self._message_type_to_callbacks: Dict[
+            MessageType,
+            Set[Callable[[WebSocketMessage, bool], Any]]
+        ] = {
+            MessageType.BIND: set(),
+            MessageType.MSG: set()
+        }
+        self._connection_callbacks: Tuple[
+            Set[Callable[[UUID4, WebSocketServerProtocol], Any]],
+            Set[Callable[[UUID4, WebSocketServerProtocol], Any]]
+        ] = (set(), set())
+        """新连接建立时 与 连接断开时"""
         self._heartbeat_interval = heartbeat_interval
         self._heartbeat_task: Optional[Task] = None
 
@@ -189,6 +201,7 @@ class DGLabWSServer:
         """
         WebSocket 连接接收器，响应处理每个连接
         """
+        new_connect_callbacks, disconnect_callbacks = self._connection_callbacks
         # 登记 WebSocket 客户端
         uuid = uuid4()
         self._uuid_to_ws[uuid] = websocket
@@ -200,6 +213,13 @@ class DGLabWSServer:
             ),
             websocket
         )
+
+        # 回调函数
+        if new_connect_callbacks:
+            for callback in new_connect_callbacks:
+                callback_ret = callback(uuid, websocket)
+                if isinstance(callback_ret, Coroutine):
+                    await callback_ret
 
         # 响应消息
         try:
@@ -250,6 +270,13 @@ class DGLabWSServer:
                 notice_ws := self._uuid_to_ws.get(notice_id),
                 to_local_client=notice_ws is None
             )
+
+        # 回调函数
+        if disconnect_callbacks:
+            for callback in disconnect_callbacks:
+                callback_ret = callback(uuid, websocket)
+                if isinstance(callback_ret, Coroutine):
+                    await callback_ret
 
     async def _message_handler(
             self,
@@ -316,6 +343,12 @@ class DGLabWSServer:
                 to_local_client=client_ws is None
             )
 
+            if callback_set := self._message_type_to_callbacks.get(MessageType.BIND):
+                for callback in callback_set:
+                    callback_ret = callback(message, msg_to_send.message == RetCode.SUCCESS)
+                    if isinstance(callback_ret, Coroutine):
+                        await callback_ret
+
     @staticmethod
     async def _handle_msg(
             self: "DGLabWSServer",
@@ -350,3 +383,75 @@ class DGLabWSServer:
                 )
             else:
                 await self._send(msg_to_send, target_ws)
+
+            if callback_set := self._message_type_to_callbacks.get(MessageType.MSG):
+                for callback in callback_set:
+                    callback_ret = callback(message, msg_to_send.message != RetCode.INCOMPATIBLE_RELATIONSHIP)
+                    if isinstance(callback_ret, Coroutine):
+                        await callback_ret
+
+    def add_receive_callback(
+            self,
+            message_type: Literal[MessageType.BIND, MessageType.MSG],
+            func: Callable[[WebSocketMessage, bool], Any]
+    ):
+        """
+        添加回调函数，在收到指定类型的消息后调用，支持异步函数
+        :param message_type: 消息类型
+        :param func: 回调函数，传入消息数据和服务端处理结果
+        """
+        self._message_type_to_callbacks[message_type].add(func)
+
+    def remove_receive_callback(
+            self,
+            message_type: Literal[MessageType.BIND, MessageType.MSG],
+            func: Callable[[WebSocketMessage, bool], Any]
+    ):
+        """
+        移除在收到指定类型的消息后调用的回调函数
+        :param message_type: 消息类型
+        :param func: 回调函数，传入消息数据和服务端处理结果
+        """
+        self._message_type_to_callbacks[message_type].remove(func)
+
+    def add_connection_callback(
+            self,
+            mode: Literal["new_connect", "disconnect"],
+            func: Callable[[UUID4, WebSocketServerProtocol], Any]
+    ) -> bool:
+        """
+        添加回调函数，在新的 WebSocket 连接建立时（新客户端）或连接断开时调用
+        :param mode: 类型，``new_connect`` - 新连接时，处理消息之前；``disconnect`` - 连接断开时
+        :param func: 回调函数，传入 终端 / App 的 ``clientId`` / ``targetId`` 和该客户端的 WebSocket 连接对象
+        :return: ``mode`` 参数不合法时返回 ``False``，否则返回 ``True``
+        """
+        new_connect_set, disconnect_set = self._connection_callbacks
+        if mode == "new_connect":
+            new_connect_set.add(func)
+        elif mode == "disconnect":
+            disconnect_set.add(func)
+        else:
+            return False
+        return True
+
+    def remove_connection_callback(
+            self,
+            mode: Literal["new_connect", "disconnect"],
+            func: Callable[[UUID4, WebSocketServerProtocol], Any]
+    ) -> bool:
+        """
+        删除在新的 WebSocket 连接建立时（新客户端）或连接断开时调用的回调函数
+        :param mode: 类型，``new_connect`` - 新连接时，处理消息之前；``disconnect`` - 连接断开时
+        :param func: 回调函数，传入 终端 / App 的 ``clientId`` / ``targetId`` 和该客户端的 WebSocket 连接对象
+        :return: 是否找到了回调函数
+        """
+        new_connect_set, disconnect_set = self._connection_callbacks
+        try:
+            if mode == "new_connect":
+                new_connect_set.remove(func)
+            elif mode == "disconnect":
+                disconnect_set.remove(func)
+        except KeyError:
+            return False
+        else:
+            return True
