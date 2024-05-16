@@ -1,6 +1,7 @@
 import asyncio
 import json
 from contextlib import asynccontextmanager
+from dataclasses import dataclass
 from typing import Tuple, List, Callable, Coroutine, Literal
 
 import pytest
@@ -25,6 +26,11 @@ ClientAppPair = Tuple[
     DGLabClient,
     DGLabAppSimulator
 ]
+
+
+@dataclass
+class CallbackData:
+    values = []
 
 
 @asynccontextmanager
@@ -71,13 +77,77 @@ async def ws_bind_lock_fixture(ws_register_lock: asyncio.Lock) -> asyncio.Lock:
     return ws_register_lock
 
 
+@pytest.fixture(name="callback_data", scope="session")
+def callback_data_fixture():
+    return CallbackData()
+
+
 @pytest_asyncio.fixture(name="dg_lab_ws_server", scope="session")
-async def dg_lab_ws_server_fixture() -> DGLabWSServer:
+async def dg_lab_ws_server_fixture(callback_data: CallbackData) -> DGLabWSServer:
     async with DGLabWSServer(
             WEBSOCKET_HOST,
             WEBSOCKET_PORT,
             HEARTBEAT_INTERVAL
     ) as dg_lab_ws_server:
+        def remove_receive_callback():
+            pass
+
+        def remove_connection_callback():
+            pass
+
+        async def async_callback(x, y):
+            callback_data.values.append((x, y))
+
+        # Test add then remove
+        assert dg_lab_ws_server.add_receive_callback(
+            MessageType.MSG,
+            remove_receive_callback
+        ) is True
+        assert dg_lab_ws_server.add_connection_callback(
+            "new_connect",
+            remove_connection_callback
+        ) is True
+        assert dg_lab_ws_server.remove_receive_callback(
+            MessageType.MSG,
+            remove_receive_callback
+        ) is True
+        assert dg_lab_ws_server.remove_connection_callback(
+            "new_connect",
+            remove_connection_callback
+        ) is True
+
+        # Test failed
+        assert dg_lab_ws_server.add_receive_callback(
+            MessageType.HEARTBEAT,
+            remove_receive_callback
+        ) is False
+        assert dg_lab_ws_server.remove_receive_callback(
+            MessageType.MSG,
+            remove_receive_callback
+        ) is False
+        assert dg_lab_ws_server.remove_connection_callback(
+            "new_connect",
+            remove_connection_callback
+        ) is False
+
+        # Test add and run
+        assert dg_lab_ws_server.add_receive_callback(
+            MessageType.MSG,
+            lambda x, y: callback_data.values.append((x, y))
+        ) is True
+        assert dg_lab_ws_server.add_receive_callback(
+            MessageType.BIND,
+            async_callback
+        ) is True
+        assert dg_lab_ws_server.add_connection_callback(
+            "new_connect",
+            lambda x, y: callback_data.values.append((x, y))
+        ) is True
+        assert dg_lab_ws_server.add_connection_callback(
+            "disconnect",
+            async_callback
+        ) is True
+
         yield dg_lab_ws_server
 
 
