@@ -415,7 +415,7 @@ class DGLabWSServer:
     ) -> bool:
         """
         移除在收到指定类型的消息后调用的回调函数
-        :param message_type: 消息类型
+        :param message_type: 消息类型，仅支持 ``MessageType.BIND``, ``MessageType.MSG``
         :param func: 回调函数，传入消息数据和服务端处理结果
         :return: 是否有找到消息类型和回调函数
         """
