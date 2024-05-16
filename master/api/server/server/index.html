@@ -2007,7 +2007,7 @@
 
 
 <a href="#pydglab_ws.server.server.DGLabWSServer.add_receive_callback" class="headerlink" title="Permanent link">&para;</a></h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">add_receive_callback</span><span class="p">(</span><span class="n">message_type</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Literal" href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.MessageType.BIND" href="../../enums/#pydglab_ws.enums.MessageType.BIND">BIND</a></span><span class="p">,</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.MessageType.MSG" href="../../enums/#pydglab_ws.enums.MessageType.MSG">MSG</a></span><span class="p">],</span> <span class="n">func</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Callable" href="https://docs.python.org/3/library/typing.html#typing.Callable">Callable</a></span><span class="p">[[</span><span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.models.WebSocketMessage" href="../../models/#pydglab_ws.models.WebSocketMessage">WebSocketMessage</a></span><span class="p">,</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span><span class="p">],</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a></span><span class="p">])</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">add_receive_callback</span><span class="p">(</span><span class="n">message_type</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Literal" href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.MessageType.BIND" href="../../enums/#pydglab_ws.enums.MessageType.BIND">BIND</a></span><span class="p">,</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.MessageType.MSG" href="../../enums/#pydglab_ws.enums.MessageType.MSG">MSG</a></span><span class="p">],</span> <span class="n">func</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Callable" href="https://docs.python.org/3/library/typing.html#typing.Callable">Callable</a></span><span class="p">[[</span><span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.models.WebSocketMessage" href="../../models/#pydglab_ws.models.WebSocketMessage">WebSocketMessage</a></span><span class="p">,</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span><span class="p">],</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -2033,7 +2033,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>消息类型</p>
+                <p>消息类型，仅支持 <code>MessageType.BIND</code>, <code>MessageType.MSG</code></p>
               </div>
             </td>
             <td>
@@ -2057,6 +2057,29 @@
       </tbody>
     </table>
 
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>是否有找到消息类型</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
             <details class="quote">
               <summary>Source code in <code>pydglab_ws/server/server.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">393</span>
@@ -2069,17 +2092,29 @@
 <span class="normal">400</span>
 <span class="normal">401</span>
 <span class="normal">402</span>
-<span class="normal">403</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add_receive_callback</span><span class="p">(</span>
+<span class="normal">403</span>
+<span class="normal">404</span>
+<span class="normal">405</span>
+<span class="normal">406</span>
+<span class="normal">407</span>
+<span class="normal">408</span>
+<span class="normal">409</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add_receive_callback</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">message_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="n">MessageType</span><span class="o">.</span><span class="n">BIND</span><span class="p">,</span> <span class="n">MessageType</span><span class="o">.</span><span class="n">MSG</span><span class="p">],</span>
         <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">WebSocketMessage</span><span class="p">,</span> <span class="nb">bool</span><span class="p">],</span> <span class="n">Any</span><span class="p">]</span>
-<span class="p">):</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    添加回调函数，在收到指定类型的消息后调用，支持异步函数</span>
-<span class="sd">    :param message_type: 消息类型</span>
+<span class="sd">    :param message_type: 消息类型，仅支持 ``MessageType.BIND``, ``MessageType.MSG``</span>
 <span class="sd">    :param func: 回调函数，传入消息数据和服务端处理结果</span>
+<span class="sd">    :return: 是否有找到消息类型</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_message_type_to_callbacks</span><span class="p">[</span><span class="n">message_type</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_message_type_to_callbacks</span><span class="p">[</span><span class="n">message_type</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2094,7 +2129,7 @@
 
 
 <a href="#pydglab_ws.server.server.DGLabWSServer.remove_receive_callback" class="headerlink" title="Permanent link">&para;</a></h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">remove_receive_callback</span><span class="p">(</span><span class="n">message_type</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Literal" href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.MessageType.BIND" href="../../enums/#pydglab_ws.enums.MessageType.BIND">BIND</a></span><span class="p">,</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.MessageType.MSG" href="../../enums/#pydglab_ws.enums.MessageType.MSG">MSG</a></span><span class="p">],</span> <span class="n">func</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Callable" href="https://docs.python.org/3/library/typing.html#typing.Callable">Callable</a></span><span class="p">[[</span><span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.models.WebSocketMessage" href="../../models/#pydglab_ws.models.WebSocketMessage">WebSocketMessage</a></span><span class="p">,</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span><span class="p">],</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a></span><span class="p">])</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">remove_receive_callback</span><span class="p">(</span><span class="n">message_type</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Literal" href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.MessageType.BIND" href="../../enums/#pydglab_ws.enums.MessageType.BIND">BIND</a></span><span class="p">,</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.MessageType.MSG" href="../../enums/#pydglab_ws.enums.MessageType.MSG">MSG</a></span><span class="p">],</span> <span class="n">func</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Callable" href="https://docs.python.org/3/library/typing.html#typing.Callable">Callable</a></span><span class="p">[[</span><span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.models.WebSocketMessage" href="../../models/#pydglab_ws.models.WebSocketMessage">WebSocketMessage</a></span><span class="p">,</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span><span class="p">],</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -2144,29 +2179,64 @@
       </tbody>
     </table>
 
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>是否有找到消息类型和回调函数</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
             <details class="quote">
               <summary>Source code in <code>pydglab_ws/server/server.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">405</span>
-<span class="normal">406</span>
-<span class="normal">407</span>
-<span class="normal">408</span>
-<span class="normal">409</span>
-<span class="normal">410</span>
-<span class="normal">411</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">411</span>
 <span class="normal">412</span>
 <span class="normal">413</span>
 <span class="normal">414</span>
-<span class="normal">415</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_receive_callback</span><span class="p">(</span>
+<span class="normal">415</span>
+<span class="normal">416</span>
+<span class="normal">417</span>
+<span class="normal">418</span>
+<span class="normal">419</span>
+<span class="normal">420</span>
+<span class="normal">421</span>
+<span class="normal">422</span>
+<span class="normal">423</span>
+<span class="normal">424</span>
+<span class="normal">425</span>
+<span class="normal">426</span>
+<span class="normal">427</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_receive_callback</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">message_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="n">MessageType</span><span class="o">.</span><span class="n">BIND</span><span class="p">,</span> <span class="n">MessageType</span><span class="o">.</span><span class="n">MSG</span><span class="p">],</span>
         <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">WebSocketMessage</span><span class="p">,</span> <span class="nb">bool</span><span class="p">],</span> <span class="n">Any</span><span class="p">]</span>
-<span class="p">):</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    移除在收到指定类型的消息后调用的回调函数</span>
 <span class="sd">    :param message_type: 消息类型</span>
 <span class="sd">    :param func: 回调函数，传入消息数据和服务端处理结果</span>
+<span class="sd">    :return: 是否有找到消息类型和回调函数</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_message_type_to_callbacks</span><span class="p">[</span><span class="n">message_type</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_message_type_to_callbacks</span><span class="p">[</span><span class="n">message_type</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2256,25 +2326,25 @@
 
             <details class="quote">
               <summary>Source code in <code>pydglab_ws/server/server.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">417</span>
-<span class="normal">418</span>
-<span class="normal">419</span>
-<span class="normal">420</span>
-<span class="normal">421</span>
-<span class="normal">422</span>
-<span class="normal">423</span>
-<span class="normal">424</span>
-<span class="normal">425</span>
-<span class="normal">426</span>
-<span class="normal">427</span>
-<span class="normal">428</span>
-<span class="normal">429</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">429</span>
 <span class="normal">430</span>
 <span class="normal">431</span>
 <span class="normal">432</span>
 <span class="normal">433</span>
 <span class="normal">434</span>
-<span class="normal">435</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add_connection_callback</span><span class="p">(</span>
+<span class="normal">435</span>
+<span class="normal">436</span>
+<span class="normal">437</span>
+<span class="normal">438</span>
+<span class="normal">439</span>
+<span class="normal">440</span>
+<span class="normal">441</span>
+<span class="normal">442</span>
+<span class="normal">443</span>
+<span class="normal">444</span>
+<span class="normal">445</span>
+<span class="normal">446</span>
+<span class="normal">447</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add_connection_callback</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;new_connect&quot;</span><span class="p">,</span> <span class="s2">&quot;disconnect&quot;</span><span class="p">],</span>
         <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">UUID4</span><span class="p">,</span> <span class="n">WebSocketServerProtocol</span><span class="p">],</span> <span class="n">Any</span><span class="p">]</span>
@@ -2373,7 +2443,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>是否找到了回调函数</p>
+                <p><code>mode</code> 参数是否合法且是否找到了回调函数</p>
               </div>
             </td>
           </tr>
@@ -2382,19 +2452,7 @@
 
             <details class="quote">
               <summary>Source code in <code>pydglab_ws/server/server.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">437</span>
-<span class="normal">438</span>
-<span class="normal">439</span>
-<span class="normal">440</span>
-<span class="normal">441</span>
-<span class="normal">442</span>
-<span class="normal">443</span>
-<span class="normal">444</span>
-<span class="normal">445</span>
-<span class="normal">446</span>
-<span class="normal">447</span>
-<span class="normal">448</span>
-<span class="normal">449</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">449</span>
 <span class="normal">450</span>
 <span class="normal">451</span>
 <span class="normal">452</span>
@@ -2402,7 +2460,21 @@
 <span class="normal">454</span>
 <span class="normal">455</span>
 <span class="normal">456</span>
-<span class="normal">457</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_connection_callback</span><span class="p">(</span>
+<span class="normal">457</span>
+<span class="normal">458</span>
+<span class="normal">459</span>
+<span class="normal">460</span>
+<span class="normal">461</span>
+<span class="normal">462</span>
+<span class="normal">463</span>
+<span class="normal">464</span>
+<span class="normal">465</span>
+<span class="normal">466</span>
+<span class="normal">467</span>
+<span class="normal">468</span>
+<span class="normal">469</span>
+<span class="normal">470</span>
+<span class="normal">471</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_connection_callback</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;new_connect&quot;</span><span class="p">,</span> <span class="s2">&quot;disconnect&quot;</span><span class="p">],</span>
         <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">UUID4</span><span class="p">,</span> <span class="n">WebSocketServerProtocol</span><span class="p">],</span> <span class="n">Any</span><span class="p">]</span>
@@ -2411,7 +2483,7 @@
 <span class="sd">    删除在新的 WebSocket 连接建立时（新客户端）或连接断开时调用的回调函数</span>
 <span class="sd">    :param mode: 类型，``new_connect`` - 新连接时，处理消息之前；``disconnect`` - 连接断开时</span>
 <span class="sd">    :param func: 回调函数，传入 终端 / App 的 ``clientId`` / ``targetId`` 和该客户端的 WebSocket 连接对象</span>
-<span class="sd">    :return: 是否找到了回调函数</span>
+<span class="sd">    :return: ``mode`` 参数是否合法且是否找到了回调函数</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">new_connect_set</span><span class="p">,</span> <span class="n">disconnect_set</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connection_callbacks</span>
     <span class="k">try</span><span class="p">:</span>
@@ -2419,6 +2491,8 @@
             <span class="n">new_connect_set</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;disconnect&quot;</span><span class="p">:</span>
             <span class="n">disconnect_set</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span>
     <span class="k">else</span><span class="p">:</span>
