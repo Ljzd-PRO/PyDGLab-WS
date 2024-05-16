@@ -1002,6 +1002,42 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#pydglab_ws.server.server.DGLabWSServer.add_receive_callback" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_receive_callback
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pydglab_ws.server.server.DGLabWSServer.remove_receive_callback" class="md-nav__link">
+    <span class="md-ellipsis">
+      remove_receive_callback
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pydglab_ws.server.server.DGLabWSServer.add_connection_callback" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_connection_callback
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pydglab_ws.server.server.DGLabWSServer.remove_connection_callback" class="md-nav__link">
+    <span class="md-ellipsis">
+      remove_connection_callback
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1329,6 +1365,42 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#pydglab_ws.server.server.DGLabWSServer.add_receive_callback" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_receive_callback
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pydglab_ws.server.server.DGLabWSServer.remove_receive_callback" class="md-nav__link">
+    <span class="md-ellipsis">
+      remove_receive_callback
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pydglab_ws.server.server.DGLabWSServer.add_connection_callback" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_connection_callback
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pydglab_ws.server.server.DGLabWSServer.remove_connection_callback" class="md-nav__link">
+    <span class="md-ellipsis">
+      remove_connection_callback
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1494,7 +1566,19 @@
 <span class="normal">52</span>
 <span class="normal">53</span>
 <span class="normal">54</span>
-<span class="normal">55</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">host</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
         <span class="n">port</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1521,6 +1605,18 @@
         <span class="n">MessageType</span><span class="o">.</span><span class="n">BIND</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_bind</span><span class="p">,</span>
         <span class="n">MessageType</span><span class="o">.</span><span class="n">MSG</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_msg</span>
     <span class="p">}</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_message_type_to_callbacks</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span>
+        <span class="n">MessageType</span><span class="p">,</span>
+        <span class="n">Set</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">WebSocketMessage</span><span class="p">,</span> <span class="nb">bool</span><span class="p">],</span> <span class="n">Any</span><span class="p">]]</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">MessageType</span><span class="o">.</span><span class="n">BIND</span><span class="p">:</span> <span class="nb">set</span><span class="p">(),</span>
+        <span class="n">MessageType</span><span class="o">.</span><span class="n">MSG</span><span class="p">:</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="p">}</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_connection_callbacks</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span>
+        <span class="n">Set</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">UUID4</span><span class="p">,</span> <span class="n">WebSocketServerProtocol</span><span class="p">],</span> <span class="n">Any</span><span class="p">]],</span>
+        <span class="n">Set</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">UUID4</span><span class="p">,</span> <span class="n">WebSocketServerProtocol</span><span class="p">],</span> <span class="n">Any</span><span class="p">]]</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">set</span><span class="p">(),</span> <span class="nb">set</span><span class="p">())</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;新连接建立时 与 连接断开时&quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_heartbeat_interval</span> <span class="o">=</span> <span class="n">heartbeat_interval</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_heartbeat_task</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Task</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 </code></pre></div></td></tr></table></div>
@@ -1746,19 +1842,19 @@
 
             <details class="quote">
               <summary>Source code in <code>pydglab_ws/server/server.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">111</span>
-<span class="normal">112</span>
-<span class="normal">113</span>
-<span class="normal">114</span>
-<span class="normal">115</span>
-<span class="normal">116</span>
-<span class="normal">117</span>
-<span class="normal">118</span>
-<span class="normal">119</span>
-<span class="normal">120</span>
-<span class="normal">121</span>
-<span class="normal">122</span>
-<span class="normal">123</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">new_local_client</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_queue</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DGLabLocalClient</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">new_local_client</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_queue</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DGLabLocalClient</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    创建新的本地终端 [`DGLabLocalClient`][pydglab_ws.client.local.DGLabLocalClient]，记录并返回</span>
 <span class="sd">    :param max_queue: 终端消息队列最大长度</span>
@@ -1850,19 +1946,7 @@
 
             <details class="quote">
               <summary>Source code in <code>pydglab_ws/server/server.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">125</span>
-<span class="normal">126</span>
-<span class="normal">127</span>
-<span class="normal">128</span>
-<span class="normal">129</span>
-<span class="normal">130</span>
-<span class="normal">131</span>
-<span class="normal">132</span>
-<span class="normal">133</span>
-<span class="normal">134</span>
-<span class="normal">135</span>
-<span class="normal">136</span>
-<span class="normal">137</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">137</span>
 <span class="normal">138</span>
 <span class="normal">139</span>
 <span class="normal">140</span>
@@ -1873,7 +1957,19 @@
 <span class="normal">145</span>
 <span class="normal">146</span>
 <span class="normal">147</span>
-<span class="normal">148</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">remove_local_client</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client_id</span><span class="p">:</span> <span class="n">UUID4</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">remove_local_client</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client_id</span><span class="p">:</span> <span class="n">UUID4</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    移除已连接的本地终端，并通知 App 终端已掉线</span>
 
@@ -1896,6 +1992,436 @@
                     <span class="n">message</span><span class="o">=</span><span class="n">RetCode</span><span class="o">.</span><span class="n">CLIENT_DISCONNECTED</span>
                 <span class="p">)</span>
                 <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">websocket</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="pydglab_ws.server.server.DGLabWSServer.add_receive_callback" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">add_receive_callback</span>
+
+
+<a href="#pydglab_ws.server.server.DGLabWSServer.add_receive_callback" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">add_receive_callback</span><span class="p">(</span><span class="n">message_type</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Literal" href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.MessageType.BIND" href="../../enums/#pydglab_ws.enums.MessageType.BIND">BIND</a></span><span class="p">,</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.MessageType.MSG" href="../../enums/#pydglab_ws.enums.MessageType.MSG">MSG</a></span><span class="p">],</span> <span class="n">func</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Callable" href="https://docs.python.org/3/library/typing.html#typing.Callable">Callable</a></span><span class="p">[[</span><span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.models.WebSocketMessage" href="../../models/#pydglab_ws.models.WebSocketMessage">WebSocketMessage</a></span><span class="p">,</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span><span class="p">],</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a></span><span class="p">])</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+      <p>添加回调函数，在收到指定类型的消息后调用，支持异步函数</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>message_type</code></td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="typing.Literal" href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a>[<a class="autorefs autorefs-internal" title="pydglab_ws.enums.MessageType.BIND" href="../../enums/#pydglab_ws.enums.MessageType.BIND">BIND</a>, <a class="autorefs autorefs-internal" title="pydglab_ws.enums.MessageType.MSG" href="../../enums/#pydglab_ws.enums.MessageType.MSG">MSG</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>消息类型</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>func</code></td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="typing.Callable" href="https://docs.python.org/3/library/typing.html#typing.Callable">Callable</a>[[<a class="autorefs autorefs-internal" title="pydglab_ws.models.WebSocketMessage" href="../../models/#pydglab_ws.models.WebSocketMessage">WebSocketMessage</a>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a>], <a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>回调函数，传入消息数据和服务端处理结果</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>pydglab_ws/server/server.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">393</span>
+<span class="normal">394</span>
+<span class="normal">395</span>
+<span class="normal">396</span>
+<span class="normal">397</span>
+<span class="normal">398</span>
+<span class="normal">399</span>
+<span class="normal">400</span>
+<span class="normal">401</span>
+<span class="normal">402</span>
+<span class="normal">403</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add_receive_callback</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">message_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="n">MessageType</span><span class="o">.</span><span class="n">BIND</span><span class="p">,</span> <span class="n">MessageType</span><span class="o">.</span><span class="n">MSG</span><span class="p">],</span>
+        <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">WebSocketMessage</span><span class="p">,</span> <span class="nb">bool</span><span class="p">],</span> <span class="n">Any</span><span class="p">]</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    添加回调函数，在收到指定类型的消息后调用，支持异步函数</span>
+<span class="sd">    :param message_type: 消息类型</span>
+<span class="sd">    :param func: 回调函数，传入消息数据和服务端处理结果</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_message_type_to_callbacks</span><span class="p">[</span><span class="n">message_type</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="pydglab_ws.server.server.DGLabWSServer.remove_receive_callback" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">remove_receive_callback</span>
+
+
+<a href="#pydglab_ws.server.server.DGLabWSServer.remove_receive_callback" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">remove_receive_callback</span><span class="p">(</span><span class="n">message_type</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Literal" href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.MessageType.BIND" href="../../enums/#pydglab_ws.enums.MessageType.BIND">BIND</a></span><span class="p">,</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.MessageType.MSG" href="../../enums/#pydglab_ws.enums.MessageType.MSG">MSG</a></span><span class="p">],</span> <span class="n">func</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Callable" href="https://docs.python.org/3/library/typing.html#typing.Callable">Callable</a></span><span class="p">[[</span><span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.models.WebSocketMessage" href="../../models/#pydglab_ws.models.WebSocketMessage">WebSocketMessage</a></span><span class="p">,</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span><span class="p">],</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a></span><span class="p">])</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+      <p>移除在收到指定类型的消息后调用的回调函数</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>message_type</code></td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="typing.Literal" href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a>[<a class="autorefs autorefs-internal" title="pydglab_ws.enums.MessageType.BIND" href="../../enums/#pydglab_ws.enums.MessageType.BIND">BIND</a>, <a class="autorefs autorefs-internal" title="pydglab_ws.enums.MessageType.MSG" href="../../enums/#pydglab_ws.enums.MessageType.MSG">MSG</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>消息类型</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>func</code></td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="typing.Callable" href="https://docs.python.org/3/library/typing.html#typing.Callable">Callable</a>[[<a class="autorefs autorefs-internal" title="pydglab_ws.models.WebSocketMessage" href="../../models/#pydglab_ws.models.WebSocketMessage">WebSocketMessage</a>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a>], <a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>回调函数，传入消息数据和服务端处理结果</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>pydglab_ws/server/server.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">405</span>
+<span class="normal">406</span>
+<span class="normal">407</span>
+<span class="normal">408</span>
+<span class="normal">409</span>
+<span class="normal">410</span>
+<span class="normal">411</span>
+<span class="normal">412</span>
+<span class="normal">413</span>
+<span class="normal">414</span>
+<span class="normal">415</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_receive_callback</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">message_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="n">MessageType</span><span class="o">.</span><span class="n">BIND</span><span class="p">,</span> <span class="n">MessageType</span><span class="o">.</span><span class="n">MSG</span><span class="p">],</span>
+        <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">WebSocketMessage</span><span class="p">,</span> <span class="nb">bool</span><span class="p">],</span> <span class="n">Any</span><span class="p">]</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    移除在收到指定类型的消息后调用的回调函数</span>
+<span class="sd">    :param message_type: 消息类型</span>
+<span class="sd">    :param func: 回调函数，传入消息数据和服务端处理结果</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_message_type_to_callbacks</span><span class="p">[</span><span class="n">message_type</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="pydglab_ws.server.server.DGLabWSServer.add_connection_callback" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">add_connection_callback</span>
+
+
+<a href="#pydglab_ws.server.server.DGLabWSServer.add_connection_callback" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">add_connection_callback</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Literal" href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a></span><span class="p">[</span><span class="s1">&#39;new_connect&#39;</span><span class="p">,</span> <span class="s1">&#39;disconnect&#39;</span><span class="p">],</span> <span class="n">func</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Callable" href="https://docs.python.org/3/library/typing.html#typing.Callable">Callable</a></span><span class="p">[[</span><span class="n"><span title="pydantic.UUID4">UUID4</span></span><span class="p">,</span> <span class="n"><span title="websockets.WebSocketServerProtocol">WebSocketServerProtocol</span></span><span class="p">],</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+      <p>添加回调函数，在新的 WebSocket 连接建立时（新客户端）或连接断开时调用</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>mode</code></td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="typing.Literal" href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a>[&#39;new_connect&#39;, &#39;disconnect&#39;]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>类型，<code>new_connect</code> - 新连接时，处理消息之前；<code>disconnect</code> - 连接断开时</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>func</code></td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="typing.Callable" href="https://docs.python.org/3/library/typing.html#typing.Callable">Callable</a>[[<span title="pydantic.UUID4">UUID4</span>, <span title="websockets.WebSocketServerProtocol">WebSocketServerProtocol</span>], <a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>回调函数，传入 终端 / App 的 <code>clientId</code> / <code>targetId</code> 和该客户端的 WebSocket 连接对象</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p><code>mode</code> 参数不合法时返回 <code>False</code>，否则返回 <code>True</code></p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>pydglab_ws/server/server.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">417</span>
+<span class="normal">418</span>
+<span class="normal">419</span>
+<span class="normal">420</span>
+<span class="normal">421</span>
+<span class="normal">422</span>
+<span class="normal">423</span>
+<span class="normal">424</span>
+<span class="normal">425</span>
+<span class="normal">426</span>
+<span class="normal">427</span>
+<span class="normal">428</span>
+<span class="normal">429</span>
+<span class="normal">430</span>
+<span class="normal">431</span>
+<span class="normal">432</span>
+<span class="normal">433</span>
+<span class="normal">434</span>
+<span class="normal">435</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add_connection_callback</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;new_connect&quot;</span><span class="p">,</span> <span class="s2">&quot;disconnect&quot;</span><span class="p">],</span>
+        <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">UUID4</span><span class="p">,</span> <span class="n">WebSocketServerProtocol</span><span class="p">],</span> <span class="n">Any</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    添加回调函数，在新的 WebSocket 连接建立时（新客户端）或连接断开时调用</span>
+<span class="sd">    :param mode: 类型，``new_connect`` - 新连接时，处理消息之前；``disconnect`` - 连接断开时</span>
+<span class="sd">    :param func: 回调函数，传入 终端 / App 的 ``clientId`` / ``targetId`` 和该客户端的 WebSocket 连接对象</span>
+<span class="sd">    :return: ``mode`` 参数不合法时返回 ``False``，否则返回 ``True``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_connect_set</span><span class="p">,</span> <span class="n">disconnect_set</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connection_callbacks</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;new_connect&quot;</span><span class="p">:</span>
+        <span class="n">new_connect_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;disconnect&quot;</span><span class="p">:</span>
+        <span class="n">disconnect_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="pydglab_ws.server.server.DGLabWSServer.remove_connection_callback" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">remove_connection_callback</span>
+
+
+<a href="#pydglab_ws.server.server.DGLabWSServer.remove_connection_callback" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">remove_connection_callback</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Literal" href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a></span><span class="p">[</span><span class="s1">&#39;new_connect&#39;</span><span class="p">,</span> <span class="s1">&#39;disconnect&#39;</span><span class="p">],</span> <span class="n">func</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Callable" href="https://docs.python.org/3/library/typing.html#typing.Callable">Callable</a></span><span class="p">[[</span><span class="n"><span title="pydantic.UUID4">UUID4</span></span><span class="p">,</span> <span class="n"><span title="websockets.WebSocketServerProtocol">WebSocketServerProtocol</span></span><span class="p">],</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+      <p>删除在新的 WebSocket 连接建立时（新客户端）或连接断开时调用的回调函数</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>mode</code></td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="typing.Literal" href="https://docs.python.org/3/library/typing.html#typing.Literal">Literal</a>[&#39;new_connect&#39;, &#39;disconnect&#39;]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>类型，<code>new_connect</code> - 新连接时，处理消息之前；<code>disconnect</code> - 连接断开时</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>func</code></td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="typing.Callable" href="https://docs.python.org/3/library/typing.html#typing.Callable">Callable</a>[[<span title="pydantic.UUID4">UUID4</span>, <span title="websockets.WebSocketServerProtocol">WebSocketServerProtocol</span>], <a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>回调函数，传入 终端 / App 的 <code>clientId</code> / <code>targetId</code> 和该客户端的 WebSocket 连接对象</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>是否找到了回调函数</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>pydglab_ws/server/server.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">437</span>
+<span class="normal">438</span>
+<span class="normal">439</span>
+<span class="normal">440</span>
+<span class="normal">441</span>
+<span class="normal">442</span>
+<span class="normal">443</span>
+<span class="normal">444</span>
+<span class="normal">445</span>
+<span class="normal">446</span>
+<span class="normal">447</span>
+<span class="normal">448</span>
+<span class="normal">449</span>
+<span class="normal">450</span>
+<span class="normal">451</span>
+<span class="normal">452</span>
+<span class="normal">453</span>
+<span class="normal">454</span>
+<span class="normal">455</span>
+<span class="normal">456</span>
+<span class="normal">457</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">remove_connection_callback</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;new_connect&quot;</span><span class="p">,</span> <span class="s2">&quot;disconnect&quot;</span><span class="p">],</span>
+        <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">UUID4</span><span class="p">,</span> <span class="n">WebSocketServerProtocol</span><span class="p">],</span> <span class="n">Any</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    删除在新的 WebSocket 连接建立时（新客户端）或连接断开时调用的回调函数</span>
+<span class="sd">    :param mode: 类型，``new_connect`` - 新连接时，处理消息之前；``disconnect`` - 连接断开时</span>
+<span class="sd">    :param func: 回调函数，传入 终端 / App 的 ``clientId`` / ``targetId`` 和该客户端的 WebSocket 连接对象</span>
+<span class="sd">    :return: 是否找到了回调函数</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_connect_set</span><span class="p">,</span> <span class="n">disconnect_set</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connection_callbacks</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;new_connect&quot;</span><span class="p">:</span>
+            <span class="n">new_connect_set</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;disconnect&quot;</span><span class="p">:</span>
+            <span class="n">disconnect_set</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">True</span>
 </code></pre></div></td></tr></table></div>
             </details>
