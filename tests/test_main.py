@@ -137,7 +137,7 @@ def client_app_pairs_fixture(
 @pytest.mark.asyncio
 async def test_dg_lab_ws_connect(dg_lab_ws_server: DGLabWSServer):
     async with DGLabWSConnect(WEBSOCKET_URI) as client:
-        assert client.client_id in dg_lab_ws_server.ws_client_ids
+        assert client.client_id in dg_lab_ws_server.uuid_to_ws.keys()
         assert client.client_id is not None
         assert client.not_registered is False
         assert client.not_bind is True
@@ -199,7 +199,7 @@ async def test_dg_lab_ws_register(
 
         await dg_lab_ws_client.register()
 
-        assert dg_lab_ws_client.client_id in dg_lab_ws_server.ws_client_ids
+        assert dg_lab_ws_client.client_id in dg_lab_ws_server.uuid_to_ws.keys()
         assert dg_lab_ws_client.client_id is not None
         assert dg_lab_ws_client.not_registered is False
         assert dg_lab_ws_client.not_bind is True

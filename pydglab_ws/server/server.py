@@ -107,11 +107,11 @@ class DGLabWSServer:
         return self._target_id_to_client_id.copy()
 
     @property
-    def ws_client_ids(self) -> Set[UUID4]:
+    def uuid_to_ws(self) -> Dict[UUID4, WebSocketServerProtocol]:
         """
-        所有的 WebSocket 客户端 ID（包含终端与 App）
+        所有的 WebSocket 客户端 ID（包含终端与 App）到 WebSocket 连接对象的映射
         """
-        return set(self._uuid_to_ws.keys())
+        return self._uuid_to_ws.copy()
 
     @property
     def local_client_ids(self) -> Set[UUID4]:
