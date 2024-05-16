@@ -394,25 +394,37 @@ class DGLabWSServer:
             self,
             message_type: Literal[MessageType.BIND, MessageType.MSG],
             func: Callable[[WebSocketMessage, bool], Any]
-    ):
+    ) -> bool:
         """
         添加回调函数，在收到指定类型的消息后调用，支持异步函数
-        :param message_type: 消息类型
+        :param message_type: 消息类型，仅支持 ``MessageType.BIND``, ``MessageType.MSG``
         :param func: 回调函数，传入消息数据和服务端处理结果
+        :return: 是否有找到消息类型
         """
-        self._message_type_to_callbacks[message_type].add(func)
+        try:
+            self._message_type_to_callbacks[message_type].add(func)
+        except KeyError:
+            return False
+        else:
+            return True
 
     def remove_receive_callback(
             self,
             message_type: Literal[MessageType.BIND, MessageType.MSG],
             func: Callable[[WebSocketMessage, bool], Any]
-    ):
+    ) -> bool:
         """
         移除在收到指定类型的消息后调用的回调函数
         :param message_type: 消息类型
         :param func: 回调函数，传入消息数据和服务端处理结果
+        :return: 是否有找到消息类型和回调函数
         """
-        self._message_type_to_callbacks[message_type].remove(func)
+        try:
+            self._message_type_to_callbacks[message_type].remove(func)
+        except KeyError:
+            return False
+        else:
+            return True
 
     def add_connection_callback(
             self,
@@ -443,7 +455,7 @@ class DGLabWSServer:
         删除在新的 WebSocket 连接建立时（新客户端）或连接断开时调用的回调函数
         :param mode: 类型，``new_connect`` - 新连接时，处理消息之前；``disconnect`` - 连接断开时
         :param func: 回调函数，传入 终端 / App 的 ``clientId`` / ``targetId`` 和该客户端的 WebSocket 连接对象
-        :return: 是否找到了回调函数
+        :return: ``mode`` 参数是否合法且是否找到了回调函数
         """
         new_connect_set, disconnect_set = self._connection_callbacks
         try:
@@ -451,6 +463,8 @@ class DGLabWSServer:
                 new_connect_set.remove(func)
             elif mode == "disconnect":
                 disconnect_set.remove(func)
+            else:
+                return False
         except KeyError:
             return False
         else:
