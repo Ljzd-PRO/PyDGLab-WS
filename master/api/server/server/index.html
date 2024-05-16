@@ -967,9 +967,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#pydglab_ws.server.server.DGLabWSServer.ws_client_ids" class="md-nav__link">
+  <a href="#pydglab_ws.server.server.DGLabWSServer.uuid_to_ws" class="md-nav__link">
     <span class="md-ellipsis">
-      ws_client_ids
+      uuid_to_ws
     </span>
   </a>
   
@@ -1330,9 +1330,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#pydglab_ws.server.server.DGLabWSServer.ws_client_ids" class="md-nav__link">
+  <a href="#pydglab_ws.server.server.DGLabWSServer.uuid_to_ws" class="md-nav__link">
     <span class="md-ellipsis">
-      ws_client_ids
+      uuid_to_ws
     </span>
   </a>
   
@@ -1729,21 +1729,21 @@
 
 
 
-<h3 id="pydglab_ws.server.server.DGLabWSServer.ws_client_ids" class="doc doc-heading">
-            <span class="doc doc-object-name doc-attribute-name">ws_client_ids</span>
+<h3 id="pydglab_ws.server.server.DGLabWSServer.uuid_to_ws" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">uuid_to_ws</span>
 
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
 
-<a href="#pydglab_ws.server.server.DGLabWSServer.ws_client_ids" class="headerlink" title="Permanent link">&para;</a></h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">ws_client_ids</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Set" href="https://docs.python.org/3/library/typing.html#typing.Set">Set</a></span><span class="p">[</span><span class="n"><span title="pydantic.UUID4">UUID4</span></span><span class="p">]</span>
+<a href="#pydglab_ws.server.server.DGLabWSServer.uuid_to_ws" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">uuid_to_ws</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Dict" href="https://docs.python.org/3/library/typing.html#typing.Dict">Dict</a></span><span class="p">[</span><span class="n"><span title="pydantic.UUID4">UUID4</span></span><span class="p">,</span> <span class="n"><span title="websockets.WebSocketServerProtocol">WebSocketServerProtocol</span></span><span class="p">]</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
 
-      <p>所有的 WebSocket 客户端 ID（包含终端与 App）</p>
+      <p>所有的 WebSocket 客户端 ID（包含终端与 App）到 WebSocket 连接对象的映射</p>
     </div>
 
 </div>
