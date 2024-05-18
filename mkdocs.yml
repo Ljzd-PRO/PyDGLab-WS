@@ -15,11 +15,16 @@ nav:
     - Welcome to PyDG-Lab-WS: index.md
     - About DG-Lab: about-dg-lab.md
     - More: more.md
-  - Usage: usage.md
+  - Usage:
+    - Server: usage/server.md
+    - Client:
+        - Base: usage/client/base.md
+        - WebSocket Client: usage/client/ws.md
+        - Server With Local Client: usage/client/local.md
   - Examples:
     - Server: examples/server.md
     - WebSocket Client: examples/ws_client.md
-    - Server With Local Client: examples/server_with_local_client.md
+    - Server With Local Client: examples/server-with-local-client.md
   - API Documentation:
     - Client:
         - DGLabClient: api/client/base.md
