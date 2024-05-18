@@ -267,16 +267,19 @@
   
   
   
-    <li class="md-tabs__item">
-      <a href="usage/" class="md-tabs__link">
-        
+    
+    
+      <li class="md-tabs__item">
+        <a href="usage/server/" class="md-tabs__link">
+          
   
     
   
   用法
 
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
       
@@ -509,16 +512,185 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="usage/" class="md-nav__link">
+    
+    
+      
         
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
   
   <span class="md-ellipsis">
     用法
   </span>
   
 
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            用法
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="usage/server/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    服务端
+  </span>
+  
+
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    客户端
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            客户端
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="usage/client/base/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基础
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="usage/client/ws/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    WebSocket 终端
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="usage/client/local/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    与本地终端一体的服务端
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -618,7 +790,7 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/server_with_local_client/" class="md-nav__link">
+      <a href="examples/server-with-local-client/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1213,6 +1385,10 @@
 </h1>
 
 <p align="center">
+  一个用于创建郊狼 3.0 DG-Lab App Socket 控制终端和服务端的 Python 库
+</p>
+
+<p align="center">
   <a href="https://www.codefactor.io/repository/github/ljzd-pro/pydglab-ws">
     <img src="https://www.codefactor.io/repository/github/ljzd-pro/pydglab-ws/badge" alt="CodeFactor" />
   </a>
@@ -1242,10 +1418,6 @@
   </a>
 </p>
 
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>目前项目还在开发中，API 可能发生较多变更</p>
-</div>
 <h2 id="_1">💡 特性<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li>通过该库可开发 Python 程序，接入 DG-Lab App</li>
@@ -1326,7 +1498,7 @@
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>不管是本地终端 <a class="autorefs autorefs-internal" href="api/client/local/#pydglab_ws.client.local.DGLabLocalClient"><code>DGLabLocalClient</code></a>
-还是 WebSocket 终端 <a class="autorefs autorefs-internal" href="api/client/ws/#pydglab_ws.client.ws.DGLabWSClient"><code>DGLabWSClient</code></a>，
+还是 WebSocket 终端 <a class="autorefs autorefs-internal" href="usage/client/ws/#pydglab_ws.client.ws.DGLabWSClient"><code>DGLabWSClient</code></a>，
 <strong>包含的主要方法都相同</strong>，因此在该段代码中，终端相关的逻辑与上面的独立的 WebSocket 终端的实现基本相同。
 这种方式，省去了终端连接 WebSocket 服务端的环节，终端与 WebSocket 服务端一体，<strong>网络延迟更低，部署更方便</strong>。</p>
 </div>
@@ -1359,7 +1531,7 @@
 <ol>
 <li>此处的 URI 需要是 DG-Lab 可以连接上的，通常是内网或公网，而不是本地环回地址</li>
 </ol>
-<p>更多演示请查看 <a href="examples/server_with_local_client/"><code>examples/server_with_local_client.py</code></a></p>
+<p>更多演示请查看 <a href="examples/server_with_local_client.md"><code>examples/server_with_local_client.py</code></a></p>
 
 
 

@@ -10,16 +10,16 @@
       
       
       
-        <link rel="canonical" href="https://pydglab-ws.readthedocs.io/master/examples/server_with_local_client/">
+        <link rel="canonical" href="https://pydglab-ws.readthedocs.io/master/usage/client/local/">
       
       
-        <link rel="prev" href="../ws_client/">
+        <link rel="prev" href="../ws/">
       
       
-        <link rel="next" href="../../api/client/base/">
+        <link rel="next" href="../../../examples/server/">
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.23">
     
     
@@ -28,10 +28,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.6543a935.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.6543a935.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -50,9 +50,9 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -87,6 +87,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -101,7 +106,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="页眉">
-    <a href="../.." title="PyDGLab-WS" class="md-header__button md-logo" aria-label="PyDGLab-WS" data-md-component="logo">
+    <a href="../../.." title="PyDGLab-WS" class="md-header__button md-logo" aria-label="PyDGLab-WS" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
@@ -245,7 +250,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../.." class="md-tabs__link">
+        <a href="../../.." class="md-tabs__link">
           
   
     
@@ -261,30 +266,33 @@
         
   
   
-  
-    <li class="md-tabs__item">
-      <a href="../../usage/" class="md-tabs__link">
-        
-  
-    
-  
-  用法
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
     
   
   
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../server/" class="md-tabs__link">
+        <a href="../../server/" class="md-tabs__link">
+          
+  
+    
+  
+  用法
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../examples/server/" class="md-tabs__link">
           
   
     
@@ -310,7 +318,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../api/client/base/" class="md-tabs__link">
+        <a href="../../../api/client/base/" class="md-tabs__link">
           
   
     
@@ -331,7 +339,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../faq/" class="md-tabs__link">
+      <a href="../../../faq/" class="md-tabs__link">
         
   
     
@@ -365,7 +373,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="PyDGLab-WS" class="md-nav__button md-logo" aria-label="PyDGLab-WS" data-md-component="logo">
+    <a href="../../.." title="PyDGLab-WS" class="md-nav__button md-logo" aria-label="PyDGLab-WS" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
@@ -420,7 +428,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../.." class="md-nav__link ">
+            <a href="../../.." class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -453,7 +461,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../about-dg-lab/" class="md-nav__link">
+      <a href="../../../about-dg-lab/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -474,7 +482,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../more/" class="md-nav__link">
+      <a href="../../../more/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -499,34 +507,12 @@
       
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../../usage/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    用法
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
     
   
   
   
     
     
-      
-        
       
         
       
@@ -545,24 +531,24 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   <span class="md-ellipsis">
-    演示示例
+    用法
   </span>
   
 
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
-            演示示例
+            用法
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -573,7 +559,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../server/" class="md-nav__link">
+      <a href="../../server/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -591,10 +577,79 @@
                 
   
   
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    客户端
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            客户端
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
   
   
     <li class="md-nav__item">
-      <a href="../ws_client/" class="md-nav__link">
+      <a href="../base/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    基础
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ws/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -622,6 +677,17 @@
       
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    与本地终端一体的服务端
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -632,6 +698,195 @@
 
       </a>
       
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      创建本地终端
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="创建本地终端">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      可用方法
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="可用方法">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pydglab_ws.DGLabWSServer.new_local_client" class="md-nav__link">
+    <span class="md-ellipsis">
+      new_local_client
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      示例
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    演示示例
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            演示示例
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/server/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    服务端
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/ws_client/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    WebSocket 终端
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/server-with-local-client/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    与本地终端一体的服务端
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -745,7 +1000,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api/client/base/" class="md-nav__link">
+      <a href="../../../api/client/base/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -766,7 +1021,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api/client/local/" class="md-nav__link">
+      <a href="../../../api/client/local/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -787,7 +1042,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api/client/ws/" class="md-nav__link">
+      <a href="../../../api/client/ws/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -808,7 +1063,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api/client/connect/" class="md-nav__link">
+      <a href="../../../api/client/connect/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -879,7 +1134,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api/server/server/" class="md-nav__link">
+      <a href="../../../api/server/server/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -958,7 +1213,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api/enums/" class="md-nav__link">
+      <a href="../../../api/enums/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -979,7 +1234,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api/exceptions/" class="md-nav__link">
+      <a href="../../../api/exceptions/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1000,7 +1255,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api/models/" class="md-nav__link">
+      <a href="../../../api/models/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1021,7 +1276,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api/typing/" class="md-nav__link">
+      <a href="../../../api/typing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1042,7 +1297,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api/utils/" class="md-nav__link">
+      <a href="../../../api/utils/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1078,7 +1333,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../faq/" class="md-nav__link">
+      <a href="../../../faq/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1109,6 +1364,62 @@
   
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      创建本地终端
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="创建本地终端">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      可用方法
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="可用方法">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pydglab_ws.DGLabWSServer.new_local_client" class="md-nav__link">
+    <span class="md-ellipsis">
+      new_local_client
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      示例
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1122,7 +1433,7 @@
                   
 
   
-    <a href="https://github.com/Ljzd-PRO/PyDGLab-WS/edit/master/docs/zh/examples/server_with_local_client.md" title="编辑此页" class="md-content__button md-icon">
+    <a href="https://github.com/Ljzd-PRO/PyDGLab-WS/edit/master/docs/zh/usage/client/local.md" title="编辑此页" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4v-2m10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1 2.1 2.1Z"/></svg>
     </a>
@@ -1132,86 +1443,99 @@
 
   <h1>与本地终端一体的服务端</h1>
 
-<p>请先安装 qrcode：
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>qrcode
-</code></pre></div></p>
-<p>这段代码不仅提供 DG-Lab WebSocket 服务端服务，还生成了一个本地终端可供 App 连接。</p>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>不管是本地终端 <a class="autorefs autorefs-internal" href="../../api/client/local/#pydglab_ws.client.local.DGLabLocalClient"><code>DGLabLocalClient</code></a>
-还是 WebSocket 终端 <a class="autorefs autorefs-internal" href="../../api/client/ws/#pydglab_ws.client.ws.DGLabWSClient"><code>DGLabWSClient</code></a>，
-<strong>包含的主要方法都相同</strong>，因此在该段代码中，终端相关的逻辑与上面的独立的 WebSocket 终端的实现基本相同。
-这种方式，省去了终端连接 WebSocket 服务端的环节，终端与 WebSocket 服务端一体，<strong>网络延迟更低，部署更方便</strong>。</p>
-</div>
-<div class="highlight"><span class="filename">examples/server_with_local_client.py</span><pre><span></span><code><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">这段代码不仅提供 DG-Lab WebSocket 服务端服务，还生成了一个本地终端可供 App 连接。</span>
-
-<span class="sd">不管是本地终端 :class:`DGLabLocalClient` 还是 WebSocket 终端 :class:`DGLabWSClient`，包含的主要方法都相同，</span>
-<span class="sd">因此在该端代码中，终端相关的逻辑与 ``ws_client.py`` WebSocket 终端的实现基本相同。</span>
-
-<span class="sd">这种方式，省去了终端连接 WebSocket 服务端的环节，终端与 WebSocket 服务端一体，网络延迟更低，部署更方便。</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">asyncio</span>
-<span class="kn">import</span> <span class="nn">io</span>
-
-<span class="kn">import</span> <span class="nn">qrcode</span>
-
-<span class="kn">from</span> <span class="nn">pydglab_ws</span> <span class="kn">import</span> <span class="n">StrengthData</span><span class="p">,</span> <span class="n">FeedbackButton</span><span class="p">,</span> <span class="n">Channel</span><span class="p">,</span> <span class="n">StrengthOperationType</span><span class="p">,</span> <span class="n">RetCode</span><span class="p">,</span> <span class="n">DGLabWSServer</span>
+<h2 id="_1">创建本地终端<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>不管是本地终端 <a class="autorefs autorefs-internal" href="../../../api/client/local/#pydglab_ws.client.local.DGLabLocalClient"><code>DGLabLocalClient</code></a>
+还是 WebSocket 终端 <a class="autorefs autorefs-internal" href="../ws/#pydglab_ws.client.ws.DGLabWSClient"><code>DGLabWSClient</code></a>，
+<strong>包含的主要方法都相同</strong>，本地终端省去了终端连接 WebSocket 服务端的环节，
+与 WebSocket 服务端一体，<strong>网络延迟更低，部署更方便</strong>。</p>
+<h3 id="_2">可用方法<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
 
 
-<span class="k">def</span> <span class="nf">print_qrcode</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;输出二维码到终端界面&quot;&quot;&quot;</span>
-    <span class="n">qr</span> <span class="o">=</span> <span class="n">qrcode</span><span class="o">.</span><span class="n">QRCode</span><span class="p">()</span>
-    <span class="n">qr</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
-    <span class="n">qr</span><span class="o">.</span><span class="n">print_ascii</span><span class="p">(</span><span class="n">out</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+<div class="doc doc-object doc-function">
 
+
+<h4 id="pydglab_ws.DGLabWSServer.new_local_client" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">pydglab_ws.DGLabWSServer.new_local_client</span>
+
+
+<a href="#pydglab_ws.DGLabWSServer.new_local_client" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">new_local_client</span><span class="p">(</span><span class="n">max_queue</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.client.local.DGLabLocalClient" href="../../../api/client/local/#pydglab_ws.client.local.DGLabLocalClient">DGLabLocalClient</a></span>
+</code></pre></div>
+
+    <div class="doc doc-contents first">
+
+      <p>创建新的本地终端 <a class="autorefs autorefs-internal" href="../../../api/client/local/#pydglab_ws.client.local.DGLabLocalClient"><code>DGLabLocalClient</code></a>，记录并返回</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>max_queue</code></td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>终端消息队列最大长度</p>
+              </div>
+            </td>
+            <td>
+                  <code>2 ** 5</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="pydglab_ws.client.local.DGLabLocalClient" href="../../../api/client/local/#pydglab_ws.client.local.DGLabLocalClient">DGLabLocalClient</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>创建好的本地终端对象</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+    </div>
+
+</div><h3 id="_3">示例<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pydglab_ws</span> <span class="kn">import</span> <span class="n">DGLabWSServer</span>
 
 <span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">DGLabWSServer</span><span class="p">(</span><span class="s2">&quot;0.0.0.0&quot;</span><span class="p">,</span> <span class="mi">5678</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span> <span class="k">as</span> <span class="n">server</span><span class="p">:</span>
         <span class="n">client</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">new_local_client</span><span class="p">()</span>
-
-        <span class="n">url</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_qrcode</span><span class="p">(</span><span class="s2">&quot;ws://192.168.1.161:5678&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;请用 DG-Lab App 扫描二维码以连接&quot;</span><span class="p">)</span>
-        <span class="n">print_qrcode</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-
+        <span class="c1"># 获取二维码</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_qrcode</span><span class="p">(</span><span class="s2">&quot;ws://192.168.1.161:5678&quot;</span><span class="p">)</span> <span class="c1"># (1)</span>
+        <span class="o">...</span>
         <span class="c1"># 等待绑定</span>
         <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">bind</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;已与 App </span><span class="si">{</span><span class="n">client</span><span class="o">.</span><span class="n">target_id</span><span class="si">}</span><span class="s2"> 成功绑定&quot;</span><span class="p">)</span>
-
-        <span class="c1"># 从 App 接收数据更新，并进行远控操作</span>
-        <span class="n">last_strength</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">async</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">client</span><span class="o">.</span><span class="n">data_generator</span><span class="p">():</span>
-
-            <span class="c1"># 接收通道强度数据</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">StrengthData</span><span class="p">):</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;从 App 收到通道强度数据更新：</span><span class="si">{</span><span class="n">data</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">last_strength</span> <span class="o">=</span> <span class="n">data</span>
-
-            <span class="c1"># 接收 App 反馈按钮</span>
-            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">FeedbackButton</span><span class="p">):</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;App 触发了反馈按钮：</span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-                <span class="k">if</span> <span class="n">data</span> <span class="o">==</span> <span class="n">FeedbackButton</span><span class="o">.</span><span class="n">A1</span><span class="p">:</span>
-                    <span class="c1"># 设置强度到 A 通道上限</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;对方按下了 A 通道圆圈按钮，加大力度&quot;</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">last_strength</span><span class="p">:</span>
-                        <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">set_strength</span><span class="p">(</span>
-                            <span class="n">Channel</span><span class="o">.</span><span class="n">A</span><span class="p">,</span>
-                            <span class="n">StrengthOperationType</span><span class="o">.</span><span class="n">SET_TO</span><span class="p">,</span>
-                            <span class="n">last_strength</span><span class="o">.</span><span class="n">a_limit</span>
-                        <span class="p">)</span>
-
-            <span class="c1"># 接收 心跳 / App 断开通知</span>
-            <span class="k">elif</span> <span class="n">data</span> <span class="o">==</span> <span class="n">RetCode</span><span class="o">.</span><span class="n">CLIENT_DISCONNECTED</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;App 已断开连接，你可以尝试重新扫码进行连接绑定&quot;</span><span class="p">)</span>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+        <span class="o">...</span>
 </code></pre></div>
+<ol>
+<li>此处的 URI 为服务端 WebSocket URI，需要是 DG-Lab 可以连接上的，通常是内网或公网，而不是本地环回地址</li>
+</ol>
 
 
 
@@ -1289,7 +1613,7 @@
       <nav class="md-footer__inner md-grid" aria-label="页脚" >
         
           
-          <a href="../ws_client/" class="md-footer__link md-footer__link--prev" aria-label="上一页: WebSocket 终端">
+          <a href="../ws/" class="md-footer__link md-footer__link--prev" aria-label="上一页: WebSocket 终端">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
@@ -1306,13 +1630,13 @@
         
         
           
-          <a href="../../api/client/base/" class="md-footer__link md-footer__link--next" aria-label="下一页: DG-Lab 终端">
+          <a href="../../../examples/server/" class="md-footer__link md-footer__link--next" aria-label="下一页: 服务端">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 下一页
               </span>
               <div class="md-ellipsis">
-                DG-Lab 终端
+                服务端
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -1350,10 +1674,10 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "search.highlight", "search.share", "navigation.tracking", "navigation.tabs", "navigation.path", "navigation.indexes", "navigation.top", "navigation.footer", "content.action.edit"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": {"provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.annotate", "search.highlight", "search.share", "navigation.tracking", "navigation.tabs", "navigation.path", "navigation.indexes", "navigation.top", "navigation.footer", "content.action.edit"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.ebd0bdb7.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.ebd0bdb7.min.js"></script>
       
     
   </body>
