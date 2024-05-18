@@ -3,7 +3,7 @@
 </h1>
 
 <p align="center">
-  一个用于创建郊狼 DG-Lab App Socket 被控的客户端和服务端的 Python 库
+  一个用于创建郊狼 3.0 DG-Lab App Socket 控制终端和服务端的 Python 库
 </p>
 
 <p align="center">

@@ -3,6 +3,10 @@
 </h1>
 
 <p align="center">
+  一个用于创建郊狼 3.0 DG-Lab App Socket 控制终端和服务端的 Python 库
+</p>
+
+<p align="center">
   <a href="https://www.codefactor.io/repository/github/ljzd-pro/pydglab-ws">
     <img src="https://www.codefactor.io/repository/github/ljzd-pro/pydglab-ws/badge" alt="CodeFactor" />
   </a>
