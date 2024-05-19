@@ -1,3 +1,4 @@
+import asyncio
 import ipaddress
 from ssl import SSLSocket
 from typing import Optional
@@ -15,14 +16,20 @@ class DGLabWSClient(DGLabClient):
     DG-Lab WebSocket 终端
 
     :param websocket: 与 WebSocket 服务端的连接
+    :param register_timeout: 终端注册（获取 ``clientId``）超时时间
+    :raise asyncio.Timeout: 终端注册（获取 ``clientId``）超时
     """
 
-    def __init__(self, websocket: WebSocketClientProtocol):
+    def __init__(self, websocket: WebSocketClientProtocol, register_timeout: float = None):
         super().__init__()
         self._websocket = websocket
+        self._register_timeout = register_timeout
 
     async def __aenter__(self) -> "DGLabWSClient":
-        await self.register()
+        if self._register_timeout is not None:
+            await asyncio.wait_for(self.register(), self._register_timeout)
+        else:
+            await self.register()
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):

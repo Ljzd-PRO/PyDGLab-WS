@@ -17,16 +17,19 @@ class DGLabWSConnect:
     ```
 
     :param uri: WebSocket 服务端 Uri
+    :param register_timeout: 终端注册（获取 ``clientId``）超时时间
     :param kwargs: :class:`websockets.client.connect` 的其他参数
+    :raise asyncio.Timeout: 终端注册（获取 ``clientId``）超时
     """
 
-    def __init__(self, uri: str, **kwargs):
+    def __init__(self, uri: str, register_timeout: float = None, **kwargs):
         self._connect = ws_connect(uri=uri, **kwargs)
+        self._register_timeout = register_timeout
 
     async def __aenter__(self) -> DGLabWSClient:
         websocket = await self._connect.__aenter__()
-        dg_lab_ws_client = DGLabWSClient(websocket)
-        await dg_lab_ws_client.register()
+        dg_lab_ws_client = DGLabWSClient(websocket, self._register_timeout)
+        await dg_lab_ws_client.__aenter__()
         return dg_lab_ws_client
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
