@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pydglab-ws"
-version = "1.0.0"
+version = "1.0.1"
 description = "一个通过 WebSocket 控制郊狼 DG-Lab 的 Python 库"
 authors = ["Ljzd-PRO <ljzd@office.ljzd-pro.asia>"]
 readme = "README.md"
