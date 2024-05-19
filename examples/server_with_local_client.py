@@ -62,6 +62,8 @@ async def main():
             # 接收 心跳 / App 断开通知
             elif data == RetCode.CLIENT_DISCONNECTED:
                 print("App 已断开连接，你可以尝试重新扫码进行连接绑定")
+                await client.rebind()
+                print("重新绑定成功")
 
 
 if __name__ == "__main__":

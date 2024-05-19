@@ -22,7 +22,8 @@ def print_qrcode(data: str):
 
 async def main():
     try:
-        async with DGLabWSConnect("ws://192.168.1.161:5678") as client:
+        # 连接到 ws://192.168.1.161:5678 服务端，超时时间设为 30 秒
+        async with DGLabWSConnect("ws://192.168.1.161:5678", 30) as client:
             # 获取二维码
             url = client.get_qrcode()
             print("请用 DG-Lab App 扫描二维码以连接")
@@ -58,9 +59,14 @@ async def main():
                 # 接收 心跳 / App 断开通知
                 elif data == RetCode.CLIENT_DISCONNECTED:
                     print("App 已断开连接，你可以尝试重新扫码进行连接绑定")
+                    await client.rebind()
+                    print("重新绑定成功")
 
-    except ConnectionClosedOK:
-        print("Socket 服务端断开连接")
+    except (ConnectionClosedOK, asyncio.TimeoutError) as e:
+        if isinstance(e, asyncio.TimeoutError):
+            print("从服务端获取终端 ID 超时")
+        else:
+            print("Socket 服务端断开连接")
 
 
 if __name__ == "__main__":
