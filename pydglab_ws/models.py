@@ -1,6 +1,7 @@
 """
 此处定义了一些 Pydantic 模型，使用 Pydantic V2
 """
+from enum import IntEnum
 from typing import Optional, Any, Union
 
 from pydantic import BaseModel, UUID4, ConfigDict, field_serializer, AliasGenerator, model_validator, \
@@ -53,8 +54,8 @@ class WebSocketMessage(BaseModel):
     @field_serializer("message", mode="wrap")
     def _serialize_message(self, value: Any, nxt: SerializerFunctionWrapHandler, _: FieldSerializationInfo):
         """对于 ``IntEnum`` 的枚举，转化为 ``str``"""
-        if isinstance(value, int):
-            return str(value)
+        if isinstance(value, IntEnum):
+            return str(value.value)
         else:
             return nxt(value)
 
