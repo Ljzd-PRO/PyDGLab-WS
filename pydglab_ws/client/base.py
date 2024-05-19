@@ -166,6 +166,19 @@ class DGLabClient(ABC):
                     self._target_id = message.target_id
                 return message.message
 
+    async def rebind(self) -> RetCode:
+        """
+        清除 ``target_id``，重新等待与 DG-Lab App 的关系绑定，适合 App 断开连接后调用
+        :return: 响应码
+        """
+        self._target_id = None
+        while self.not_bind:
+            message = await self._recv_owned()
+            if message.type == MessageType.BIND and isinstance(message.message, RetCode):
+                if message.message == RetCode.SUCCESS:
+                    self._target_id = message.target_id
+                return message.message
+
     async def recv_data(self) -> Union[StrengthData, FeedbackButton, RetCode]:
         """
         获取 WebSocket 服务端的数据
