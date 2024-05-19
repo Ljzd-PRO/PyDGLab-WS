@@ -638,7 +638,7 @@ async def test_dg_lab_app_disconnect(
                         app.websocket = app_new_websocket_for_ws
                     await app.register()
                     await app.bind(client.client_id)
-                    await client.bind()
+                    await client.rebind()
                     break
 
 
