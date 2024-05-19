@@ -51,6 +51,17 @@ class WebSocketMessage(BaseModel):
                     pass
         return value
 
+    @field_serializer("message")
+    @classmethod
+    def _serialize_message(cls, value: Any):
+        """
+        对于 ``IntEnum`` 的枚举，转化为 ``str``
+        """
+        if isinstance(value, int):
+            return str(value)
+        else:
+            return value
+
     @field_serializer("client_id", "target_id")
     def _serialize_id(self, value: Optional[UUID4]):
         """
