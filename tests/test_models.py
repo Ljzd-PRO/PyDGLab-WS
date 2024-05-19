@@ -1,7 +1,7 @@
 import json
 from uuid import uuid4
 
-from pydglab_ws.enums import MessageType, MessageDataHead
+from pydglab_ws.enums import MessageType, MessageDataHead, RetCode
 from pydglab_ws.models import WebSocketMessage
 
 
@@ -19,6 +19,7 @@ def test_web_socket_message():
 
     client_id = uuid4()
     target_id = uuid4()
+
     raw_message = WebSocketMessage(
         type=MessageType.MSG,
         client_id=client_id,
@@ -30,4 +31,17 @@ def test_web_socket_message():
         "clientId": str(client_id),
         "targetId": str(target_id),
         "message": "targetId"
+    }
+
+    raw_message = WebSocketMessage(
+        type=MessageType.BIND,
+        client_id=client_id,
+        target_id=target_id,
+        message=RetCode.SUCCESS
+    ).model_dump_json(by_alias=True)
+    assert json.loads(raw_message) == {
+        "type": "bind",
+        "clientId": str(client_id),
+        "targetId": str(target_id),
+        "message": "200"
     }
