@@ -38,9 +38,7 @@ class WebSocketMessage(BaseModel):
     @field_validator("message")
     @classmethod
     def _validate_message(cls, value: Any):
-        """
-        自动先行尝试解析 `message`
-        """
+        """自动先行尝试解析 `message`"""
         if isinstance(value, str):
             try:
                 return RetCode(int(value))
@@ -54,9 +52,7 @@ class WebSocketMessage(BaseModel):
     @field_serializer("message")
     @classmethod
     def _serialize_message(cls, value: Any):
-        """
-        对于 ``IntEnum`` 的枚举，转化为 ``str``
-        """
+        """对于 ``IntEnum`` 的枚举，转化为 ``str``"""
         if isinstance(value, int):
             return str(value)
         else:
@@ -64,17 +60,13 @@ class WebSocketMessage(BaseModel):
 
     @field_serializer("client_id", "target_id")
     def _serialize_id(self, value: Optional[UUID4]):
-        """
-        序列化时，当值为 ``None``，序列化成空字符串
-        """
+        """序列化时，当值为 ``None``，序列化成空字符串"""
         return value or ""
 
     @field_validator("client_id", "target_id", mode="before")
     @classmethod
     def _validate_id(cls, value: Any):
-        """
-        验证 UUID 值时，当值为空字符串，更改为 ``None``，与 :meth:`serialize_id` 相对应
-        """
+        """验证 UUID 值时，当值为空字符串，更改为 ``None``，与 :meth:`serialize_id` 相对应"""
         return value if value != "" else None
 
     @model_validator(mode="before")
