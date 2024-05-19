@@ -1442,7 +1442,7 @@
 
 
 <a href="#pydglab_ws.client.ws.DGLabWSClient" class="headerlink" title="Permanent link">&para;</a></h2>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">DGLabWSClient</span><span class="p">(</span><span class="n">websocket</span><span class="p">:</span> <span class="n"><span title="websockets.WebSocketClientProtocol">WebSocketClientProtocol</span></span><span class="p">)</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">DGLabWSClient</span><span class="p">(</span><span class="n">websocket</span><span class="p">:</span> <span class="n"><span title="websockets.WebSocketClientProtocol">WebSocketClientProtocol</span></span><span class="p">,</span> <span class="n">register_timeout</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1478,16 +1478,55 @@
                 <em>required</em>
             </td>
           </tr>
+          <tr class="doc-section-item">
+            <td><code>register_timeout</code></td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>终端注册（获取 <code>clientId</code>）超时时间</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code>asyncio.Timeout</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>终端注册（获取 <code>clientId</code>）超时</p>
+              </div>
+            </td>
+          </tr>
       </tbody>
     </table>
 
                   <details class="quote">
                     <summary>Source code in <code>pydglab_ws/client/ws.py</code></summary>
-                    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">websocket</span><span class="p">:</span> <span class="n">WebSocketClientProtocol</span><span class="p">):</span>
+                    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">websocket</span><span class="p">:</span> <span class="n">WebSocketClientProtocol</span><span class="p">,</span> <span class="n">register_timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_websocket</span> <span class="o">=</span> <span class="n">websocket</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_register_timeout</span> <span class="o">=</span> <span class="n">register_timeout</span>
 </code></pre></div></td></tr></table></div>
                   </details>
 
