@@ -6,6 +6,7 @@ from typing import Optional, Any, Union
 from pydantic import BaseModel, UUID4, ConfigDict, field_serializer, AliasGenerator, model_validator, \
     field_validator
 from pydantic.alias_generators import to_camel, to_snake
+from pydantic_core.core_schema import SerializerFunctionWrapHandler, FieldSerializationInfo
 
 from .enums import MessageType, RetCode, MessageDataHead
 
@@ -49,14 +50,13 @@ class WebSocketMessage(BaseModel):
                     pass
         return value
 
-    @field_serializer("message")
-    @classmethod
-    def _serialize_message(cls, value: Any):
+    @field_serializer("message", mode="wrap")
+    def _serialize_message(self, value: Any, nxt: SerializerFunctionWrapHandler, _: FieldSerializationInfo):
         """对于 ``IntEnum`` 的枚举，转化为 ``str``"""
         if isinstance(value, int):
             return str(value)
         else:
-            return value
+            return nxt(value)
 
     @field_serializer("client_id", "target_id")
     def _serialize_id(self, value: Optional[UUID4]):
