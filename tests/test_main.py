@@ -521,11 +521,11 @@ async def test_dg_lab_client_set_strength(
         ((
                  Channel.A,
                  *[((0, 0, 0, 0), (0, 0, 0, 0))]
-         ), "pulse-1:['0000000000000000']"),
+         ), 'pulse-A:["0000000000000000"]'),
         ((
                  Channel.B,
                  *[((0, 0, 0, 0), (10, 10, 10, 10)), ((15, 15, 15, 15), (15, 15, 15, 15))]
-         ), "pulse-2:['000000000a0a0a0a', '0f0f0f0f0f0f0f0f']"),
+         ), 'pulse-B:["000000000a0a0a0a","0f0f0f0f0f0f0f0f"]'),
     ]
 )
 async def test_dg_lab_client_add_pulses(
