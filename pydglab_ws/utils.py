@@ -113,10 +113,9 @@ def dump_add_pulses(
     :return: 返回数据可作为 WebSocket 消息中的 ``message``
     :raise InvalidPulseOperation: [`InvalidPulseOperation`][pydglab_ws.exceptions.InvalidPulseOperation]
     """
-    dict_data = {
-        f"{MessageDataHead.PULSE.value}-{channel.value}": [dump_pulse_operation(pulse) for pulse in pulses]
-    }
-    return json.dumps(dict_data)
+
+    return (f"{MessageDataHead.PULSE.value}-{channel.name}"
+            f":{json.dumps([dump_pulse_operation(pulse) for pulse in pulses], separators=(',', ':'))}")
 
 
 def dg_lab_client_qrcode(uri: str, client_id: UUID4) -> str:
