@@ -119,7 +119,7 @@ async def main():
 if __name__ == "__main__":
     asyncio.run(main())
 ```
-更多演示请查看 [`examples/ws_client.py`](examples/ws_client.md)
+更多演示请查看 [`examples/ws_client.py`](examples/ws-client.md)
 
 ### 🕹️ 搭建与第三方终端一体的 WebSocket 服务端
 

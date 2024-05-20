@@ -23,7 +23,7 @@ nav:
         - Server With Local Client: usage/client/local.md
   - Examples:
     - Server: examples/server.md
-    - WebSocket Client: examples/ws_client.md
+    - WebSocket Client: examples/ws-client.md
     - Server With Local Client: examples/server-with-local-client.md
     - Add Pulses: examples/add-pulses.md
   - API Documentation:
