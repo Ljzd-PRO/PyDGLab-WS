@@ -1,4 +1,3 @@
-import json
 from uuid import uuid4
 
 import pytest
@@ -119,25 +118,23 @@ def test_dump_pulse_operation(pulse: PulseOperation, expected):
         ((
                  Channel.A,
                  *[((0, 0, 0, 0), (0, 0, 0, 0))]
-         ), {"pulse-1": ["0000000000000000"]}),
+         ), "pulse-1:['0000000000000000']"),
         ((
                  Channel.A,
                  *[((0, 0, 0, 0), (0, 0, 0, 0)), ((9, 9, 9, 9), (0, 0, 0, 0))]
-         ), {"pulse-1": ["0000000000000000", "0909090900000000"]}),
+         ), "pulse-1:['0000000000000000', '0909090900000000']"),
         ((
                  Channel.B,
                  *[((0, 0, 0, 0), (10, 10, 10, 10))]
-         ), {"pulse-2": ["000000000a0a0a0a"]}),
+         ), "pulse-2:['000000000a0a0a0a']"),
         ((
                  Channel.B,
                  *[((0, 0, 0, 0), (10, 10, 10, 10)), ((15, 15, 15, 15), (15, 15, 15, 15))]
-         ), {"pulse-2": ["000000000a0a0a0a", "0f0f0f0f0f0f0f0f"]}),
+         ), "pulse-2:['000000000a0a0a0a', '0f0f0f0f0f0f0f0f']"),
     ]
 )
 def test_dump_add_pulses(args, expected):
-    assert json.loads(
-        dump_add_pulses(*args)
-    ) == expected
+    assert dump_add_pulses(*args) == expected
 
 
 @pytest.mark.parametrize(

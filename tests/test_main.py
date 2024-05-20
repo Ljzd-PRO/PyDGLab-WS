@@ -1,5 +1,4 @@
 import asyncio
-import json
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from typing import Tuple, List, Callable, Coroutine, Literal
@@ -522,11 +521,11 @@ async def test_dg_lab_client_set_strength(
         ((
                  Channel.A,
                  *[((0, 0, 0, 0), (0, 0, 0, 0))]
-         ), {"pulse-1": ["0000000000000000"]}),
+         ), "pulse-1:['0000000000000000']"),
         ((
                  Channel.B,
                  *[((0, 0, 0, 0), (10, 10, 10, 10)), ((15, 15, 15, 15), (15, 15, 15, 15))]
-         ), {"pulse-2": ["000000000a0a0a0a", "0f0f0f0f0f0f0f0f"]}),
+         ), "pulse-2:['000000000a0a0a0a', '0f0f0f0f0f0f0f0f']"),
     ]
 )
 async def test_dg_lab_client_add_pulses(
@@ -549,7 +548,7 @@ async def test_dg_lab_client_add_pulses(
             assert message.type == MessageType.MSG
             assert message.client_id == client.client_id
             assert message.target_id == app.target_id
-            assert json.loads(message.message) == expected
+            assert message.message == expected
 
 
 @pytest.mark.asyncio
