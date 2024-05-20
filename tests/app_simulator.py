@@ -18,7 +18,7 @@ class DGLabAppSimulator:
         self.client_id: Optional[UUID4] = None
 
     async def _send(self, message: WebSocketMessage):
-        await self.websocket.send(message.model_dump_json(by_alias=True))
+        await self.websocket.send(message.model_dump_json(by_alias=True, context={"separators": (",", ":")}))
 
     async def _recv(self) -> WebSocketMessage:
         raw_message = await self.websocket.recv()

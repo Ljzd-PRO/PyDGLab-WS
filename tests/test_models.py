@@ -9,7 +9,7 @@ def test_web_socket_message():
     raw_message = WebSocketMessage(
         type=MessageType.BIND,
         message=MessageDataHead.DG_LAB
-    ).model_dump_json(by_alias=True)
+    ).model_dump_json(by_alias=True, context={"separators": (",", ":")})
     assert json.loads(raw_message) == {
         "type": "bind",
         "clientId": "",
@@ -25,7 +25,7 @@ def test_web_socket_message():
         client_id=client_id,
         target_id=target_id,
         message=MessageDataHead.TARGET_ID
-    ).model_dump_json(by_alias=True)
+    ).model_dump_json(by_alias=True, context={"separators": (",", ":")})
     assert json.loads(raw_message) == {
         "type": "msg",
         "clientId": str(client_id),
@@ -38,7 +38,7 @@ def test_web_socket_message():
         client_id=client_id,
         target_id=target_id,
         message=RetCode.SUCCESS
-    ).model_dump_json(by_alias=True)
+    ).model_dump_json(by_alias=True, context={"separators": (",", ":")})
     assert json.loads(raw_message) == {
         "type": "bind",
         "clientId": str(client_id),

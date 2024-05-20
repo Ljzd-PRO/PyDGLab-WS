@@ -40,7 +40,7 @@ class DGLabWSClient(DGLabClient):
         return WebSocketMessage.model_validate_json(raw_message)
 
     async def _send(self, message: WebSocketMessage):
-        await self._websocket.send(message.model_dump_json(by_alias=True))
+        await self._websocket.send(message.model_dump_json(by_alias=True, context={"separators": (",", ":")}))
 
     def get_qrcode(self, uri: str = None) -> Optional[str]:
         if uri is None and (remote_address := self._websocket.remote_address):

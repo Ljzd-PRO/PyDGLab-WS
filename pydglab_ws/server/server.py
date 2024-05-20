@@ -173,7 +173,7 @@ class DGLabWSServer:
         """
         for websocket in wss:
             if websocket is not None:
-                await websocket.send(message.model_dump_json(by_alias=True))
+                await websocket.send(message.model_dump_json(by_alias=True, context={"separators": (",", ":")}))
         if to_local_client:
             if queue := self._client_id_to_queue.get(message.client_id):
                 await queue.put(message)
