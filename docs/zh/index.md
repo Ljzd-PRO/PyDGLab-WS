@@ -162,4 +162,4 @@ if __name__ == "__main__":
 
 1.  此处的 URI 需要是 DG-Lab 可以连接上的，通常是内网或公网，而不是本地环回地址
 
-更多演示请查看 [`examples/server_with_local_client.py`](examples/server_with_local_client.md)
+更多演示请查看 [`examples/server_with_local_client.py`](examples/server-with-local-client.md)
