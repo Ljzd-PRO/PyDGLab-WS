@@ -1,6 +1,7 @@
 """
 此处提供一些工具函数
 """
+import json
 
 from pydantic import UUID4
 
@@ -112,7 +113,9 @@ def dump_add_pulses(
     :return: 返回数据可作为 WebSocket 消息中的 ``message``
     :raise InvalidPulseOperation: [`InvalidPulseOperation`][pydglab_ws.exceptions.InvalidPulseOperation]
     """
-    return f"{MessageDataHead.PULSE.value}-{channel.value}:{[dump_pulse_operation(pulse) for pulse in pulses]}"
+
+    return (f"{MessageDataHead.PULSE.value}-{channel.name}"
+            f":{json.dumps([dump_pulse_operation(pulse) for pulse in pulses], separators=(',', ':'))}")
 
 
 def dg_lab_client_qrcode(uri: str, client_id: UUID4) -> str:
