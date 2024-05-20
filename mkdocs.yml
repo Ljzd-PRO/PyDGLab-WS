@@ -25,6 +25,7 @@ nav:
     - Server: examples/server.md
     - WebSocket Client: examples/ws_client.md
     - Server With Local Client: examples/server-with-local-client.md
+    - Add Pulses: examples/add-pulses.md
   - API Documentation:
     - Client:
         - DGLabClient: api/client/base.md
@@ -76,6 +77,7 @@ plugins:
             Server: 服务端
             WebSocket Client: WebSocket 终端
             Server With Local Client: 与本地终端一体的服务端
+            Add Pulses: 发送波形
             API Documentation: API 文档
             FAQ: 常见问题
             Base: 基础
