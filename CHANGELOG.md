@@ -4,6 +4,6 @@
 
 ### 🪲 修复
 
-- 修复了 WebSocket 消息序列化时 `message` 部分为响应码时没有被序列化为字符串形式的问题，这可能导致 App 绑定超时
+- 修复了波形数据序列化格式错误，该错误导致无法下发波形数据
 
-**Full Changelog**: https://github.com/Ljzd-PRO/PyDGLab-WS/compare/v1.0.0...v1.0.1
+**Full Changelog**: https://github.com/Ljzd-PRO/PyDGLab-WS/compare/v1.0.1...v1.0.2
