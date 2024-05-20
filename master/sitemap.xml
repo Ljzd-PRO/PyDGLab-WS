@@ -25,12 +25,6 @@
         <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/more/"/>
     </url>
     <url>
-        <loc>https://pydglab-ws.readthedocs.io/master/usage/</loc>
-        <lastmod>2024-05-20</lastmod>
-        <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/usage/"/>
-    </url>
-    <url>
         <loc>https://pydglab-ws.readthedocs.io/master/api/enums/</loc>
         <lastmod>2024-05-20</lastmod>
         <changefreq>daily</changefreq>
@@ -91,6 +85,12 @@
         <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/api/server/server/"/>
     </url>
     <url>
+        <loc>https://pydglab-ws.readthedocs.io/master/examples/add-pulses/</loc>
+        <lastmod>2024-05-20</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/examples/add-pulses/"/>
+    </url>
+    <url>
         <loc>https://pydglab-ws.readthedocs.io/master/examples/server-with-local-client/</loc>
         <lastmod>2024-05-20</lastmod>
         <changefreq>daily</changefreq>
@@ -103,10 +103,10 @@
         <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/examples/server/"/>
     </url>
     <url>
-        <loc>https://pydglab-ws.readthedocs.io/master/examples/ws_client/</loc>
+        <loc>https://pydglab-ws.readthedocs.io/master/examples/ws-client/</loc>
         <lastmod>2024-05-20</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/examples/ws_client/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://pydglab-ws.readthedocs.io/master/examples/ws-client/"/>
     </url>
     <url>
         <loc>https://pydglab-ws.readthedocs.io/master/usage/server/</loc>
