@@ -2195,8 +2195,7 @@
 <span class="normal">115</span>
 <span class="normal">116</span>
 <span class="normal">117</span>
-<span class="normal">118</span>
-<span class="normal">119</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">dump_add_pulses</span><span class="p">(</span>
+<span class="normal">118</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">dump_add_pulses</span><span class="p">(</span>
         <span class="n">channel</span><span class="p">:</span> <span class="n">Channel</span><span class="p">,</span>
         <span class="o">*</span><span class="n">pulses</span><span class="p">:</span> <span class="n">PulseOperation</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -2208,10 +2207,9 @@
 <span class="sd">    :return: 返回数据可作为 WebSocket 消息中的 ``message``</span>
 <span class="sd">    :raise InvalidPulseOperation: [`InvalidPulseOperation`][pydglab_ws.exceptions.InvalidPulseOperation]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">dict_data</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">MessageDataHead</span><span class="o">.</span><span class="n">PULSE</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">channel</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">dump_pulse_operation</span><span class="p">(</span><span class="n">pulse</span><span class="p">)</span> <span class="k">for</span> <span class="n">pulse</span> <span class="ow">in</span> <span class="n">pulses</span><span class="p">]</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dict_data</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">MessageDataHead</span><span class="o">.</span><span class="n">PULSE</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">channel</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;:</span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">([</span><span class="n">dump_pulse_operation</span><span class="p">(</span><span class="n">pulse</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">pulse</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">pulses</span><span class="p">],</span><span class="w"> </span><span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;:&#39;</span><span class="p">))</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2301,7 +2299,8 @@
 
             <details class="quote">
               <summary>Source code in <code>pydglab_ws/utils.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">122</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">121</span>
+<span class="normal">122</span>
 <span class="normal">123</span>
 <span class="normal">124</span>
 <span class="normal">125</span>
@@ -2311,8 +2310,7 @@
 <span class="normal">129</span>
 <span class="normal">130</span>
 <span class="normal">131</span>
-<span class="normal">132</span>
-<span class="normal">133</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">dg_lab_client_qrcode</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">client_id</span><span class="p">:</span> <span class="n">UUID4</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="normal">132</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">dg_lab_client_qrcode</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">client_id</span><span class="p">:</span> <span class="n">UUID4</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    生成终端二维码，二维码图像需要自行生成</span>
 
