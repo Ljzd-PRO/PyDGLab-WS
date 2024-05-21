@@ -85,6 +85,10 @@ DG-Lab App 进入 Socket 被控界面后，扫码二维码即可绑定
 !!! info
     注意此处生成的二维码 **仅仅是二维码内容/数据**，二维码图像需要自行从返回的数据生成
 
+!!! info
+    App 断开连接后，重新连接至服务端时 `targetId` 可能发生变化，因此最好是再调用一次
+    [`rebind`][pydglab_ws.client.base.DGLabClient.rebind] 方法，重新等待绑定并更新 `targetId`
+
 !!! warning
     生成二维码后，需要调用绑定方法来等待 App 绑定，此时该异步事件会阻塞直到绑定完成
 
@@ -98,6 +102,13 @@ DG-Lab App 进入 Socket 被控界面后，扫码二维码即可绑定
         show_source: false
 
 ::: pydglab_ws.client.base.DGLabClient.bind
+    options:
+        heading_level: 4
+        show_root_heading: true
+        show_root_full_path: false
+        show_source: false
+
+::: pydglab_ws.client.base.DGLabClient.rebind
     options:
         heading_level: 4
         show_root_heading: true
@@ -128,14 +139,24 @@ async def main():
 
 - - -
 
-## 获取 App 的数据更新和服务端心跳
+## 获取 App 数据更新和服务端通知
 
-完成绑定后，即可从 WebSocket 服务端获取 App 的数据更新，如通道强度数据、App 反馈按钮触发事件等
+可获取如下数据：
+
+- 通道强度数据
+- App 触发的反馈按钮
+- App 返回的错误码
+- 服务端发送的心跳
+- 服务端发送的 App 断开连接通知
 
 !!! info
     [`data_generator`][pydglab_ws.client.base.DGLabClient.data_generator]
     会不断从队列中读取消息并解析，队列为空时则会阻塞该异步事件，
     如果需要退出，可使用 `break`
+
+!!! info
+    App 断开连接后，重新连接至服务端时 `targetId` 可能发生变化，因此最好是再调用一次
+    [`rebind`][pydglab_ws.client.base.DGLabClient.rebind] 方法，重新等待绑定并更新 `targetId`
 
 !!! danger
     **不能并发地读取** 数据更新，因为消息一旦被读出，就会从队列中移除。
