@@ -257,7 +257,7 @@ async def main():
 ### 示例
 
 ```python3
-from pydglab_ws import DGLabWSConnect, Channel, StrengthOperationType
+from pydglab_ws import DGLabWSConnect, Channel
 
 async def main():
     async with DGLabWSConnect("ws://192.168.1.161:5678") as client:
@@ -294,7 +294,7 @@ App 中的波形执行是基于波形队列，遵循先进先出的原则，并�
 ### 示例
 
 ```python3
-from pydglab_ws import DGLabWSConnect, Channel, StrengthOperationType
+from pydglab_ws import DGLabWSConnect, Channel
 
 async def main():
     async with DGLabWSConnect("ws://192.168.1.161:5678") as client:
