@@ -231,25 +231,28 @@ class DGLabClient(ABC):
             channel: Channel,
             operation_type: StrengthOperationType,
             value: int
-    ):
+    ) -> bool:
         """
         设置强度
 
         :param channel: 通道选择
         :param operation_type: 强度变化模式
         :param value: 强度数值，范围在 [0, 200]
+        :return: 若未完成绑定操作，返回 ``False``，否则在发送后返回 ``True``
         """
-        await self.ensure_bind()
+        if self.not_bind:
+            return False
         await self._send_owned(
             MessageType.MSG,
             dump_strength_operation(channel, operation_type, value)
         )
+        return True
 
     async def add_pulses(
             self,
             channel: Channel,
             *pulses: PulseOperation
-    ):
+    ) -> bool:
         """
         下发波形数据
 
@@ -262,12 +265,15 @@ class DGLabClient(ABC):
         :param pulses: 波形操作数据，最大长度为 100
         :raise InvalidPulseOperation: [`InvalidPulseOperation`][pydglab_ws.exceptions.InvalidPulseOperation]
         :raise PulseDataTooLong: 波形操作数据过长，最大长度应为 [`PULSE_DATA_MAX_LENGTH`][pydglab_ws.utils.PULSE_DATA_MAX_LENGTH]
+        :return: 若未完成绑定操作，返回 ``False``，否则在发送后返回 ``True``
         """
-        await self.ensure_bind()
+        if self.not_bind:
+            return False
         await self._send_owned(
             MessageType.MSG,
             dump_add_pulses(channel, *pulses)
         )
+        return True
 
     async def clear_pulses(self, channel: Channel):
         """
@@ -275,9 +281,12 @@ class DGLabClient(ABC):
 
         :param channel: 通道选择
         :raise InvalidPulseOperation: [`InvalidPulseOperation`][pydglab_ws.exceptions.InvalidPulseOperation]
+        :return: 若未完成绑定操作，返回 ``False``，否则在发送后返回 ``True``
         """
-        await self.ensure_bind()
+        if self.not_bind:
+            return False
         await self._send_owned(
             MessageType.MSG,
             dump_clear_pulses(channel)
         )
+        return True
