@@ -111,7 +111,7 @@ class DGLabClient(ABC):
         await self._send(message)
 
     @staticmethod
-    def _handle_msg(message: WebSocketMessage) -> Optional[Union[StrengthData, FeedbackButton]]:
+    def _handle_msg(message: WebSocketMessage) -> Optional[Union[StrengthData, FeedbackButton, RetCode]]:
         """
         处理类型为 ``msg`` 的消息
 
@@ -123,6 +123,8 @@ class DGLabClient(ABC):
                 return parse_strength_data(message.message)
             elif message.message.startswith(MessageDataHead.FEEDBACK.value):
                 return parse_feedback_data(message.message)
+        elif isinstance(message.message, RetCode):
+            return message.message
         return None
 
     @staticmethod
@@ -186,9 +188,10 @@ class DGLabClient(ABC):
         注意，获取到的是队列中最早的数据，可能不是最新的
 
         :return: 可能为 **强度数据** - [`StrengthData`][pydglab_ws.models.StrengthData]、 \
-            **App 反馈数据** - [`FeedbackButton`][pydglab_ws.enums.FeedbackButton] \
-            、**心跳** - [`RetCode.SUCCESS`][pydglab_ws.enums.RetCode]、 \
-            **App 断开连接** - [`RetCode.CLIENT_DISCONNECTED`][pydglab_ws.enums.RetCode]
+            **App 反馈数据** - [`FeedbackButton`][pydglab_ws.enums.FeedbackButton]、 \
+            **心跳** - [`RetCode.SUCCESS`][pydglab_ws.enums.RetCode.SUCCESS]、 \
+            **App 断开连接** - [`RetCode.CLIENT_DISCONNECTED`][pydglab_ws.enums.RetCode.CLIENT_DISCONNECTED]、\
+            **消息长度大于 1950** - [`RetCode.MESSAGE_TOO_LONG`][pydglab_ws.enums.RetCode.MESSAGE_TOO_LONG]
         :raise InvalidStrengthData: [`InvalidStrengthData`][pydglab_ws.exceptions.InvalidStrengthData]
         :raise InvalidFeedbackData: [`InvalidFeedbackData`][pydglab_ws.exceptions.InvalidFeedbackData]
         """
