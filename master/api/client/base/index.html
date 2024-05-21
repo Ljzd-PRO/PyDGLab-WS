@@ -2480,7 +2480,7 @@
   </span>
 
 <a href="#pydglab_ws.client.base.DGLabClient.set_strength" class="headerlink" title="Permanent link">&para;</a></h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">set_strength</span><span class="p">(</span><span class="n">channel</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.Channel" href="../../enums/#pydglab_ws.enums.Channel">Channel</a></span><span class="p">,</span> <span class="n">operation_type</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.StrengthOperationType" href="../../enums/#pydglab_ws.enums.StrengthOperationType">StrengthOperationType</a></span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span><span class="p">)</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">set_strength</span><span class="p">(</span><span class="n">channel</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.Channel" href="../../enums/#pydglab_ws.enums.Channel">Channel</a></span><span class="p">,</span> <span class="n">operation_type</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.StrengthOperationType" href="../../enums/#pydglab_ws.enums.StrengthOperationType">StrengthOperationType</a></span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -2544,6 +2544,29 @@
       </tbody>
     </table>
 
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>若未完成绑定操作，返回 <code>False</code>，否则在发送后返回 <code>True</code></p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
             <details class="quote">
               <summary>Source code in <code>pydglab_ws/client/base.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">229</span>
@@ -2563,24 +2586,30 @@
 <span class="normal">243</span>
 <span class="normal">244</span>
 <span class="normal">245</span>
-<span class="normal">246</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">set_strength</span><span class="p">(</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">set_strength</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">channel</span><span class="p">:</span> <span class="n">Channel</span><span class="p">,</span>
         <span class="n">operation_type</span><span class="p">:</span> <span class="n">StrengthOperationType</span><span class="p">,</span>
         <span class="n">value</span><span class="p">:</span> <span class="nb">int</span>
-<span class="p">):</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    设置强度</span>
 
 <span class="sd">    :param channel: 通道选择</span>
 <span class="sd">    :param operation_type: 强度变化模式</span>
 <span class="sd">    :param value: 强度数值，范围在 [0, 200]</span>
+<span class="sd">    :return: 若未完成绑定操作，返回 ``False``，否则在发送后返回 ``True``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_bind</span><span class="p">()</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">not_bind</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
     <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_send_owned</span><span class="p">(</span>
         <span class="n">MessageType</span><span class="o">.</span><span class="n">MSG</span><span class="p">,</span>
         <span class="n">dump_strength_operation</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">operation_type</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
     <span class="p">)</span>
+    <span class="k">return</span> <span class="kc">True</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2599,7 +2628,7 @@
   </span>
 
 <a href="#pydglab_ws.client.base.DGLabClient.add_pulses" class="headerlink" title="Permanent link">&para;</a></h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">add_pulses</span><span class="p">(</span><span class="n">channel</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.Channel" href="../../enums/#pydglab_ws.enums.Channel">Channel</a></span><span class="p">,</span> <span class="o">*</span><span class="n">pulses</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.typing.PulseOperation" href="../../typing/#pydglab_ws.typing.PulseOperation">PulseOperation</a></span><span class="p">)</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">add_pulses</span><span class="p">(</span><span class="n">channel</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.Channel" href="../../enums/#pydglab_ws.enums.Channel">Channel</a></span><span class="p">,</span> <span class="o">*</span><span class="n">pulses</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.typing.PulseOperation" href="../../typing/#pydglab_ws.typing.PulseOperation">PulseOperation</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -2654,6 +2683,29 @@
     </table>
 
 
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>若未完成绑定操作，返回 <code>False</code>，否则在发送后返回 <code>True</code></p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
 <p><span class="doc-section-title">Raises:</span></p>
     <table>
       <thead>
@@ -2688,10 +2740,7 @@
 
             <details class="quote">
               <summary>Source code in <code>pydglab_ws/client/base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">248</span>
-<span class="normal">249</span>
-<span class="normal">250</span>
-<span class="normal">251</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">251</span>
 <span class="normal">252</span>
 <span class="normal">253</span>
 <span class="normal">254</span>
@@ -2710,11 +2759,17 @@
 <span class="normal">267</span>
 <span class="normal">268</span>
 <span class="normal">269</span>
-<span class="normal">270</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">add_pulses</span><span class="p">(</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">add_pulses</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">channel</span><span class="p">:</span> <span class="n">Channel</span><span class="p">,</span>
         <span class="o">*</span><span class="n">pulses</span><span class="p">:</span> <span class="n">PulseOperation</span>
-<span class="p">):</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    下发波形数据</span>
 
@@ -2727,12 +2782,15 @@
 <span class="sd">    :param pulses: 波形操作数据，最大长度为 100</span>
 <span class="sd">    :raise InvalidPulseOperation: [`InvalidPulseOperation`][pydglab_ws.exceptions.InvalidPulseOperation]</span>
 <span class="sd">    :raise PulseDataTooLong: 波形操作数据过长，最大长度应为 [`PULSE_DATA_MAX_LENGTH`][pydglab_ws.utils.PULSE_DATA_MAX_LENGTH]</span>
+<span class="sd">    :return: 若未完成绑定操作，返回 ``False``，否则在发送后返回 ``True``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_bind</span><span class="p">()</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">not_bind</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
     <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_send_owned</span><span class="p">(</span>
         <span class="n">MessageType</span><span class="o">.</span><span class="n">MSG</span><span class="p">,</span>
         <span class="n">dump_add_pulses</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="o">*</span><span class="n">pulses</span><span class="p">)</span>
     <span class="p">)</span>
+    <span class="k">return</span> <span class="kc">True</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2788,6 +2846,28 @@
     </table>
 
 
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>若未完成绑定操作，返回 <code>False</code>，否则在发送后返回 <code>True</code></p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
 <p><span class="doc-section-title">Raises:</span></p>
     <table>
       <thead>
@@ -2812,29 +2892,35 @@
 
             <details class="quote">
               <summary>Source code in <code>pydglab_ws/client/base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">272</span>
-<span class="normal">273</span>
-<span class="normal">274</span>
-<span class="normal">275</span>
-<span class="normal">276</span>
-<span class="normal">277</span>
-<span class="normal">278</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">278</span>
 <span class="normal">279</span>
 <span class="normal">280</span>
 <span class="normal">281</span>
 <span class="normal">282</span>
-<span class="normal">283</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">clear_pulses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">:</span> <span class="n">Channel</span><span class="p">):</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">clear_pulses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">:</span> <span class="n">Channel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    清空波形队列</span>
 
 <span class="sd">    :param channel: 通道选择</span>
 <span class="sd">    :raise InvalidPulseOperation: [`InvalidPulseOperation`][pydglab_ws.exceptions.InvalidPulseOperation]</span>
+<span class="sd">    :return: 若未完成绑定操作，返回 ``False``，否则在发送后返回 ``True``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_bind</span><span class="p">()</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">not_bind</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
     <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_send_owned</span><span class="p">(</span>
         <span class="n">MessageType</span><span class="o">.</span><span class="n">MSG</span><span class="p">,</span>
         <span class="n">dump_clear_pulses</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
     <span class="p">)</span>
+    <span class="k">return</span> <span class="kc">True</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>

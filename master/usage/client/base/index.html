@@ -2712,7 +2712,7 @@ DG-Lab App 进入 Socket 被控界面后，扫码二维码即可绑定</p>
   </span>
 
 <a href="#pydglab_ws.client.base.DGLabClient.set_strength" class="headerlink" title="Permanent link">&para;</a></h4>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">set_strength</span><span class="p">(</span><span class="n">channel</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.Channel" href="../../../api/enums/#pydglab_ws.enums.Channel">Channel</a></span><span class="p">,</span> <span class="n">operation_type</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.StrengthOperationType" href="../../../api/enums/#pydglab_ws.enums.StrengthOperationType">StrengthOperationType</a></span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span><span class="p">)</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">set_strength</span><span class="p">(</span><span class="n">channel</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.Channel" href="../../../api/enums/#pydglab_ws.enums.Channel">Channel</a></span><span class="p">,</span> <span class="n">operation_type</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.StrengthOperationType" href="../../../api/enums/#pydglab_ws.enums.StrengthOperationType">StrengthOperationType</a></span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span>
 </code></pre></div>
 
     <div class="doc doc-contents first">
@@ -2776,6 +2776,29 @@ DG-Lab App 进入 Socket 被控界面后，扫码二维码即可绑定</p>
       </tbody>
     </table>
 
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>若未完成绑定操作，返回 <code>False</code>，否则在发送后返回 <code>True</code></p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
     </div>
 
 </div><h3 id="_12">示例<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h3>
@@ -2817,7 +2840,7 @@ DG-Lab App 进入 Socket 被控界面后，扫码二维码即可绑定</p>
   </span>
 
 <a href="#pydglab_ws.client.base.DGLabClient.add_pulses" class="headerlink" title="Permanent link">&para;</a></h4>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">add_pulses</span><span class="p">(</span><span class="n">channel</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.Channel" href="../../../api/enums/#pydglab_ws.enums.Channel">Channel</a></span><span class="p">,</span> <span class="o">*</span><span class="n">pulses</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.typing.PulseOperation" href="../../../api/typing/#pydglab_ws.typing.PulseOperation">PulseOperation</a></span><span class="p">)</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">add_pulses</span><span class="p">(</span><span class="n">channel</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.Channel" href="../../../api/enums/#pydglab_ws.enums.Channel">Channel</a></span><span class="p">,</span> <span class="o">*</span><span class="n">pulses</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.typing.PulseOperation" href="../../../api/typing/#pydglab_ws.typing.PulseOperation">PulseOperation</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span>
 </code></pre></div>
 
     <div class="doc doc-contents first">
@@ -2866,6 +2889,29 @@ DG-Lab App 进入 Socket 被控界面后，扫码二维码即可绑定</p>
             </td>
             <td>
                   <code>()</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>若未完成绑定操作，返回 <code>False</code>，否则在发送后返回 <code>True</code></p>
+              </div>
             </td>
           </tr>
       </tbody>
@@ -2974,6 +3020,28 @@ DG-Lab App 进入 Socket 被控界面后，扫码二维码即可绑定</p>
             </td>
             <td>
                 <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>若未完成绑定操作，返回 <code>False</code>，否则在发送后返回 <code>True</code></p>
+              </div>
             </td>
           </tr>
       </tbody>
