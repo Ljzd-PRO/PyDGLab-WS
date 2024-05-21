@@ -825,6 +825,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#pydglab_ws.client.base.DGLabClient.rebind" class="md-nav__link">
+    <span class="md-ellipsis">
+      rebind
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -847,11 +856,11 @@
         <li class="md-nav__item">
   <a href="#app" class="md-nav__link">
     <span class="md-ellipsis">
-      获取 App 的数据更新和服务端心跳
+      获取 App 数据更新和服务端通知
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="获取 App 的数据更新和服务端心跳">
+    <nav class="md-nav" aria-label="获取 App 数据更新和服务端通知">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1875,6 +1884,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#pydglab_ws.client.base.DGLabClient.rebind" class="md-nav__link">
+    <span class="md-ellipsis">
+      rebind
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1897,11 +1915,11 @@
         <li class="md-nav__item">
   <a href="#app" class="md-nav__link">
     <span class="md-ellipsis">
-      获取 App 的数据更新和服务端心跳
+      获取 App 数据更新和服务端通知
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="获取 App 的数据更新和服务端心跳">
+    <nav class="md-nav" aria-label="获取 App 数据更新和服务端通知">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2277,6 +2295,11 @@ DG-Lab App 进入 Socket 被控界面后，扫码二维码即可绑定</p>
 <p class="admonition-title">Info</p>
 <p>注意此处生成的二维码 <strong>仅仅是二维码内容/数据</strong>，二维码图像需要自行从返回的数据生成</p>
 </div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>App 断开连接后，重新连接至服务端时 <code>targetId</code> 可能发生变化，因此最好是再调用一次
+<a class="autorefs autorefs-internal" href="#pydglab_ws.client.base.DGLabClient.rebind"><code>rebind</code></a> 方法，重新等待绑定并更新 <code>targetId</code></p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>生成二维码后，需要调用绑定方法来等待 App 绑定，此时该异步事件会阻塞直到绑定完成</p>
@@ -2399,6 +2422,52 @@ DG-Lab App 进入 Socket 被控界面后，扫码二维码即可绑定</p>
 
     </div>
 
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="pydglab_ws.client.base.DGLabClient.rebind" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">rebind</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#pydglab_ws.client.base.DGLabClient.rebind" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">rebind</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="pydglab_ws.enums.RetCode" href="../../../api/enums/#pydglab_ws.enums.RetCode">RetCode</a></span>
+</code></pre></div>
+
+    <div class="doc doc-contents first">
+
+      <p>清除 <code>target_id</code>，重新等待与 DG-Lab App 的关系绑定，适合 App 断开连接后调用</p>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="pydglab_ws.enums.RetCode" href="../../../api/enums/#pydglab_ws.enums.RetCode">RetCode</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>响应码</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+    </div>
+
 </div><h3 id="_7">示例<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pydglab_ws</span> <span class="kn">import</span> <span class="n">DGLabWSConnect</span>
 
@@ -2419,13 +2488,25 @@ DG-Lab App 进入 Socket 被控界面后，扫码二维码即可绑定</p>
         <span class="o">...</span>
 </code></pre></div>
 <hr />
-<h2 id="app">获取 App 的数据更新和服务端心跳<a class="headerlink" href="#app" title="Permanent link">&para;</a></h2>
-<p>完成绑定后，即可从 WebSocket 服务端获取 App 的数据更新，如通道强度数据、App 反馈按钮触发事件等</p>
+<h2 id="app">获取 App 数据更新和服务端通知<a class="headerlink" href="#app" title="Permanent link">&para;</a></h2>
+<p>可获取如下数据：</p>
+<ul>
+<li>通道强度数据</li>
+<li>App 触发的反馈按钮</li>
+<li>App 返回的错误码</li>
+<li>服务端发送的心跳</li>
+<li>服务端发送的 App 断开连接通知</li>
+</ul>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
 <p><a class="autorefs autorefs-internal" href="#pydglab_ws.client.base.DGLabClient.data_generator"><code>data_generator</code></a>
 会不断从队列中读取消息并解析，队列为空时则会阻塞该异步事件，
 如果需要退出，可使用 <code>break</code></p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>App 断开连接后，重新连接至服务端时 <code>targetId</code> 可能发生变化，因此最好是再调用一次
+<a class="autorefs autorefs-internal" href="#pydglab_ws.client.base.DGLabClient.rebind"><code>rebind</code></a> 方法，重新等待绑定并更新 <code>targetId</code></p>
 </div>
 <div class="admonition danger">
 <p class="admonition-title">Danger</p>
