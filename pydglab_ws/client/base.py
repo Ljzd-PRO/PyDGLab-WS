@@ -260,6 +260,8 @@ class DGLabClient(ABC):
 
         :param channel: 通道选择
         :param pulses: 波形操作数据，最大长度为 100
+        :raise InvalidPulseOperation: [`InvalidPulseOperation`][pydglab_ws.exceptions.InvalidPulseOperation]
+        :raise PulseDataTooLong: 波形操作数据过长，最大长度应为 [`PULSE_DATA_MAX_LENGTH`][pydglab_ws.utils.PULSE_DATA_MAX_LENGTH]
         """
         await self.ensure_bind()
         await self._send_owned(

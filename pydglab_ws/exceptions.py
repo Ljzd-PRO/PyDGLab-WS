@@ -1,7 +1,7 @@
 """
 此处定义了一些异常类
 """
-__all__ = ("InvalidStrengthData", "InvalidFeedbackData", "InvalidPulseOperation")
+__all__ = ("InvalidStrengthData", "InvalidFeedbackData", "InvalidPulseOperation", "PulseDataTooLong")
 
 from typing import Any
 
@@ -25,3 +25,10 @@ class InvalidPulseOperation(Exception):
 
     def __init__(self, pulse_operation: Any):
         super().__init__(f"Invalid pulse operation: {pulse_operation}")
+
+
+class PulseDataTooLong(Exception):
+    """波形操作数据列表过长"""
+
+    def __init__(self, length: int):
+        super().__init__(f"Pulse data too long: {length}")

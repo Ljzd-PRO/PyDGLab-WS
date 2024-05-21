@@ -11,7 +11,10 @@ from pydantic_core.core_schema import SerializerFunctionWrapHandler, FieldSerial
 
 from .enums import MessageType, RetCode, MessageDataHead
 
-__all__ = ("WebSocketMessage", "StrengthData")
+__all__ = ("WS_MESSAGE_MAX_LENGTH", "WebSocketMessage", "StrengthData")
+
+WS_MESSAGE_MAX_LENGTH = 1950
+"""WebSocket 消息最大长度"""
 
 
 # noinspection PyNestedDecorators

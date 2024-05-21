@@ -6,11 +6,12 @@ import json
 from pydantic import UUID4
 
 from .enums import StrengthOperationType, Channel, MessageDataHead, FeedbackButton
-from .exceptions import InvalidStrengthData, InvalidFeedbackData, InvalidPulseOperation
-from .models import StrengthData
+from .exceptions import InvalidStrengthData, InvalidFeedbackData, InvalidPulseOperation, PulseDataTooLong
+from .models import StrengthData, WS_MESSAGE_MAX_LENGTH
 from .typing import PulseOperation
 
 __all__ = (
+    "PULSE_DATA_MAX_LENGTH",
     "dump_pulse_operation",
     "dg_lab_client_qrcode",
     "dump_strength_operation",
@@ -19,6 +20,17 @@ __all__ = (
     "dump_clear_pulses",
     "parse_feedback_data"
 )
+
+# {"type":"msg","clientId":"","targetId":"","message":"pulse-A:[]"} - 65bit
+# {"type":"msg","clientId":"`32bit`","targetId":"`32bit`","message":"pulse-A:[]"} - 129bit
+# \"`16bit`\", - 21bit
+# {"type":"msg","clientId":"`32bit`","targetId":"`32bit`","message":"pulse-A:[\"`16bit`\",\"`16bit`\"]"}
+PULSE_DATA_MAX_LENGTH = (WS_MESSAGE_MAX_LENGTH - 129 + 1) // 21  # 86
+"""
+波形操作列表最大长度，计算结果为 ``86``
+
+``(WS_MESSAGE_MAX_LENGTH - 129 + 1) // 21``
+"""
 
 
 def parse_strength_data(data: str) -> StrengthData:
@@ -112,8 +124,10 @@ def dump_add_pulses(
     :param pulses: 波形操作数据
     :return: 返回数据可作为 WebSocket 消息中的 ``message``
     :raise InvalidPulseOperation: [`InvalidPulseOperation`][pydglab_ws.exceptions.InvalidPulseOperation]
+    :raise PulseDataTooLong: 波形操作数据过长，最大长度应为 [`PULSE_DATA_MAX_LENGTH`][pydglab_ws.utils.PULSE_DATA_MAX_LENGTH]
     """
-
+    if (pulses_length := len(pulses)) > PULSE_DATA_MAX_LENGTH:
+        raise PulseDataTooLong(pulses_length)
     return (f"{MessageDataHead.PULSE.value}-{channel.name}"
             f":{json.dumps([dump_pulse_operation(pulse) for pulse in pulses], separators=(',', ':'))}")
 
