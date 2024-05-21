@@ -1252,6 +1252,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#pydglab_ws.exceptions.PulseDataTooLong" class="md-nav__link">
+    <span class="md-ellipsis">
+      PulseDataTooLong
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1414,6 +1423,15 @@
   <a href="#pydglab_ws.exceptions.InvalidPulseOperation" class="md-nav__link">
     <span class="md-ellipsis">
       InvalidPulseOperation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pydglab_ws.exceptions.PulseDataTooLong" class="md-nav__link">
+    <span class="md-ellipsis">
+      PulseDataTooLong
     </span>
   </a>
   
@@ -1582,6 +1600,53 @@
                     <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">26</span>
 <span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pulse_operation</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid pulse operation: </span><span class="si">{</span><span class="n">pulse_operation</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+                  </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="pydglab_ws.exceptions.PulseDataTooLong" class="doc doc-heading">
+            <span class="doc doc-object-name doc-class-name">PulseDataTooLong</span>
+
+
+<a href="#pydglab_ws.exceptions.PulseDataTooLong" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">PulseDataTooLong</span><span class="p">(</span><span class="n">length</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/exceptions.html#Exception">Exception</a></code></p>
+
+
+      <p>波形操作数据列表过长</p>
+
+                  <details class="quote">
+                    <summary>Source code in <code>pydglab_ws/exceptions.py</code></summary>
+                    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">33</span>
+<span class="normal">34</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pulse data too long: </span><span class="si">{</span><span class="n">length</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
                   </details>
 

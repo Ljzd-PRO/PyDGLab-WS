@@ -2472,7 +2472,7 @@ DG-Lab App 进入 Socket 被控界面后，扫码二维码即可绑定</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>可能为 <strong>强度数据</strong> - <a class="autorefs autorefs-internal" href="../../../api/models/#pydglab_ws.models.StrengthData"><code>StrengthData</code></a>、             <strong>App 反馈数据</strong> - <a class="autorefs autorefs-internal" href="../../../api/enums/#pydglab_ws.enums.FeedbackButton"><code>FeedbackButton</code></a>             、<strong>心跳</strong> - <a class="autorefs autorefs-internal" href="../../../api/enums/#pydglab_ws.enums.RetCode"><code>RetCode.SUCCESS</code></a>、             <strong>App 断开连接</strong> - <a class="autorefs autorefs-internal" href="../../../api/enums/#pydglab_ws.enums.RetCode"><code>RetCode.CLIENT_DISCONNECTED</code></a></p>
+                <p>可能为 <strong>强度数据</strong> - <a class="autorefs autorefs-internal" href="../../../api/models/#pydglab_ws.models.StrengthData"><code>StrengthData</code></a>、             <strong>App 反馈数据</strong> - <a class="autorefs autorefs-internal" href="../../../api/enums/#pydglab_ws.enums.FeedbackButton"><code>FeedbackButton</code></a>、             <strong>心跳</strong> - <a class="autorefs autorefs-internal" href="../../../api/enums/#pydglab_ws.enums.RetCode.SUCCESS"><code>RetCode.SUCCESS</code></a>、             <strong>App 断开连接</strong> - <a class="autorefs autorefs-internal" href="../../../api/enums/#pydglab_ws.enums.RetCode.CLIENT_DISCONNECTED"><code>RetCode.CLIENT_DISCONNECTED</code></a>、            <strong>消息长度大于 1950</strong> - <a class="autorefs autorefs-internal" href="../../../api/enums/#pydglab_ws.enums.RetCode.MESSAGE_TOO_LONG"><code>RetCode.MESSAGE_TOO_LONG</code></a></p>
               </div>
             </td>
           </tr>
@@ -2785,6 +2785,39 @@ DG-Lab App 进入 Socket 被控界面后，扫码二维码即可绑定</p>
             </td>
             <td>
                   <code>()</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code>InvalidPulseOperation</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p><a class="autorefs autorefs-internal" href="../../../api/exceptions/#pydglab_ws.exceptions.InvalidPulseOperation"><code>InvalidPulseOperation</code></a></p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code>PulseDataTooLong</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>波形操作数据过长，最大长度应为 <a class="autorefs autorefs-internal" href="../../../api/utils/#pydglab_ws.utils.PULSE_DATA_MAX_LENGTH"><code>PULSE_DATA_MAX_LENGTH</code></a></p>
+              </div>
             </td>
           </tr>
       </tbody>
