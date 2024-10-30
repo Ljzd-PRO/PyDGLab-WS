@@ -177,6 +177,8 @@ if __name__ == "__main__":
 
 ## 📌 更多
 
+如果您在开发过程中，发现要实现一些常用的功能时并不方便，或者您有什么建议能够使开发更简单快捷，欢迎在 Issues 中提出~
+
 ### 🔗 链接
 
 - PyPI: 🔗[pydglab-ws](https://pypi.org/project/pydglab-ws/)
