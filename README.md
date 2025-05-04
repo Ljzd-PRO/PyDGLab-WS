@@ -179,6 +179,15 @@ if __name__ == "__main__":
 
 如果您在开发过程中，发现要实现一些常用的功能时并不方便，或者您有什么建议能够使开发更简单快捷，欢迎在 Issues 中提出~
 
+### 相关项目
+
+下列为采用了 PyDGLab-WS 的一些项目：
+- [Ljzd-PRO/nonebot-plugin-dg-lab-play](https://github.com/Ljzd-PRO/nonebot-plugin-dg-lab-play)：nonebot2 机器人插件 - ⚡在群里和大家一起玩郊狼吧！⚡
+- [Ljzd-PRO/HL2-DGLabInjuryExperienceMod](https://github.com/Ljzd-PRO/HL2-DGLabInjuryExperienceMod)：半条命 2 模组 - 用郊狼⚡模拟一下自己和敌人的受伤痛觉~
+  > 其中的 PyDGLab-WS-Connector
+
+如果你的项目也应用了 PyDGLab-WS，欢迎在 Issues 页面分享。
+
 ### 🔗 链接
 
 - PyPI: 🔗[pydglab-ws](https://pypi.org/project/pydglab-ws/)
